@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yinhai.zengtr.mapper.read.zengtrSalaryDeclarationReadMapper">
+
+    <!--根据单位编号查询单位基本信息-->
+    <select id="queryEmpInfo" resultType="com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo">
+        select
+            EMP_NO as empNo, EMP_ENTT_CODG as empEnttCodg, EMP_MGT_TYPE as empMgtType, PRNT_EMP_NO as prntEmpNo, ASOC_LEGENT_FLAG as asocLegentFlag, EMP_TYPE as empType, EMP_NAME as empName, REG_NAME as regName, LOC_ADMDVS as locAdmdvs, CONER_NAME as conerName, CONER_EMAIL as conerEmail, TEL as tel, FAX_NO as faxNo, TAX_NO as taxNo, ORGCODE as orgcode, REGNO as regno, REGNO_CERT_TYPE as regnoCertType, EMP_ADDR as empAddr, POSCODE as poscode, APRV_ESTA_DEPT as aprvEstaDept, APRV_ESTA_DATE as aprvEstaDate, APRV_ESTA_DOCNO as aprvEstaDocno, PRNT_ADMDVS as prntAdmdvs, INSU_OPTINS as insuOptins, ORG_VALI_STAS as orgValiStas, LEGREP_TEL as legrepTel, LEGREP_NAME as legrepName, LEGREP_CERT_TYPE as legrepCertType, LEGREP_CERTNO as legrepCertno, ORGCODE_ISSU_EMP as orgcodeIssuEmp, VALI_FLAG as valiFlag, RID as rid, CRTE_TIME as crteTime, UPDT_TIME as updtTime, CRTER as crter, CRTER_NAME as crterName, CRTE_OPTINS as crteOptins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, OPTINS as optins, POOLAREA as poolarea, VER as ver
+        from insu_emp_info_b
+        where (EMP_NO like CONCAT(concat('%',#{empNo},'%')))
+    </select>
+
+    <!--根据单位编号查询单位参保信息-->
+    <select id="queryEmpInsuInfo" resultType="com.yinhai.zengtr.vo.EmpInsuDQueryVo">
+        select
+            EMP_INSU_RLTS_ID as empInsuRltsId, EMP_NO as empNo, INSUTYPE as insutype, EMP_INSU_STAS as empInsuStas, EMP_INSU_DATE as empInsuDate, MAX_ACCTPRD as maxAcctprd, CLCT_WAY as clctWay, TAX_BEGN_CLCT_YM as taxBegnClctYm, HI_TYPE as hiType, CLCT_RULE_TYPE_CODG as clctRuleTypeCodg, CLCTSTD_CRTF_RULE_CODG as clctstdCrtfRuleCodg, MEMO as memo, INSU_ORG as insuOrg, POOLAREA as poolarea, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime, UPDT_TIME as updtTime, RID as rid, INSU_EMP_MGT_EID as insuEmpMgtEid
+        from emp_insu_d
+        where EMP_NO = #{empNo}
+    </select>
+
+<!--    &lt;!&ndash;查询正常参保正常缴费的人员信息&ndash;&gt;-->
+<!--    <select id="queryNormalPsnNo" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">-->
+<!--        select-->
+<!--            PSN_NO as psnNo,INSUTYPE as insutype,PSN_INSU_STAS as psnInsuStas-->
+<!--        from psn_insu_d-->
+<!--        where EMP_NO=#{empNo} and PSN_INSU_STAS = '1' and INSUTYPE_RETR_FLAG = '0' and PAUS_INSU_DATE is NULL-->
+<!--    </select>-->
+
+<!--    <select id="queryPsnInfoByPsnNo" resultType="com.yinhai.zengtr.vo.PsnInfoBQueryVo">-->
+<!--        select-->
+<!--            PSN_NO as psnNo,PSN_NAME as psnName,CERTNO as certno,GEND as gend-->
+<!--        from psn_info_b-->
+<!--        where PSN_NO in-->
+<!--        <foreach collection="list" item="psnNo" separator="," open="(" close=")">-->
+<!--            #{psnNo}-->
+<!--        </foreach>-->
+<!--    </select>-->
+
+    <!--查询参保合格的人员信息-->
+    <select id="queryPsnInsuInfo" resultType="com.yinhai.zengtr.vo.PsnNormalInfoQueryVo">
+        select
+            pb.PSN_NO as psnNo,pb.PSN_NAME as psnName,pb.CERTNO as certno,pb.GEND as gend,pd.INSUTYPE as insutype,pd.PSN_INSU_STAS as psnInsuStas,pd.PSN_INSU_DATE as psnInsuDate
+        from psn_info_b as pb,psn_insu_d as pd
+        where
+            pb.PSN_NO=pd.PSN_NO and pb.PSN_NO in (select
+                                                     PSN_NO as psnNo
+                                                 from psn_insu_d
+                                                 where EMP_NO=#{empNo} and PSN_INSU_STAS = '1' and INSUTYPE_RETR_FLAG = '0' and PAUS_INSU_DATE is NULL)
+
+    </select>
+
+    <!--根据人员编号查询人员信息-->
+    <select id="queryPsnInfo" resultType="com.yinhai.zengtr.vo.PsnInfoBQueryVo">
+        select PSN_NO as psnNo,PSN_NAME as psnName,CERTNO as certno,GEND as gend,NATY as naty,SURV_STAS as survStas
+        from psn_info_b
+        where
+            (PSN_NO like CONCAT(concat('%',#{psnNo},'%'))) or (PSN_NAME like CONCAT(concat('%',#{psnName},'%'))) or (CERTNO like CONCAT(concat('%',#{certno},'%')))
+    </select>
+
+    <!--根据人员编号查询参保信息-->
+    <select id="queryPsnInsuInfoByPsnNo" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
+        select PSN_INSU_STAS as psnInsuStas,PSN_NO as psnNo,PAUS_INSU_DATE as pausInsuDate,PSN_INSU_DATE as psnInsuDate
+        from psn_insu_d
+        where
+            PSN_NO = #{psnNo}
+    </select>
+</mapper>

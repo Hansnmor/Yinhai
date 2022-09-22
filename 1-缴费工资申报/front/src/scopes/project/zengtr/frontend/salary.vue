@@ -1,0 +1,580 @@
+<template>
+	<div>
+		<ta-border-layout layout-type="fixtop" class="noborder">
+			<div slot="header">
+				<div style="text-align: center">
+					<ta-button type="primary" @click="fnSave" :disabled="ifSave" >保存</ta-button>
+					<ta-button @click="reSet">重置</ta-button>
+				</div>
+			</div>
+
+			<div>
+				<ta-tabs defaultActiveKey="1">
+					<ta-tab-pane tab="手工申报" key="1">
+						<ta-radio-group @change="onChange" v-model="value">
+							<ta-radio :value="1">按人员申报</ta-radio>
+							<ta-radio :value="2">按单位申报</ta-radio>
+						</ta-radio-group>
+
+						<!--单位基本信息-->
+						<ta-card  :bordered="false" >
+							<div slot="title" style="font-size: 20px;font-weight: bold">单位基本信息</div>
+							<ta-form :form-layout="true"
+									 :col="col"
+									 :auto-form-create="(form)=>{this.empBaseForm = form}">
+								<ta-form-item label="单位编号"
+											  field-decorator-id="empNo"
+											  :span="6"
+											  :disabled="false"
+											  :require="{message:'请输入单位编号'}">
+									<ta-suggest
+										:data-source="empInfoList"
+										dropdownTrigger="enterKeyup"
+										:table-title-map="titleMap"
+										:option-config="optionConfig"
+										@select="onSelect"
+										@search="handleSearch"
+									/>
+								</ta-form-item>
+
+								<ta-form-item label="单位名称" :span="12"
+											  :disabled="true"
+											  field-decorator-id="empName"
+											  :label-col="{span: 3}"
+											  :wrapper-col="{span: 21}">
+									<ta-input></ta-input>
+								</ta-form-item>
+							</ta-form>
+						</ta-card>
+
+						<!--人员基本信息-->
+						<ta-card :bordered="false" v-show="this.value===1">
+							<div slot="title" style="font-size: 20px;font-weight: bold">人员基本信息</div>
+							<ta-form :form-layout="true"
+									 :col="col"
+									 :auto-form-create="(form)=>{this.psnBaseForm = form}">
+								<ta-form-item label="个人编号" :span="6"
+											  field-decorator-id="psnNo"
+											  :disabled="psnStatus"
+											  :require="{message:'请输入人员编号'}">
+									<ta-suggest
+										:data-source="psnInfoList"
+										dropdownTrigger="enterKeyup"
+										:table-title-map="titleMap_Psn"
+										:option-config="optionConf_Psn"
+										@select="onSelect_Psn"
+										@search="handleSearch_Psn"
+									/>
+								</ta-form-item>
+
+
+								<ta-form-item label="证件号码" :span="6"
+											  field-decorator-id="certno"
+											  :disabled="true"
+								>
+									<ta-input></ta-input>
+								</ta-form-item>
+
+								<ta-form-item label="姓名" :span="6"
+											  field-decorator-id="psnName"
+											  :disabled="true"
+								>
+									<ta-input></ta-input>
+								</ta-form-item>
+
+								<ta-form-item label="性别" :span="6"
+											  field-decorator-id="gend"
+											  :disabled="true"
+											 >
+									<ta-select collection-type="GEND"></ta-select>
+								</ta-form-item>
+
+								<ta-form-item label="民族" :span="6"
+											  field-decorator-id="naty"
+											  :disabled="true"
+								>
+									<ta-select collection-type="NATY"></ta-select>
+								</ta-form-item>
+							</ta-form>
+						</ta-card>
+
+						<!--工资申报信息-->
+						<ta-card :bordered="false">
+							<div slot="title" style="font-size: 20px;font-weight: bold">工资申报信息</div>
+							<ta-form :form-layout="true"
+									 :col="col"
+									 :auto-form-create="(form)=>{this.salaryBaseForm = form}">
+								<ta-form-item label="开始年月" :span="6"
+											  field-decorator-id="startYM"
+											  :disabled="salaryDec"
+											  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入开始年月'},
+											  {validator: checkStartMY}]}"
+								>
+									<ta-month-picker style="width: 100%"></ta-month-picker>
+								</ta-form-item>
+
+								<ta-form-item label="结束年月" :span="6"
+											  field-decorator-id="endYM"
+											  :disabled="salaryDec"
+											  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入开始年月'},
+											  {validator: checkEndMY}]}"
+								>
+									<ta-month-picker style="width: 100%"></ta-month-picker>
+								</ta-form-item>
+
+								<ta-form-item label="申报工资" :span="6"
+											  field-decorator-id="wag"
+											  :disabled="salaryDec"
+											  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入申报的工资'},
+											 { pattern: /^[0-9]+([.][0-9]{1,2})?$/ , message: '工资格式不正确' }, {validator: checkSalary}]}">
+									<ta-input-number style="width: 100%" :min="0" :max="999999999999.9999" :step="0.01"></ta-input-number>
+								</ta-form-item>
+
+								<ta-form-item :span="6" >
+									<ta-button type="primary" style="margin-left: 20px" @click="fnDeclaration">申报</ta-button>
+								</ta-form-item>
+							</ta-form>
+						</ta-card>
+
+						<!--人员参保信息表和工资基数信息表-->
+						<div @click="fatherMethod">
+							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList ref="freshPage" ></psn-insu-info-table>
+						</div>
+
+
+					</ta-tab-pane>
+
+					<ta-tab-pane tab="导盘申报" key="2">
+
+					</ta-tab-pane>
+				</ta-tabs>
+			</div>
+
+		</ta-border-layout>
+	</div>
+</template>
+
+<script>
+export default {
+	name: 'salary',
+	data(){
+		return{
+			value:'1',//单选框的value
+			col: {
+				//用于设置表单栅格属性的分割
+				xs: 1,
+				sm: 2,
+				md: 3,
+				lg: 4,
+				xl: 6,
+				xxl: 12,
+			},
+			empInfoList:[],//单位基本信息
+			psnInfoList:[],//人员基本信息
+			titleMap: null, //单位编号下拉框列表头
+			titleMap_Psn:null,//人员编号下拉框列表头
+			optionConfig: { //suggest显示框配置
+				value:'empNo',  // option的value配置
+				label: 'empNo'  //回显给框里的信息
+			},
+			optionConf_Psn:{
+				value:'psnNo',
+				label:'psnNo'
+			},
+			empNo:'',//单位编号
+			empInsuInfoList:[],//公司参保信息
+			salaryStatus:true,//工资申报部分的按钮可用状态
+			psnStatus:true,//决定人员信息区域的按钮可用
+			salaryDec:true,//工资申报部分的按钮状态
+			psnInsuInfoList:[],//人员参保信息列表，查询出来后放入子组件中
+			psnInfoInsuListByPsnNo:[],//根据psnNo查询得到的人员参保信息列表
+			ifSave:true,//保存按钮
+		}
+	},
+	methods:{
+		reSet(){
+			//重置页面
+			this.$router.go(0)
+		},
+		onChange(e){
+			let temp=e.target.value
+			console.log('temp:',temp)
+			if(temp===1){
+				//按人员申报
+				if(this.empNo!==''){
+					this.psnStatus=false
+				}else{
+					this.salaryDec=true
+				}
+			}
+			if(temp===2){
+				//按单位申报
+				this.psnStatus=true
+				this.salaryDec=false
+
+				console.log('当前empNo的值：',this.empNo)
+				if(this.empNo!==''){
+					this.queryInfoInsuList(this.empNo)
+					this.salaryDec=false
+				}else{
+					this.salaryDec=true
+				}
+			}
+		},
+		handleSearch(val){
+			//输入单位编号会自动进行搜索
+			console.log('开始进行handleSearch')
+			console.log('val:',val)
+			this.empNo=val
+			this.Base.submit(null,{
+				url:'salaryDeclaration/queryEmpInfo',
+				data:{
+					empNo:this.empNo
+				},
+			}).then((data)=>{
+				console.log('查询后的data:',data)
+				if ( data.data.empInfoList == null) {
+					this.$message.error('未获取到单位基本信息!');
+				}
+				this.empInfoList = data.data.empInfoList
+			})
+		},
+		onSelect(val){
+			//选择单位编号进行的操作
+			console.log('开始onSelect')
+			console.log('val:',val)
+			let temp=this.empInfoList
+			for(let i=0;i<temp.length;i++){
+				if(temp[i].empNo===val){
+					if(temp[i].orgValiStas==='1'){
+						console.log('单位状态正常')
+						//单位状态正常,则查询公司参保数据
+						this.Base.submit(null,{
+							url:'salaryDeclaration/queryEmpInsuInfo',
+							data: { empNo: val, },
+						}).then((data)=>{
+							console.log('查询到数据：',data)
+							//循环判断是否参保正常
+							let temp1=data.data.empInsuInfoList
+							let count=0
+							for(let j=0;j<temp1.length;j++){
+								if(temp1[j].empInsuStas==='2' ){
+									//参保不正常
+									count++
+								}
+							}
+							if(count===0){
+								//全部参保不正常
+								this.$message.error('该单位参保状态不正常，不允许办理此业务！');
+								this.empBaseForm.resetFields()
+								return
+							}else{
+								//有参保正常的
+								console.log('单位参保正常')
+								//回显相关信息
+								let temp2=this.empInfoList
+								for(let k=0;k<temp2.length;k++){
+									if(temp2[k].empNo===val){
+										this.empBaseForm.setFieldsValue({
+											'empName':temp2[k].empName
+										})
+									}
+								}
+								console.log('单位参保还是个人参保：',this.value)
+								if(this.value===2){
+									this.salaryDec=false
+									this.queryInfoInsuList(this.empNo)
+								}
+								if(this.value===1){
+									this.psnStatus=false
+								}
+
+							}
+						})
+
+
+
+					}
+				}else if(temp.orgValiStas==='2'){
+					this.$message.error('该单位状态不正常，请确认！');
+					this.empBaseForm.resetFields()
+					return
+				}
+			}
+		},
+		queryInfoInsuList(val){
+			//查询正常的人员参保信息
+			this.Base.submit(null,{
+				url:'salaryDeclaration/queryPsnInsuInfo',
+				data: { empNo: val, },
+
+			}).then((data)=>{
+				this.psnInsuInfoList=data.data.psnInsuInfolist
+				console.log('人员参保信息列表：',this.psnInsuInfoList)
+			})
+		},
+		handleSearch_Psn(val){
+			//根据人员编号查询人员信息
+			console.log('开始进行handleSearch_Psn')
+			console.log('val:',val)
+			this.psnNo=val
+			this.Base.submit(null,{
+				url:'salaryDeclaration/queryPsnInfo',
+				data:{
+					psnNo:this.psnNo
+				},
+			}).then((data)=>{
+				console.log('查询后的data:',data)
+				// if ( data.data.empInfoList == null) {
+				// 	this.$message.error('未获取到单位基本信息!');
+				// }
+				// this.empInfoList = data.data.empInfoList
+				if(data.data.psnInfoList===null){
+					this.$message.error('没有获取到人员信息，重新录入!');
+				}
+				this.psnInfoList=data.data.psnInfoList
+			})
+
+		},
+		onSelect_Psn(val){
+			//选择人员编号后回显信息
+			console.log('开始进行onSelect_Psn')
+			console.log('val:',val)
+			this.psnNo=val
+			//进行信息回显
+			let temp=this.psnInfoList
+			for(let i=0;i<temp.length;i++){
+				if(temp[i].psnNo===val){
+					//检查生存状态是否正常
+					if(temp[i].survStas!=='1' ){
+						this.psnBaseForm.resetFields()
+						this.$message.error('该人员生存状态不正常，不允许办理此业务！');
+						return
+					}else{
+						//检查是否正常参保
+						this.Base.submit(null,{
+							url:'salaryDeclaration/queryPsnInsuInfoByPsnNo',
+							data:{
+								psnNo:this.psnNo
+							},
+						}).then((data)=>{
+							console.log('查询出的data：',data)
+							this.psnInfoInsuListByPsnNo=data.data.psnInfoInsuListByPsnNo
+							let flag1=0
+							let flag2=0
+							for(let i=0;i<this.psnInfoInsuListByPsnNo.length;i++){
+								if(this.psnInfoInsuListByPsnNo[i].psnInsuStas!=='1'){
+									flag1=1
+								}
+							}
+							if(flag1===0){
+								//正常参保
+								console.log('参保正常')
+								for(let j=0;j<this.psnInfoInsuListByPsnNo.length;j++){
+									if(this.psnInfoInsuListByPsnNo[j].pausInsuDate!==null){
+										flag2=1
+									}
+								}
+								if(flag2===0){
+									//缴费正常
+									console.log('缴费正常')
+									//一切正常开始赋值
+									this.psnBaseForm.setFieldsValue({
+										'psnName':temp[i].psnName,
+										'certno':temp[i].certno,
+										'naty':temp[i].naty,
+										'gend':temp[i].gend
+									})
+									//清空现有的人员参保信息列表，将查询出的结果赋值
+									this.psnInsuInfoList=this.psnInfoInsuListByPsnNo
+									console.log('当前psnInsuInfoList:',this.psnInsuInfoList)
+
+									if(this.value===1){
+										this.salaryDec=false
+									}
+
+								}else{
+									this.$message.error('该人员缴费状态不正常，不允许办理此业务！')
+									return
+								}
+							}else{
+								this.$message.error('该人员未在该单位下正常参保，请重新录入人员信息！')
+								return
+							}
+						})
+					}
+				}
+			}
+
+
+		},
+		checkStartMY(rule,value,callback){
+			//开始年月的校验
+			console.log('value：',value)
+			const startYM=this.salaryBaseForm.getFieldMomentValue("startYM")
+			const endYM=this.salaryBaseForm.getFieldMomentValue("endYM")
+
+			if(endYM!==undefined){
+				if(Date.parse(startYM)>=Date.parse(endYM)){
+					this.$message.error('申报开始年月不能晚于结束年月，请重新录入！')
+					this.salaryBaseForm.resetFields(['startYM'])
+					callback()
+				}else{
+					callback()
+				}
+			}else{
+				console.log('结束年月为空')
+				callback()
+			}
+
+			console.log('进行参保日期校验')
+			//校验开始日期不能早于首次参保日期，分为个人参保和单位参保
+			let tempInsulist
+			if(this.value===1){
+				//个人参保
+				tempInsulist=this.psnInfoInsuListByPsnNo
+			}else if(this.value===2){
+				//单位参保
+				tempInsulist=this.psnInsuInfoList
+			}
+			console.log('参保信息：',tempInsulist)
+			// const fstInsuYM=this.psnInfoInsuListByPsnNo[0].psnInsuDate
+			let earlist=tempInsulist[0].psnInsuDate
+			for(let i=0;i<tempInsulist.length;i++){
+				if(earlist===null&&tempInsulist[i].psnInsuDate!==null){
+					earlist=tempInsulist[i].psnInsuDate
+				}
+				if(i>0&&Date.parse(tempInsulist[i].psnInsuDate)<Date.parse(earlist)){
+					console.log('进入if')
+					earlist=tempInsulist[i].psnInsuDate
+				}
+			}
+			console.log('最早的参保日期：',earlist)
+			if(Date.parse(value)<Date.parse(earlist)){
+				this.$message.error('补录开始期号不能早于在本单位的参保日期，请重新录入！')
+				this.salaryBaseForm.resetFields(['startYM'])
+				callback()
+			}
+
+
+		},
+		checkEndMY(rule, value, callback){
+			//结束年月的校验
+			console.log('value：',value)
+			const startYM=this.salaryBaseForm.getFieldMomentValue("startYM")
+			const endYM=this.salaryBaseForm.getFieldMomentValue("endYM")
+			if(startYM!==undefined){
+				if(Date.parse(startYM)>=Date.parse(endYM)){
+					this.$message.error('申报结束年月不能早于开始年月，请重新录入！')
+					this.salaryBaseForm.resetFields(['endYM'])
+					callback()
+				}else{
+					callback()
+				}
+			}else{
+				console.log('开始年月为空')
+				callback()
+			}
+
+		},
+		checkSalary(rule, value, callback){
+			//对工资的校验
+			console.log('现在开始进行工资校验')
+			if(value<0||value>99999999.9999){
+				callback('工资金额有误，请重新输入')
+			}else{
+				callback()
+			}
+		},
+		fnDeclaration(){
+			//对工资部分进行申报
+			let flag=0
+			console.log('现在进行工资申报')
+			let startYM=this.salaryBaseForm.getFieldMomentValue("startYM")
+			let endYM=this.salaryBaseForm.getFieldMomentValue("endYM")
+			let salary=this.salaryBaseForm.getFieldValue('wag')
+			console.log('startYM:',startYM)
+			console.log('endYM:',endYM)
+			console.log('salary:',salary)
+			if(startYM===undefined||endYM===undefined||salary===undefined){
+				this.$message.error('工资申报信息录入不完整，请先将信息录入完整！')
+				flag=1
+			}
+			this.salaryBaseForm.validateFields(errors => {
+				console.log('错误信息：',errors)
+				if(errors!==null){
+					this.$message.error('工资申报信息录入有误，请确认！')
+					flag=1
+				}
+			})
+			if(flag!==0){
+				//终止申报
+				return
+			}
+			console.log('一切正常，开始申报')
+			let baseNum//基数工资
+			for(let i=0;i<this.psnInsuInfoList.length;i++){
+				if(salary<=3000){
+					baseNum=3000
+				}else if(salary>=15000){
+					baseNum=15000
+				}else{
+					baseNum=salary
+				}
+				//时间格式转换
+				startYM=startYM.substring(0,7).replaceAll('-','')
+				endYM=startYM.substring(0,7).replaceAll('-','')
+				//填入数据
+				this.psnInsuInfoList.forEach(item =>{
+					Object.assign( item , {startYM:startYM})
+					Object.assign( item , {endYM:endYM})
+					Object.assign( item , {wag:salary})
+					Object.assign( item , {base:baseNum})
+				})
+			}
+			console.log('此时人员参保信息列表:',this.psnInsuInfoList)
+			this.ifSave=false
+		},
+		fatherMethod(){
+			//父组件中调用子组件方法
+			this.$refs.freshPage.childMethods();
+		},
+		changeStatus(){
+			//改变按钮的可用状态
+			this.salaryStatus=false
+		},
+		fnSave(){
+			console.log('现在开始进行保存操作')
+		},
+	},
+	// watch: {
+	// 	//message必须和监测的data名字一样
+	// 	psnInsuInfoList: function() {
+	// 		console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
+	// 		setTimeout(()=>{
+	// 			this.fatherMethod()
+	// 		},300)
+	// 	}
+	// },
+	updated () {
+		console.log('父组件，当前信息列表：',this.psnInsuInfoList)
+		setTimeout(()=>{
+			this.fatherMethod()
+		},300)
+	},
+	created() {
+		this.titleMap = new Map()
+		this.titleMap.set('empNo', '单位编号')
+		this.titleMap.set('empName', '单位名称')
+		this.titleMap_Psn=new Map()
+		this.titleMap_Psn.set('psnNo','人员编号')
+		this.titleMap_Psn.set('psnName','姓名')
+		this.titleMap_Psn.set('certno','证件号码')
+	},
+
+}
+</script>
+
+<style scoped>
+
+</style>
