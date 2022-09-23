@@ -1,11 +1,14 @@
 package com.yinhai.zengtr.rest;
 
+import com.alibaba.fastjson.JSON;
 import com.yinhai.ta404.core.restservice.BaseRestService;
 import com.yinhai.ta404.core.restservice.annotation.RestService;
 import com.yinhai.ta404.core.utils.ValidateUtil;
 import com.yinhai.zengtr.service.read.zengtrSalaryDeclarationReadService;
 import com.yinhai.zengtr.service.write.zengtrSalaryDeclarationWriteService;
 import com.yinhai.zengtr.vo.*;
+
+import net.sf.json.JSONArray;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
@@ -61,6 +64,17 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 			List<PsnInsuDQueryVo> psnInsuDQueryVoList=zengtrSalaryDeclarationReadService.queryPsnInsuInfoByPsnNo(psnNo);
 			System.out.println("查询出的结果："+psnInsuDQueryVoList);
 			setData("psnInfoInsuListByPsnNo",psnInsuDQueryVoList);
+		}
+	}
+
+	//检查是否已经存入工资，有则更新数据
+	@PostMapping("ifExistSalary")
+	public void ifExistSalary(String jsonStr){
+		if (!ValidateUtil.isEmpty(jsonStr)) {
+			List<Object> objectsList = JSON.parseArray(jsonStr);
+			JSONArray array = JSONArray.fromObject(jsonStr);
+			System.out.println("收到的数据为："+array);
+			zengtrSalaryDeclarationWriteService.ifExistSalary(array);
 		}
 
 	}

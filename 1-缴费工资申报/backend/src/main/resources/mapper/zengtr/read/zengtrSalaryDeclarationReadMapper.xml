@@ -59,9 +59,16 @@
 
     <!--根据人员编号查询参保信息-->
     <select id="queryPsnInsuInfoByPsnNo" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
-        select PSN_INSU_STAS as psnInsuStas,PSN_NO as psnNo,PAUS_INSU_DATE as pausInsuDate,PSN_INSU_DATE as psnInsuDate
+        select PSN_INSU_STAS as psnInsuStas,PSN_NO as psnNo,PAUS_INSU_DATE as pausInsuDate,PSN_INSU_DATE as psnInsuDate,INSUTYPE as insutype
         from psn_insu_d
         where
             PSN_NO = #{psnNo}
     </select>
+
+    <select id="queryPsnWagInfoByPsnNo" resultType="com.yinhai.zengtr.vo.PsnWagDclaDQueryVo">
+        select PSN_WAG_ID as psnWagId, PSN_NO as psnNo, EMP_NO as empNo, INSUTYPE as insutype, WAG as wag, YM as ym, INSUTYPE_RETR_FLAG as insutypeRetrFlag, SOCA_AVESAL_ENAB_MODE as socaAvesalEnabMode, CLCTSTD_CRTF_RULE_CODG as clctstdCrtfRuleCodg, INSU_ORG as insuOrg, POOLAREA as poolarea, PSN_INSU_RLTS_ID as psnInsuRltsId, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime, UPDT_TIME as updtTime, RID as rid, WAG_DCLA_MGT_EID as wagDclaMgtEid, WAG_DCLA_HIS_EID as wagDclaHisEid, PSN_CLCTSTD as psnClctstd
+        from psn_wag_dcla_d
+        where PSN_NO = #{psnNo}
+    </select>
+
 </mapper>

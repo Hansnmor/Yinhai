@@ -7,11 +7,11 @@ import java.io.Serializable;
 * (PsnWagDclaD)实体类
 *
 * @author default
-* @since 2022-09-21 11:44:21
+* @since 2022-09-23 15:13:14
 */
 public class PsnWagDclaDQueryVo implements Serializable {
 
-    private static final long serialVersionUID = -33689003536970189L;
+    private static final long serialVersionUID = -61756551704000105L;
             //人员工资ID
     private String psnWagId;
             //人员编号
@@ -64,16 +64,47 @@ public class PsnWagDclaDQueryVo implements Serializable {
     private String wagDclaHisEid;
             //人员缴费基数
     private Double psnClctstd;
-    
-                
-public String getPsnWagId() {
+
+    @Override
+    public String toString() {
+        return "PsnWagDclaDQueryVo{" +
+                "psnWagId='" + psnWagId + '\'' +
+                ", psnNo='" + psnNo + '\'' +
+                ", empNo='" + empNo + '\'' +
+                ", insutype='" + insutype + '\'' +
+                ", wag=" + wag +
+                ", ym='" + ym + '\'' +
+                ", insutypeRetrFlag='" + insutypeRetrFlag + '\'' +
+                ", socaAvesalEnabMode='" + socaAvesalEnabMode + '\'' +
+                ", clctstdCrtfRuleCodg='" + clctstdCrtfRuleCodg + '\'' +
+                ", insuOrg='" + insuOrg + '\'' +
+                ", poolarea='" + poolarea + '\'' +
+                ", psnInsuRltsId='" + psnInsuRltsId + '\'' +
+                ", optChnl='" + optChnl + '\'' +
+                ", optins='" + optins + '\'' +
+                ", opter='" + opter + '\'' +
+                ", opterName='" + opterName + '\'' +
+                ", optTime=" + optTime +
+                ", crteOptins='" + crteOptins + '\'' +
+                ", crter='" + crter + '\'' +
+                ", crterName='" + crterName + '\'' +
+                ", crteTime=" + crteTime +
+                ", updtTime=" + updtTime +
+                ", rid='" + rid + '\'' +
+                ", wagDclaMgtEid='" + wagDclaMgtEid + '\'' +
+                ", wagDclaHisEid='" + wagDclaHisEid + '\'' +
+                ", psnClctstd=" + psnClctstd +
+                '}';
+    }
+
+    public String getPsnWagId() {
 return psnWagId;
 }
 
 public void setPsnWagId(String psnWagId) {
 this.psnWagId = psnWagId;
 }
-                
+
 public String getPsnNo() {
 return psnNo;
 }
@@ -81,7 +112,7 @@ return psnNo;
 public void setPsnNo(String psnNo) {
 this.psnNo = psnNo;
 }
-                
+
 public String getEmpNo() {
 return empNo;
 }
@@ -89,7 +120,7 @@ return empNo;
 public void setEmpNo(String empNo) {
 this.empNo = empNo;
 }
-                
+
 public String getInsutype() {
 return insutype;
 }
@@ -97,7 +128,7 @@ return insutype;
 public void setInsutype(String insutype) {
 this.insutype = insutype;
 }
-                
+
 public Double getWag() {
 return wag;
 }
@@ -105,7 +136,7 @@ return wag;
 public void setWag(Double wag) {
 this.wag = wag;
 }
-                
+
 public String getYm() {
 return ym;
 }
@@ -113,7 +144,7 @@ return ym;
 public void setYm(String ym) {
 this.ym = ym;
 }
-                
+
 public String getInsutypeRetrFlag() {
 return insutypeRetrFlag;
 }
@@ -121,7 +152,7 @@ return insutypeRetrFlag;
 public void setInsutypeRetrFlag(String insutypeRetrFlag) {
 this.insutypeRetrFlag = insutypeRetrFlag;
 }
-                
+
 public String getSocaAvesalEnabMode() {
 return socaAvesalEnabMode;
 }
@@ -129,7 +160,7 @@ return socaAvesalEnabMode;
 public void setSocaAvesalEnabMode(String socaAvesalEnabMode) {
 this.socaAvesalEnabMode = socaAvesalEnabMode;
 }
-                
+
 public String getClctstdCrtfRuleCodg() {
 return clctstdCrtfRuleCodg;
 }
@@ -137,7 +168,7 @@ return clctstdCrtfRuleCodg;
 public void setClctstdCrtfRuleCodg(String clctstdCrtfRuleCodg) {
 this.clctstdCrtfRuleCodg = clctstdCrtfRuleCodg;
 }
-                
+
 public String getInsuOrg() {
 return insuOrg;
 }
@@ -145,7 +176,7 @@ return insuOrg;
 public void setInsuOrg(String insuOrg) {
 this.insuOrg = insuOrg;
 }
-                
+
 public String getPoolarea() {
 return poolarea;
 }
@@ -153,7 +184,7 @@ return poolarea;
 public void setPoolarea(String poolarea) {
 this.poolarea = poolarea;
 }
-                
+
 public String getPsnInsuRltsId() {
 return psnInsuRltsId;
 }
@@ -161,7 +192,7 @@ return psnInsuRltsId;
 public void setPsnInsuRltsId(String psnInsuRltsId) {
 this.psnInsuRltsId = psnInsuRltsId;
 }
-                
+
 public String getOptChnl() {
 return optChnl;
 }
@@ -169,7 +200,7 @@ return optChnl;
 public void setOptChnl(String optChnl) {
 this.optChnl = optChnl;
 }
-                
+
 public String getOptins() {
 return optins;
 }
@@ -177,7 +208,7 @@ return optins;
 public void setOptins(String optins) {
 this.optins = optins;
 }
-                
+
 public String getOpter() {
 return opter;
 }
@@ -185,7 +216,7 @@ return opter;
 public void setOpter(String opter) {
 this.opter = opter;
 }
-                
+
 public String getOpterName() {
 return opterName;
 }
@@ -193,7 +224,7 @@ return opterName;
 public void setOpterName(String opterName) {
 this.opterName = opterName;
 }
-                
+
 public Date getOptTime() {
 return optTime;
 }
@@ -201,7 +232,7 @@ return optTime;
 public void setOptTime(Date optTime) {
 this.optTime = optTime;
 }
-                
+
 public String getCrteOptins() {
 return crteOptins;
 }
@@ -209,7 +240,7 @@ return crteOptins;
 public void setCrteOptins(String crteOptins) {
 this.crteOptins = crteOptins;
 }
-                
+
 public String getCrter() {
 return crter;
 }
@@ -217,7 +248,7 @@ return crter;
 public void setCrter(String crter) {
 this.crter = crter;
 }
-                
+
 public String getCrterName() {
 return crterName;
 }
@@ -225,7 +256,7 @@ return crterName;
 public void setCrterName(String crterName) {
 this.crterName = crterName;
 }
-                
+
 public Date getCrteTime() {
 return crteTime;
 }
@@ -233,7 +264,7 @@ return crteTime;
 public void setCrteTime(Date crteTime) {
 this.crteTime = crteTime;
 }
-                
+
 public Date getUpdtTime() {
 return updtTime;
 }
@@ -241,7 +272,7 @@ return updtTime;
 public void setUpdtTime(Date updtTime) {
 this.updtTime = updtTime;
 }
-                
+
 public String getRid() {
 return rid;
 }
@@ -249,7 +280,7 @@ return rid;
 public void setRid(String rid) {
 this.rid = rid;
 }
-                
+
 public String getWagDclaMgtEid() {
 return wagDclaMgtEid;
 }
@@ -257,7 +288,7 @@ return wagDclaMgtEid;
 public void setWagDclaMgtEid(String wagDclaMgtEid) {
 this.wagDclaMgtEid = wagDclaMgtEid;
 }
-                
+
 public String getWagDclaHisEid() {
 return wagDclaHisEid;
 }
@@ -265,7 +296,7 @@ return wagDclaHisEid;
 public void setWagDclaHisEid(String wagDclaHisEid) {
 this.wagDclaHisEid = wagDclaHisEid;
 }
-                
+
 public Double getPsnClctstd() {
 return psnClctstd;
 }
@@ -273,5 +304,5 @@ return psnClctstd;
 public void setPsnClctstd(Double psnClctstd) {
 this.psnClctstd = psnClctstd;
 }
-    
+
 }

@@ -15,4 +15,6 @@ public interface zengtrSalaryDeclarationReadMapper extends Ta404SupportMapper {
 	List<PsnInfoBQueryVo> queryPsnInfo(String psnNo);
 
 	List<PsnInsuDQueryVo> queryPsnInsuInfoByPsnNo(String psnNo);
+
+	List<PsnWagDclaDQueryVo> queryPsnWagInfoByPsnNo(String psnNo);
 }

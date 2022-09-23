@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yinhai.zengtr.mapper.read.zengtrSalaryDeclarationReadMapper">
-
+<mapper namespace="com.yinhai.zengtr.mapper.write.zengtrSalaryDeclarationWriteMapper">
+        <!--通过主键物理删除-->
+        <delete id="deleteOldWag">
+                delete from psn_wag_dcla_d
+                where  PSN_NO= #{psnNo}
+        </delete>
 </mapper>

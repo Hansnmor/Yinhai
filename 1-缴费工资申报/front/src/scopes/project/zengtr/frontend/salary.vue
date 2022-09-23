@@ -138,7 +138,10 @@
 
 						<!--人员参保信息表和工资基数信息表-->
 						<div @click="fatherMethod">
-							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList ref="freshPage" ></psn-insu-info-table>
+							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList
+												 ref="freshPage"
+												 :salaryBaseInfoList=this.salaryBaseInfoList
+							></psn-insu-info-table>
 						</div>
 
 
@@ -187,8 +190,11 @@ export default {
 			psnStatus:true,//决定人员信息区域的按钮可用
 			salaryDec:true,//工资申报部分的按钮状态
 			psnInsuInfoList:[],//人员参保信息列表，查询出来后放入子组件中
+			salaryBaseInfoList:[],//工资基数信息列表，放入子组件
 			psnInfoInsuListByPsnNo:[],//根据psnNo查询得到的人员参保信息列表
 			ifSave:true,//保存按钮
+			ifFreshChild:0,//决定是否刷新子组件
+			checkedInfoInsuList:[],//父组件收到的从子组件传过来的值
 		}
 	},
 	methods:{
@@ -311,6 +317,11 @@ export default {
 			}).then((data)=>{
 				this.psnInsuInfoList=data.data.psnInsuInfolist
 				console.log('人员参保信息列表：',this.psnInsuInfoList)
+				//同时赋值工资基数信息列表
+				this.salaryBaseInfoList=this.psnInsuInfoList
+				console.log('工资基数信息列表：',this.salaryBaseInfoList)
+				this.ifFreshChild++//刷新子组件
+
 			})
 		},
 		handleSearch_Psn(val){
@@ -386,8 +397,21 @@ export default {
 										'gend':temp[i].gend
 									})
 									//清空现有的人员参保信息列表，将查询出的结果赋值
-									this.psnInsuInfoList=this.psnInfoInsuListByPsnNo
-									console.log('当前psnInsuInfoList:',this.psnInsuInfoList)
+
+									this.psnInsuInfoList=[{}]
+									this.psnInsuInfoList.forEach(item =>{
+										Object.assign( item , {psnNo:val})
+										Object.assign( item , {psnName:temp[i].psnName})
+										Object.assign( item , {certno:temp[i].certno})
+										Object.assign( item , {naty:temp[i].naty})
+										Object.assign( item , {gend:temp[i].gend})
+										Object.assign( item , {insutype:this.psnInfoInsuListByPsnNo[i].insutype})
+										Object.assign( item , {psnInsuStas:this.psnInfoInsuListByPsnNo[i].psnInsuStas})
+									})
+									// console.log('单人申报：当前psnInsuInfoList:',this.psnInsuInfoList)
+									// console.log('参保状态：',this.psnInfoInsuListByPsnNo)
+									this.salaryBaseInfoList=this.psnInsuInfoList
+									this.ifFreshChild++//刷新子组件
 
 									if(this.value===1){
 										this.salaryDec=false
@@ -531,13 +555,28 @@ export default {
 					Object.assign( item , {wag:salary})
 					Object.assign( item , {base:baseNum})
 				})
+
+				//向工资基数列表填入数据
+				let month=new Date().getMonth()<10?'0'+String(new Date().getMonth()):String(new Date().getMonth())
+				let nowTime=String(new Date().getFullYear())+month
+				this.salaryBaseInfoList.forEach(item=>{
+					Object.assign( item , {nowTime:nowTime})
+					Object.assign( item , {wag:salary})
+					Object.assign( item , {base:baseNum})
+				})
 			}
 			console.log('此时人员参保信息列表:',this.psnInsuInfoList)
+			console.log('此时工资基数列表列表:',this.salaryBaseInfoList)
 			this.ifSave=false
+			this.ifFreshChild++//刷新子组件
 		},
 		fatherMethod(){
 			//父组件中调用子组件方法
+			console.log('我是父组件，调用子组件childmethod方法')
+			this.checkedInfoInsuList=this.$refs.freshPage.sendDataToFather()
+			console.log('父组件收到的值：',this.checkedInfoInsuList)
 			this.$refs.freshPage.childMethods();
+
 		},
 		changeStatus(){
 			//改变按钮的可用状态
@@ -545,23 +584,50 @@ export default {
 		},
 		fnSave(){
 			console.log('现在开始进行保存操作')
+			console.log('已经选择的人员参保信息：',this.checkedInfoInsuList)
+			if(this.checkedInfoInsuList===[]){
+				this.$message.error('没有获取到要保存的数据，请勾选！')
+				return
+			}
+			//已经有数据，进行校验是否存在老数据
+			this.Base.submit(null,{
+				url:'salaryDeclaration/ifExistSalary',
+				data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
+			}).then((data)=>{
+				console.log('data:',data)
+			})
+			// let flag=0
+			// if(this.value===1){
+			// 	//人员申报，需要多校验一个单人信息
+			// 	this.psnBaseForm.validateFields(errors => {
+			// 		console.log('错误信息：',errors)
+			// 		if(errors!==null){
+			// 			this.$message.error('工资申报信息录入有误，请确认！')
+			// 			flag=1
+			// 		}
+			// 	})
+			// }
+			//首先判断人员参保信息列表是否勾选了需要保存的数据
+
+
 		},
 	},
-	// watch: {
-	// 	//message必须和监测的data名字一样
-	// 	psnInsuInfoList: function() {
-	// 		console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
-	// 		setTimeout(()=>{
-	// 			this.fatherMethod()
-	// 		},300)
-	// 	}
-	// },
-	updated () {
-		console.log('父组件，当前信息列表：',this.psnInsuInfoList)
-		setTimeout(()=>{
-			this.fatherMethod()
-		},300)
+	watch: {
+		//message必须和监测的data名字一样
+		ifFreshChild: function() {
+			console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
+			setTimeout(()=>{
+				this.fatherMethod()
+			},300)
+		}
 	},
+	// updated () {
+	// 	setTimeout(()=>{
+	// 		this.fatherMethod()
+	// 	},300)
+	//
+	// },
+
 	created() {
 		this.titleMap = new Map()
 		this.titleMap.set('empNo', '单位编号')
