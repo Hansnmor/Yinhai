@@ -4,6 +4,17 @@
         <!--通过主键物理删除-->
         <delete id="deleteOldWag">
                 delete from psn_wag_dcla_d
-                where  PSN_NO= #{psnNo}
+                where  PSN_NO= #{param1,jdbcType=VARCHAR} and YM =#{param2,jdbcType=VARCHAR}
         </delete>
+
+        <!--按月份新增数据-->
+        <insert id="insertNewWagInfo" parameterType="com.yinhai.zengtr.vo.SaveWagInfoListVo">
+                insert into
+                psn_wag_dcla_d(PSN_WAG_ID,PSN_NO,EMP_NO,INSUTYPE,WAG,YM,INSUTYPE_RETR_FLAG,INSU_ORG,PSN_INSU_RLTS_ID,OPTINS,OPTER,OPT_TIME,CRTE_TIME,UPDT_TIME,WAG_DCLA_MGT_EID,WAG_DCLA_HIS_EID,PSN_CLCTSTD)
+                values
+<!--                <foreach collection ="list" item="item" separator =",">-->
+<!--                        (#{item.psnWagId,jdbcType=VARCHAR}, #{item.psnNo,jdbcType=VARCHAR},#{item.empNo,jdbcType=VARCHAR},#{item.insutype,jdbcType=VARCHAR},#{item.wag,jdbcType=VARCHAR},#{item.nowTime,jdbcType=VARCHAR},#{item.insutypeRetrFlag,jdbcType=VARCHAR},#{item.insuOrg,jdbcType=VARCHAR},#{item.psnInsuRltsId,jdbcType=VARCHAR},#{item.optins,jdbcType=VARCHAR},#{item.opter,jdbcType=VARCHAR},#{item.optTime,jdbcType=TIMESTAMP},#{item.crteTime,jdbcType=TIMESTAMP},#{item.updtTime,jdbcType=TIMESTAMP},#{item.wagDclaMgtEid,jdbcType=VARCHAR},#{item.wagDclaHisEid,jdbcType=VARCHAR},#{item.base,jdbcType=VARCHAR})-->
+<!--                </foreach>-->
+                (#{psnWagId,jdbcType=VARCHAR},#{psnNo,jdbcType=VARCHAR},#{empNo,jdbcType=VARCHAR},#{insutype,jdbcType=VARCHAR},#{wag,jdbcType=DOUBLE}, #{ym,jdbcType=VARCHAR},#{insutypeRetrFlag,jdbcType=VARCHAR},#{insuOrg,jdbcType=VARCHAR},#{psnInsuRltsId,jdbcType=VARCHAR},#{optins,jdbcType=VARCHAR},#{opter,jdbcType=VARCHAR},#{optTime,jdbcType=TIMESTAMP},#{crteTime,jdbcType=TIMESTAMP},#{updtTime,jdbcType=TIMESTAMP},#{wagDclaHisEid,jdbcType=VARCHAR},#{wagDclaMgtEid,jdbcType=VARCHAR},#{psnClctstd,jdbcType=DOUBLE})
+        </insert>
 </mapper>

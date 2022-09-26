@@ -148,7 +148,93 @@
 					</ta-tab-pane>
 
 					<ta-tab-pane tab="导盘申报" key="2">
+						<!--单位基本信息-->
+						<ta-card  :bordered="false" >
+							<div slot="title" style="font-size: 20px;font-weight: bold">单位基本信息</div>
+							<ta-form :form-layout="true"
+									 :col="col"
+									 :auto-form-create="(form)=>{this.empBaseForm = form}">
+								<ta-form-item label="单位编号"
+											  field-decorator-id="empNo"
+											  :span="6"
+											  :disabled="false"
+											  :require="{message:'请输入单位编号'}">
+									<ta-suggest
+										:data-source="empInfoList"
+										dropdownTrigger="enterKeyup"
+										:table-title-map="titleMap"
+										:option-config="optionConfig"
+										@select="onSelect"
+										@search="handleSearch"
+									/>
+								</ta-form-item>
 
+								<ta-form-item label="单位名称" :span="12"
+											  :disabled="true"
+											  field-decorator-id="empName"
+											  :label-col="{span: 3}"
+											  :wrapper-col="{span: 21}">
+									<ta-input></ta-input>
+								</ta-form-item>
+							</ta-form>
+						</ta-card>
+
+						<div style="text-align: center">
+							<ta-button  @click="downTemplate"  >模板下载</ta-button>
+
+							<ta-button @click="fnImport" icon="import" style="margin-left: 30px">批量导入</ta-button>
+
+							<ta-upload
+								name="bannerFile"
+								:before-upload="beforeUpload"
+								:remove="handleRemove"
+								style="margin-left: 30px"
+							>
+								<ta-button type="primary" icon="upload">
+									选择文件
+								</ta-button>
+							</ta-upload>
+						</div>
+
+
+						<div slot="title" style="font-size: 20px;font-weight: bold">导盘信息</div>
+						<ta-tabs defaultActiveKey="1">
+							<ta-tab-pane tab="导入成功信息" key="1">
+								<ta-big-table
+									border
+									auto-resize
+									:data="tableDataSuccess">
+									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>
+									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>
+									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
+									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
+									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
+									<ta-big-table-column field="insutype" title="参保险种" collection-type="NATY"></ta-big-table-column>
+									<ta-big-table-column field="psnInsuStas" title="参保状态"></ta-big-table-column>
+									<ta-big-table-column field="startYM" title="开始年月"></ta-big-table-column>
+									<ta-big-table-column field="endYM" title="结束年月"></ta-big-table-column>
+									<ta-big-table-column field="psnClctstd" title="基数"></ta-big-table-column>
+									<ta-big-table-column field="wag" title="工资"></ta-big-table-column>
+								</ta-big-table>
+							</ta-tab-pane>
+
+							<ta-tab-pane tab="导入失败信息" key="2" forceRender>
+								<ta-big-table
+									border
+									auto-resize
+									:data="tableDataError">
+									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>
+									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>
+									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
+									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
+									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
+									<ta-big-table-column field="insutype" title="参保险种" collection-type="NATY"></ta-big-table-column>
+									<ta-big-table-column field="psnInsuStas" title="参保状态"></ta-big-table-column>
+									<ta-big-table-column field="rowTips" title="失败原因"></ta-big-table-column>
+
+								</ta-big-table>
+							</ta-tab-pane>
+						</ta-tabs>
 					</ta-tab-pane>
 				</ta-tabs>
 			</div>
@@ -195,6 +281,10 @@ export default {
 			ifSave:true,//保存按钮
 			ifFreshChild:0,//决定是否刷新子组件
 			checkedInfoInsuList:[],//父组件收到的从子组件传过来的值
+			wagInfoFile:[],//批量保存的信息
+			wagImportData:[],//导入的wag信息表
+			tableDataSuccess:[],//导入成功信息
+			tableDataError:[],//导入失败信息
 		}
 	},
 	methods:{
@@ -405,6 +495,7 @@ export default {
 										Object.assign( item , {certno:temp[i].certno})
 										Object.assign( item , {naty:temp[i].naty})
 										Object.assign( item , {gend:temp[i].gend})
+										Object.assign( item , {empNo:this.empNo})
 										Object.assign( item , {insutype:this.psnInfoInsuListByPsnNo[i].insutype})
 										Object.assign( item , {psnInsuStas:this.psnInfoInsuListByPsnNo[i].psnInsuStas})
 									})
@@ -547,13 +638,14 @@ export default {
 				}
 				//时间格式转换
 				startYM=startYM.substring(0,7).replaceAll('-','')
-				endYM=startYM.substring(0,7).replaceAll('-','')
+				endYM=endYM.substring(0,7).replaceAll('-','')
 				//填入数据
 				this.psnInsuInfoList.forEach(item =>{
 					Object.assign( item , {startYM:startYM})
 					Object.assign( item , {endYM:endYM})
 					Object.assign( item , {wag:salary})
 					Object.assign( item , {base:baseNum})
+					Object.assign( item , {empNo:this.empNo})
 				})
 
 				//向工资基数列表填入数据
@@ -563,6 +655,7 @@ export default {
 					Object.assign( item , {nowTime:nowTime})
 					Object.assign( item , {wag:salary})
 					Object.assign( item , {base:baseNum})
+					Object.assign( item , {empNo:this.empNo})
 				})
 			}
 			console.log('此时人员参保信息列表:',this.psnInsuInfoList)
@@ -589,27 +682,90 @@ export default {
 				this.$message.error('没有获取到要保存的数据，请勾选！')
 				return
 			}
+
 			//已经有数据，进行校验是否存在老数据
 			this.Base.submit(null,{
 				url:'salaryDeclaration/ifExistSalary',
 				data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
 			}).then((data)=>{
 				console.log('data:',data)
+				this.$message.success('保存成功!');
+			}).catch((data)=>{
+				this.$message.error('保存失败!');
 			})
-			// let flag=0
-			// if(this.value===1){
-			// 	//人员申报，需要多校验一个单人信息
-			// 	this.psnBaseForm.validateFields(errors => {
-			// 		console.log('错误信息：',errors)
-			// 		if(errors!==null){
-			// 			this.$message.error('工资申报信息录入有误，请确认！')
-			// 			flag=1
-			// 		}
-			// 	})
-			// }
-			//首先判断人员参保信息列表是否勾选了需要保存的数据
+		},
+		downTemplate(){
+			//模板下载
+			//模板下载的实现
+			console.log('开始下载模板')
+			Base.downloadFile({
+				url: 'salaryDeclaration/downloadTemplate',
+				fileName: "模板文件.xlsx",
+				type: 'application/octet-stream',
+			}).then((data) => {
+				console.log('data：',data)
+				this.$message.success('下载成功!');
+			}).catch((data) => {
+				this.$message.error('下载失败!');
+			})
+		},
+		beforeUpload(file){
+			//文件上传之前的操作
+			console.log('开始进行文件上传前操作')
+			//批量参保文件导入之前的操作
+			this.wagInfoFile=[...this.wagInfoFile,file]
+			return false
+		},
+		handleRemove(){
+			//删除待上传的文件
+			this.wagInfoFile=[]
+		},
+		fnImport(){
+			//文件导入实现
+			console.log('开始进行文件导入')
+			//判断文件是否存在
+			if (this.wagInfoFile === null || this.wagInfoFile === undefined || this.wagInfoFile === ''||this.wagInfoFile.length<=0) {
+				this.$message.error('请先选择导入文件！！');
+				return
+			}
+			console.log('wagInfoFiles：',this.wagInfoFile)
+			this.Base.submit(null, {
+				url: 'salaryDeclaration/uploadFile',
+				data: {
+					file: this.wagInfoFile, //文件参数，可以是文件数组
+				},
+				//文件提交时，采用FormData方式提交参数
+				isFormData: true,
+			}).then((res) => {
+				this.wagImportData=res.data.wagInfoFiles
+				console.log('this.wagInfoFiles:',this.wagImportData)
+				//对导入的所有进行进行校验，分别放入成功表和失败表
+				for(let i=0;i<this.wagImportData.length;i++){
+					let temp=this.wagImportData[i]
+					let flag=0//判断校验结果
+					//校验工资
+					if(temp.wag<0||temp.wag>999999999999.9999){
+						flag=1
+					}
+					let start=temp.startYM
+					let end=temp.endYM
+					//校验月份
+					if(start.length===6||end.length===6){
 
+					}else if((start.split(4,5)===0||start.split(4,5)===1)&&(end.split(4,5)===0||end.split(4,5)===1)){
 
+					}else if(start.toNumber<=12||end.toNumber<=12){
+
+					}else{
+						flag=1
+					}
+
+					//校验
+				}
+				this.$message.success('导入成功！！');
+			}).catch(() => {
+				this.$message.error('导入失败！！');
+			})
 		},
 	},
 	watch: {
