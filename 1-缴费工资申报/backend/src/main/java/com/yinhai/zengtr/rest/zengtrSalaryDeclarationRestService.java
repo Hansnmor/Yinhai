@@ -107,22 +107,66 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 		}else{
 			System.out.println("收到的文件："+file);
 			List<FileImportInfoListVo> fileImportInfoListVos = ExcelUtils.readMultipartFile(file, FileImportInfoListVo.class);
-//			List<FileImportInfoListVo> successFile = new ArrayList<>();
-//			List<FileImportInfoListVo> errorFile = new ArrayList<>();
-//			for (FileImportInfoListVo fileImportInfoListVo : zengtrPsnInfoFileVoList) {
-//				if(fileImportInfoListVo.getRowTips().isEmpty()){
-//					successFile.add(fileImportInfoListVo);
-//				}else{
-//					System.out.println("错误信息："+fileImportInfoListVo.getRowTips());
-//					errorFile.add(fileImportInfoListVo);
-//				}
-//			}
+			List<FileImportInfoListVo> successFile = new ArrayList<>();
+			List<FileImportInfoListVo> realsuccessFile = new ArrayList<>();
+			List<FileImportInfoListVo> errorFile = new ArrayList<>();
+			//初步校验
+			for (FileImportInfoListVo fileImportInfoListVo : fileImportInfoListVos) {
+				if(fileImportInfoListVo.getRowTips().isEmpty()){
+					successFile.add(fileImportInfoListVo);
+				}else{
+					System.out.println("错误信息："+fileImportInfoListVo.getRowTips());
+					errorFile.add(fileImportInfoListVo);
+				}
+			}
+			//进阶校验
+			int flag=0;//0则表示没有校验出错误
+			for (FileImportInfoListVo success : successFile) {
+				System.out.println("这是success的数据："+success);
+				String start=success.getStartYM();
+				String end=success.getEndYM();
+				if(success.getWag()<0||success.getWag()>999999999999.99){//校验工资
+					flag=1;
+					success.setRowTips("工资校验不正确");
+				}else if(start.length()!=6||end.length()!=6||(Integer.parseInt(start.substring(4,5))!=0&&
+						Integer.parseInt(start.substring(4,5))!=1)||(Integer.parseInt(end.substring(4,5))!=0&&
+						Integer.parseInt(end.substring(4,5))!=1)||Integer.parseInt(start.substring(4))>12||
+						Integer.parseInt(start.substring(4))>12||Integer.parseInt(start)>Integer.parseInt(end)){
+					flag=1;
+					success.setRowTips("开始年月或结束年月不正确");
+				}else{
+					//校验生存状态是否正常，是否正常缴费
+					String psnNo=success.getPsnNo();
+					String insutype=success.getInsutype();
+					List<PsnInsuDQueryVo> psnInsuDQueryVoList=zengtrSalaryDeclarationReadService.queryPsnInsuIfNormal(psnNo,insutype);
+					if(ValidateUtil.isEmpty(psnInsuDQueryVoList)){
+						flag=1;
+					}else{
+						for (PsnInsuDQueryVo psnInsuDQueryVo : psnInsuDQueryVoList) {
+							if(!"1".equals(psnInsuDQueryVo.getPsnInsuStas())){
+								flag=1;
+							}
+						}
+					}
+					//校验证件号码
+					if(success.getCertno().length()!=18){
+						flag=1;
+						success.setRowTips("证件号码不正确");
+					}
+
+				}
+				if(flag!=0){
+					errorFile.add(success);
+				}else{
+					realsuccessFile.add(success);
+				}
+			}
 
 			System.out.println("fileImportInfoListVo:"+ fileImportInfoListVos);
 
 			setData("wagInfoFiles", fileImportInfoListVos);
-//			setData("successFile", successFile);
-//			setData("errorFile", errorFile);
+			setData("successFile", realsuccessFile);
+			setData("errorFile", errorFile);
 		}
 	}
 }

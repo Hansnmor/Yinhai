@@ -71,4 +71,16 @@
         where PSN_NO = #{psnNo}
     </select>
 
+
+    <select id="queryPsnInsuIfNormal" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
+        select pid.PSN_INSU_STAS
+        from psn_info_b pib,psn_insu_d pid
+        where
+             pid.PSN_NO = #{param1,jdbcType=VARCHAR} and pib.SURV_STAS='1' and pid.INSUTYPE=#{param2,jdbcType=VARCHAR} and pib.PSN_NO=pid.PSN_NO
+                and pid.EMP_NO = (
+                    select EMP_NO
+                    from psn_insu_d
+                    where PSN_NO =#{param1,jdbcType=VARCHAR})
+    </select>
+
 </mapper>

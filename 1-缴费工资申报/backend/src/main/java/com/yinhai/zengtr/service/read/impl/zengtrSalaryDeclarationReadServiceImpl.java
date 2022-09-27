@@ -51,4 +51,9 @@ public class zengtrSalaryDeclarationReadServiceImpl extends BaseRestService impl
 	public List<PsnInsuDQueryVo> queryPsnInsuInfoByPsnNo(String psnNo) {
 		return zengtrSalaryDeclarationReadMapper.queryPsnInsuInfoByPsnNo(psnNo);
 	}
+
+	@Override
+	public List<PsnInsuDQueryVo> queryPsnInsuIfNormal(String psnNo,String insutype) {
+		return zengtrSalaryDeclarationReadMapper.queryPsnInsuIfNormal(psnNo,insutype);
+	}
 }

@@ -180,6 +180,8 @@
 						</ta-card>
 
 						<div style="text-align: center">
+							<ta-button @click="fnExport" icon="export" :disabled="isExport"> 导出</ta-button>
+
 							<ta-button  @click="downTemplate"  >模板下载</ta-button>
 
 							<ta-button @click="fnImport" icon="import" style="margin-left: 30px">批量导入</ta-button>
@@ -196,6 +198,16 @@
 							</ta-upload>
 						</div>
 
+						<ta-modal  title="导出选项"
+								   :visible="chooseExport"
+								   @ok="exportSuccess"
+								   :confirmLoading="confirmLoading"
+								   @cancel="exportError"
+								   okText="成功信息"
+								   cancelText="失败信息">
+							请选择导出成功信息还是失败信息
+						</ta-modal>
+
 
 						<div slot="title" style="font-size: 20px;font-weight: bold">导盘信息</div>
 						<ta-tabs defaultActiveKey="1">
@@ -209,8 +221,8 @@
 									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
 									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
 									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
-									<ta-big-table-column field="insutype" title="参保险种" collection-type="NATY"></ta-big-table-column>
-									<ta-big-table-column field="psnInsuStas" title="参保状态"></ta-big-table-column>
+									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>
+									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>
 									<ta-big-table-column field="startYM" title="开始年月"></ta-big-table-column>
 									<ta-big-table-column field="endYM" title="结束年月"></ta-big-table-column>
 									<ta-big-table-column field="psnClctstd" title="基数"></ta-big-table-column>
@@ -228,8 +240,8 @@
 									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
 									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
 									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
-									<ta-big-table-column field="insutype" title="参保险种" collection-type="NATY"></ta-big-table-column>
-									<ta-big-table-column field="psnInsuStas" title="参保状态"></ta-big-table-column>
+									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>
+									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>
 									<ta-big-table-column field="rowTips" title="失败原因"></ta-big-table-column>
 
 								</ta-big-table>
@@ -285,6 +297,9 @@ export default {
 			wagImportData:[],//导入的wag信息表
 			tableDataSuccess:[],//导入成功信息
 			tableDataError:[],//导入失败信息
+			chooseExport:false,//是否打开导出模态框
+			confirmLoading: false,
+			isExport:true,//决定导出按钮的可用
 		}
 	},
 	methods:{
@@ -738,35 +753,123 @@ export default {
 				isFormData: true,
 			}).then((res) => {
 				this.wagImportData=res.data.wagInfoFiles
+				this.tableDataSuccess=res.data.successFile
+				this.tableDataError=res.data.errorFile
 				console.log('this.wagInfoFiles:',this.wagImportData)
-				//对导入的所有进行进行校验，分别放入成功表和失败表
-				for(let i=0;i<this.wagImportData.length;i++){
-					let temp=this.wagImportData[i]
-					let flag=0//判断校验结果
-					//校验工资
-					if(temp.wag<0||temp.wag>999999999999.9999){
-						flag=1
-					}
-					let start=temp.startYM
-					let end=temp.endYM
-					//校验月份
-					if(start.length===6||end.length===6){
-
-					}else if((start.split(4,5)===0||start.split(4,5)===1)&&(end.split(4,5)===0||end.split(4,5)===1)){
-
-					}else if(start.toNumber<=12||end.toNumber<=12){
-
-					}else{
-						flag=1
-					}
-
-					//校验
+				console.log('successFiles:',this.tableDataSuccess)
+				console.log('errorFiles:',this.tableDataError)
+				this.isExport=false
+				if(this.tableDataError!==[]){
+					this.$message.error('存在校验不通过的数据，请检查！')
+				}else{
+					this.ifSave=false
+					//赋值人员参保信息
+					this.checkedInfoInsuList=this.tableDataSuccess
+					this.fnSave()
+					this.$message.success('导盘申报工资基数成功！')
 				}
-				this.$message.success('导入成功！！');
+				// //对导入的所有进行进行校验，分别放入成功表和失败表
+				// for(let i=0;i<this.wagImportData.length;i++){
+				// 	let temp=this.wagImportData[i]
+				// 	let flag=0//判断校验结果
+				// 	//校验工资
+				// 	if(temp.wag<0||temp.wag>999999999999.9999){
+				// 		flag=1
+				// 	}
+				// 	let start=temp.startYM
+				// 	let end=temp.endYM
+				// 	//校验月份
+				// 	if(start.length===6||end.length===6){
+				//
+				// 	}else if((start.split(4,5)===0||start.split(4,5)===1)&&(end.split(4,5)===0||end.split(4,5)===1)){
+				//
+				// 	}else if(start.toNumber<=12||end.toNumber<=12){
+				//
+				// 	}else{
+				// 		flag=1
+				// 	}
+				//
+				// 	//校验
+				// }
 			}).catch(() => {
 				this.$message.error('导入失败！！');
 			})
 		},
+		fnExport(){
+			//导出选项，会提示选择导出成功还是失败信息
+			this.chooseExport=true
+		},
+		exportSuccess(){
+			//导出成功信息
+			this.chooseExport=false
+			console.log('现在开始导出成功信息')
+			const successData = {
+				fileName: '成功信息',   // 文件名
+				// 工作表List
+				sheets: [{
+					// 工作表名字，默认为Sheet加上该工作表在List中的index
+					name: 'worksheet1',
+					column: {
+						// 简单表头设置如下
+						complex: false,
+						// 简单表头的列索引
+						columns: [
+							{header: '人员编号', key: 'psnNo', width: 32 },
+							{header: '姓名', key: 'psnName', width: 20 },
+							{header: '证件号码', key: 'certno', width: 30 },
+							{header: '性别', key: 'gend', width: 20 },
+							{header: '参保险种', key: 'insutype', width: 20 },
+							{header: '参保状态', key: 'psnInsuStas', width: 20 },
+							{header: '开始年月', key: 'startYM', width: 20 },
+							{header: '结束年月', key: 'endYM', width: 20 },
+							{header: '基数', key: 'psnClctstd', width: 20 },
+							{header: '工资', key: 'wag', width: 15 }],
+					},
+					// 表格数据
+					rows: this.tableDataSuccess,
+					codeList: [
+						{codeType:'INSUTYPE',columnKey: 'insutype' },
+						{codeType: 'PSN_INSU_STAS',columnKey:'psnInsuStas'},
+						{codeType: 'GEND',columnKey: 'gend'},
+					],
+				}],
+			}
+			this.Base.generateExcel(successData)
+		},
+		exportError(){
+			//导出失败信息
+			this.chooseExport=false
+			console.log('现在开始导出失败信息')
+			const errorData = {
+				fileName: '失败信息',   // 文件名
+				// 工作表List
+				sheets: [{
+					// 工作表名字，默认为Sheet加上该工作表在List中的index
+					name: 'worksheet1',
+					column: {
+						// 简单表头设置如下
+						complex: false,
+						// 简单表头的列索引
+						columns: [
+							{header: '人员编号', key: 'psnNo', width: 32 },
+							{header: '姓名', key: 'psnName', width: 20 },
+							{header: '证件号码', key: 'certno', width: 30 },
+							{header: '性别', key: 'gend', width: 20 },
+							{header: '参保险种', key: 'insutype', width: 20 },
+							{header: '参保状态', key: 'psnInsuStas', width: 20 },
+							{header: '失败原因', key: 'rowTips', width: 30 }],
+					},
+					// 表格数据
+					rows: this.tableDataError,
+					codeList: [
+						{codeType:'INSUTYPE',columnKey: 'insutype' },
+						{codeType: 'PSN_INSU_STAS',columnKey:'psnInsuStas'},
+						{codeType: 'GEND',columnKey: 'gend'},
+					],
+				}],
+			}
+			this.Base.generateExcel(errorData)
+		}
 	},
 	watch: {
 		//message必须和监测的data名字一样

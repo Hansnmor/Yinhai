@@ -3,16 +3,24 @@ import router from './router/index' // 引入 改模块的路由模块
 import psnInsuInfoTable from '@/scopes/project/zengtr/frontend/psnInsuInfoTable'
 Vue.component('psnInsuInfoTable',psnInsuInfoTable)
 // 自己引入各种插件
+import excelUtil from '@yh/ta404-ui/es/utils/js/excel.util'
+// 注册工具到上Base
+Vue.prototype.Base = Object.assign(Vue.prototype.Base,{
+  ...excelUtil
+})
+
 import{
   Radio,
   Descriptions,
   InputNumber,
-  BigTable
+  BigTable,
+  Modal
 } from '@yh/ta404-ui'
 Vue.use(Radio)
 Vue.use(Descriptions)
 Vue.use(InputNumber)
 Vue.use(BigTable)
+Vue.use(Modal)
 // 判断登录状态然后确认是否渲染页面
 
 checkLogin(() => {

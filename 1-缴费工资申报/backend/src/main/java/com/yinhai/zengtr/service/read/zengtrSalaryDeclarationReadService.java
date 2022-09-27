@@ -15,6 +15,8 @@ public interface zengtrSalaryDeclarationReadService {
 
 	List<PsnInsuDQueryVo> queryPsnInsuInfoByPsnNo(String psnNo);
 
+	List<PsnInsuDQueryVo> queryPsnInsuIfNormal(String psnNo,String insutype);
+
 
 //	List<PsnInfoBQueryVo> queryPsnInsuInfo(String empNo);
 }

@@ -13,7 +13,7 @@ public class FileImportInfoListVo implements Serializable {
 	//错误提示
 	private String rowTips;
 
-	@ExcelImport(value = "人员编号",required = true)
+	@ExcelImport(value = "人员编号",required = true,maxLength = 18)
 	private String psnNo;
 
 	@ExcelImport(value = "姓名",required = true)
@@ -25,10 +25,12 @@ public class FileImportInfoListVo implements Serializable {
 	@ExcelImport(value = "性别",kv = "1-男;2-女", required = true)
 	private String gend;
 
-	@ExcelImport(value = "险种类型",required = true)
+	@ExcelImport(value = "参保险种", kv="320-公务员医疗补助;310-职工基本医疗保险;391-城镇居民基本医疗保险;" +
+			"340-离休人员医疗保障;330-大额医疗费用补助;380-新型农村合作医疗;360-老红军医疗保障;392-城乡居民大病医疗保险;" +
+			"510-生育保险;390-城乡居民基本医疗保险;350-一至六级残废军人医疗补助",required = true)
 	private String insutype;
 
-	@ExcelImport(value = "参保状态",required = true)
+	@ExcelImport(value = "参保状态",kv="0-未参保;1-正常参保;2-暂停参保;3-终止参保",required = true)
 	private String  psnInsuStas;
 
 
