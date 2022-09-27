@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yinhai.zengtr.mapper.read.zengtrPaymentDetailsReadMapper">
+    <!--根据人员编号查询人员信息-->
+    <select id="queryPsnInfo" resultType="com.yinhai.zengtr.vo.PsnInfoBQueryVo">
+        select PSN_NO as psnNo,PSN_NAME as psnName,CERTNO as certno,GEND as gend,NATY as naty
+        from psn_info_b
+        where
+            (PSN_NO like CONCAT(concat('%',#{psnNo},'%'))) or (PSN_NAME like CONCAT(concat('%',#{psnNo},'%'))) or (CERTNO like CONCAT(concat('%',#{psnNo},'%')))
+    </select>
+
+
+    <!--根据个人编号查询参保信息-->
+    <select id="queryPsnInsuInfoByPsnNo" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
+        select PSN_INSU_STAS as psnInsuStas,PSN_NO as psnNo,PAUS_INSU_DATE as pausInsuDate,PSN_INSU_DATE as psnInsuDate,INSUTYPE as insutype
+        from psn_insu_d
+        where
+            PSN_NO = #{psnNo}
+    </select>
+
+    <!--根据单位编号查询单位基本信息-->
+    <select id="queryEmpInfo" resultType="com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo">
+        select
+            EMP_NO as empNo, EMP_ENTT_CODG as empEnttCodg, EMP_MGT_TYPE as empMgtType, PRNT_EMP_NO as prntEmpNo, ASOC_LEGENT_FLAG as asocLegentFlag, EMP_TYPE as empType, EMP_NAME as empName, REG_NAME as regName, LOC_ADMDVS as locAdmdvs, CONER_NAME as conerName, CONER_EMAIL as conerEmail, TEL as tel, FAX_NO as faxNo, TAX_NO as taxNo, ORGCODE as orgcode, REGNO as regno, REGNO_CERT_TYPE as regnoCertType, EMP_ADDR as empAddr, POSCODE as poscode, APRV_ESTA_DEPT as aprvEstaDept, APRV_ESTA_DATE as aprvEstaDate, APRV_ESTA_DOCNO as aprvEstaDocno, PRNT_ADMDVS as prntAdmdvs, INSU_OPTINS as insuOptins, ORG_VALI_STAS as orgValiStas, LEGREP_TEL as legrepTel, LEGREP_NAME as legrepName, LEGREP_CERT_TYPE as legrepCertType, LEGREP_CERTNO as legrepCertno, ORGCODE_ISSU_EMP as orgcodeIssuEmp, VALI_FLAG as valiFlag, RID as rid, CRTE_TIME as crteTime, UPDT_TIME as updtTime, CRTER as crter, CRTER_NAME as crterName, CRTE_OPTINS as crteOptins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, OPTINS as optins, POOLAREA as poolarea, VER as ver
+        from insu_emp_info_b
+        where (EMP_NO like CONCAT(concat('%',#{empNo},'%')))
+    </select>
+</mapper>
