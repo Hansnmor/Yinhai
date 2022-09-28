@@ -6,9 +6,11 @@ import com.yinhai.ta404.core.utils.ValidateUtil;
 import com.yinhai.ta404.core.validate.annotation.V;
 import com.yinhai.zengtr.service.read.zengtrPaymentDetailsReadService;
 import com.yinhai.zengtr.service.write.zengtrPaymentDetailsWriteService;
+import com.yinhai.zengtr.vo.EmpInsuDQueryVo;
 import com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo;
 import com.yinhai.zengtr.vo.PsnInfoBQueryVo;
 import com.yinhai.zengtr.vo.PsnInsuDQueryVo;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.annotation.Resource;
@@ -45,6 +47,23 @@ public class zengtrPaymentDetailsRestService extends BaseRestService {
 			List<InsuEmpInfoBQueryVo> insuEmpInfoBQueryVoList=zengtrPaymentDetailsReadService.queryEmpInfo(empNo);
 			setData("empInfoList",insuEmpInfoBQueryVoList);
 		}
+	}
+
+	@PostMapping("queryPsnInsuInfoByEmpNo")
+	public void queryPsnInsuInfoByEmpNo(String empNo){
+		if(!ValidateUtil.isEmpty(empNo)){
+			List<PsnInsuDQueryVo> psnInsuDQueryVoList=zengtrPaymentDetailsReadService.queryPsnInsuInfoByEmpNo(empNo);
+			setData("psnInsuInfoListByEmpNo",psnInsuDQueryVoList);
+		}
+	}
+	//查询单位征缴规则
+	@PostMapping("queryClctRuleTypeCodg")
+	public void queryClctRuleTypeCodg(String empNo){
+		if(!ValidateUtil.isEmpty(empNo)){
+			List<EmpInsuDQueryVo> empInsuDQueryVoList=zengtrPaymentDetailsReadService.queryClctRuleTypeCodg(empNo);
+			setData("empInsuDList",empInsuDQueryVoList);
+		}
+
 	}
 
 }

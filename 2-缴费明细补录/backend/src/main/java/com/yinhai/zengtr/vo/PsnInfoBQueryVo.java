@@ -106,16 +106,68 @@ public class PsnInfoBQueryVo implements Serializable {
     private String optins;
             //版本号
     private String ver;
-    
-                
-public String getPsnNo() {
+
+    @Override
+    public String toString() {
+        return "PsnInfoBQueryVo{" +
+                "psnNo='" + psnNo + '\'' +
+                ", psnMgtcode='" + psnMgtcode + '\'' +
+                ", psnName='" + psnName + '\'' +
+                ", alis='" + alis + '\'' +
+                ", gend='" + gend + '\'' +
+                ", brdy=" + brdy +
+                ", psnCertType='" + psnCertType + '\'' +
+                ", certno='" + certno + '\'' +
+                ", hsecfc='" + hsecfc + '\'' +
+                ", tel='" + tel + '\'' +
+                ", mob='" + mob + '\'' +
+                ", naty='" + naty + '\'' +
+                ", natRegnCode='" + natRegnCode + '\'' +
+                ", email='" + email + '\'' +
+                ", polstas='" + polstas + '\'' +
+                ", fstPatcJobDate=" + fstPatcJobDate +
+                ", resdNatu='" + resdNatu + '\'' +
+                ", resdLocAdmdvs='" + resdLocAdmdvs + '\'' +
+                ", resdAddr='" + resdAddr + '\'' +
+                ", resdAddrPoscode='" + resdAddrPoscode + '\'' +
+                ", liveAdmdvs='" + liveAdmdvs + '\'' +
+                ", liveAddr='" + liveAddr + '\'' +
+                ", liveAddrPoscode='" + liveAddrPoscode + '\'' +
+                ", resdbookNo='" + resdbookNo + '\'' +
+                ", mrgStas='" + mrgStas + '\'' +
+                ", hlcon='" + hlcon + '\'' +
+                ", memo='" + memo + '\'' +
+                ", survStas='" + survStas + '\'' +
+                ", mulProvMntFlag='" + mulProvMntFlag + '\'' +
+                ", admdut='" + admdut + '\'' +
+                ", retrType='" + retrType + '\'' +
+                ", gradSchl='" + gradSchl + '\'' +
+                ", educ='" + educ + '\'' +
+                ", proTechDutyLv='" + proTechDutyLv + '\'' +
+                ", natPrfsQuaLv='" + natPrfsQuaLv + '\'' +
+                ", valiFlag='" + valiFlag + '\'' +
+                ", rid='" + rid + '\'' +
+                ", crteTime=" + crteTime +
+                ", updtTime=" + updtTime +
+                ", crter='" + crter + '\'' +
+                ", crterName='" + crterName + '\'' +
+                ", crteOptins='" + crteOptins + '\'' +
+                ", opter='" + opter + '\'' +
+                ", opterName='" + opterName + '\'' +
+                ", optTime=" + optTime +
+                ", optins='" + optins + '\'' +
+                ", ver='" + ver + '\'' +
+                '}';
+    }
+
+    public String getPsnNo() {
 return psnNo;
 }
 
 public void setPsnNo(String psnNo) {
 this.psnNo = psnNo;
 }
-                
+
 public String getPsnMgtcode() {
 return psnMgtcode;
 }
@@ -123,7 +175,7 @@ return psnMgtcode;
 public void setPsnMgtcode(String psnMgtcode) {
 this.psnMgtcode = psnMgtcode;
 }
-                
+
 public String getPsnName() {
 return psnName;
 }
@@ -131,7 +183,7 @@ return psnName;
 public void setPsnName(String psnName) {
 this.psnName = psnName;
 }
-                
+
 public String getAlis() {
 return alis;
 }
@@ -139,7 +191,7 @@ return alis;
 public void setAlis(String alis) {
 this.alis = alis;
 }
-                
+
 public String getGend() {
 return gend;
 }
@@ -147,7 +199,7 @@ return gend;
 public void setGend(String gend) {
 this.gend = gend;
 }
-                
+
 public Date getBrdy() {
 return brdy;
 }
@@ -155,7 +207,7 @@ return brdy;
 public void setBrdy(Date brdy) {
 this.brdy = brdy;
 }
-                
+
 public String getPsnCertType() {
 return psnCertType;
 }
@@ -163,7 +215,7 @@ return psnCertType;
 public void setPsnCertType(String psnCertType) {
 this.psnCertType = psnCertType;
 }
-                
+
 public String getCertno() {
 return certno;
 }
@@ -171,7 +223,7 @@ return certno;
 public void setCertno(String certno) {
 this.certno = certno;
 }
-                
+
 public String getHsecfc() {
 return hsecfc;
 }
@@ -179,7 +231,7 @@ return hsecfc;
 public void setHsecfc(String hsecfc) {
 this.hsecfc = hsecfc;
 }
-                
+
 public String getTel() {
 return tel;
 }
@@ -187,7 +239,7 @@ return tel;
 public void setTel(String tel) {
 this.tel = tel;
 }
-                
+
 public String getMob() {
 return mob;
 }
@@ -195,7 +247,7 @@ return mob;
 public void setMob(String mob) {
 this.mob = mob;
 }
-                
+
 public String getNaty() {
 return naty;
 }
@@ -203,7 +255,7 @@ return naty;
 public void setNaty(String naty) {
 this.naty = naty;
 }
-                
+
 public String getNatRegnCode() {
 return natRegnCode;
 }
@@ -211,7 +263,7 @@ return natRegnCode;
 public void setNatRegnCode(String natRegnCode) {
 this.natRegnCode = natRegnCode;
 }
-                
+
 public String getEmail() {
 return email;
 }
@@ -219,7 +271,7 @@ return email;
 public void setEmail(String email) {
 this.email = email;
 }
-                
+
 public String getPolstas() {
 return polstas;
 }
@@ -227,7 +279,7 @@ return polstas;
 public void setPolstas(String polstas) {
 this.polstas = polstas;
 }
-                
+
 public Date getFstPatcJobDate() {
 return fstPatcJobDate;
 }
@@ -235,7 +287,7 @@ return fstPatcJobDate;
 public void setFstPatcJobDate(Date fstPatcJobDate) {
 this.fstPatcJobDate = fstPatcJobDate;
 }
-                
+
 public String getResdNatu() {
 return resdNatu;
 }
@@ -243,7 +295,7 @@ return resdNatu;
 public void setResdNatu(String resdNatu) {
 this.resdNatu = resdNatu;
 }
-                
+
 public String getResdLocAdmdvs() {
 return resdLocAdmdvs;
 }
@@ -251,7 +303,7 @@ return resdLocAdmdvs;
 public void setResdLocAdmdvs(String resdLocAdmdvs) {
 this.resdLocAdmdvs = resdLocAdmdvs;
 }
-                
+
 public String getResdAddr() {
 return resdAddr;
 }
@@ -259,7 +311,7 @@ return resdAddr;
 public void setResdAddr(String resdAddr) {
 this.resdAddr = resdAddr;
 }
-                
+
 public String getResdAddrPoscode() {
 return resdAddrPoscode;
 }
@@ -267,7 +319,7 @@ return resdAddrPoscode;
 public void setResdAddrPoscode(String resdAddrPoscode) {
 this.resdAddrPoscode = resdAddrPoscode;
 }
-                
+
 public String getLiveAdmdvs() {
 return liveAdmdvs;
 }
@@ -275,7 +327,7 @@ return liveAdmdvs;
 public void setLiveAdmdvs(String liveAdmdvs) {
 this.liveAdmdvs = liveAdmdvs;
 }
-                
+
 public String getLiveAddr() {
 return liveAddr;
 }
@@ -283,7 +335,7 @@ return liveAddr;
 public void setLiveAddr(String liveAddr) {
 this.liveAddr = liveAddr;
 }
-                
+
 public String getLiveAddrPoscode() {
 return liveAddrPoscode;
 }
@@ -291,7 +343,7 @@ return liveAddrPoscode;
 public void setLiveAddrPoscode(String liveAddrPoscode) {
 this.liveAddrPoscode = liveAddrPoscode;
 }
-                
+
 public String getResdbookNo() {
 return resdbookNo;
 }
@@ -299,7 +351,7 @@ return resdbookNo;
 public void setResdbookNo(String resdbookNo) {
 this.resdbookNo = resdbookNo;
 }
-                
+
 public String getMrgStas() {
 return mrgStas;
 }
@@ -307,7 +359,7 @@ return mrgStas;
 public void setMrgStas(String mrgStas) {
 this.mrgStas = mrgStas;
 }
-                
+
 public String getHlcon() {
 return hlcon;
 }
@@ -315,7 +367,7 @@ return hlcon;
 public void setHlcon(String hlcon) {
 this.hlcon = hlcon;
 }
-                
+
 public String getMemo() {
 return memo;
 }
@@ -323,7 +375,7 @@ return memo;
 public void setMemo(String memo) {
 this.memo = memo;
 }
-                
+
 public String getSurvStas() {
 return survStas;
 }
@@ -331,7 +383,7 @@ return survStas;
 public void setSurvStas(String survStas) {
 this.survStas = survStas;
 }
-                
+
 public String getMulProvMntFlag() {
 return mulProvMntFlag;
 }
@@ -339,7 +391,7 @@ return mulProvMntFlag;
 public void setMulProvMntFlag(String mulProvMntFlag) {
 this.mulProvMntFlag = mulProvMntFlag;
 }
-                
+
 public String getAdmdut() {
 return admdut;
 }
@@ -347,7 +399,7 @@ return admdut;
 public void setAdmdut(String admdut) {
 this.admdut = admdut;
 }
-                
+
 public String getRetrType() {
 return retrType;
 }
@@ -355,7 +407,7 @@ return retrType;
 public void setRetrType(String retrType) {
 this.retrType = retrType;
 }
-                
+
 public String getGradSchl() {
 return gradSchl;
 }
@@ -363,7 +415,7 @@ return gradSchl;
 public void setGradSchl(String gradSchl) {
 this.gradSchl = gradSchl;
 }
-                
+
 public String getEduc() {
 return educ;
 }
@@ -371,7 +423,7 @@ return educ;
 public void setEduc(String educ) {
 this.educ = educ;
 }
-                
+
 public String getProTechDutyLv() {
 return proTechDutyLv;
 }
@@ -379,7 +431,7 @@ return proTechDutyLv;
 public void setProTechDutyLv(String proTechDutyLv) {
 this.proTechDutyLv = proTechDutyLv;
 }
-                
+
 public String getNatPrfsQuaLv() {
 return natPrfsQuaLv;
 }
@@ -387,7 +439,7 @@ return natPrfsQuaLv;
 public void setNatPrfsQuaLv(String natPrfsQuaLv) {
 this.natPrfsQuaLv = natPrfsQuaLv;
 }
-                
+
 public String getValiFlag() {
 return valiFlag;
 }
@@ -395,7 +447,7 @@ return valiFlag;
 public void setValiFlag(String valiFlag) {
 this.valiFlag = valiFlag;
 }
-                
+
 public String getRid() {
 return rid;
 }
@@ -403,7 +455,7 @@ return rid;
 public void setRid(String rid) {
 this.rid = rid;
 }
-                
+
 public Date getCrteTime() {
 return crteTime;
 }
@@ -411,7 +463,7 @@ return crteTime;
 public void setCrteTime(Date crteTime) {
 this.crteTime = crteTime;
 }
-                
+
 public Date getUpdtTime() {
 return updtTime;
 }
@@ -419,7 +471,7 @@ return updtTime;
 public void setUpdtTime(Date updtTime) {
 this.updtTime = updtTime;
 }
-                
+
 public String getCrter() {
 return crter;
 }
@@ -427,7 +479,7 @@ return crter;
 public void setCrter(String crter) {
 this.crter = crter;
 }
-                
+
 public String getCrterName() {
 return crterName;
 }
@@ -435,7 +487,7 @@ return crterName;
 public void setCrterName(String crterName) {
 this.crterName = crterName;
 }
-                
+
 public String getCrteOptins() {
 return crteOptins;
 }
@@ -443,7 +495,7 @@ return crteOptins;
 public void setCrteOptins(String crteOptins) {
 this.crteOptins = crteOptins;
 }
-                
+
 public String getOpter() {
 return opter;
 }
@@ -451,7 +503,7 @@ return opter;
 public void setOpter(String opter) {
 this.opter = opter;
 }
-                
+
 public String getOpterName() {
 return opterName;
 }
@@ -459,7 +511,7 @@ return opterName;
 public void setOpterName(String opterName) {
 this.opterName = opterName;
 }
-                
+
 public Date getOptTime() {
 return optTime;
 }
@@ -467,7 +519,7 @@ return optTime;
 public void setOptTime(Date optTime) {
 this.optTime = optTime;
 }
-                
+
 public String getOptins() {
 return optins;
 }
@@ -475,7 +527,7 @@ return optins;
 public void setOptins(String optins) {
 this.optins = optins;
 }
-                
+
 public String getVer() {
 return ver;
 }
@@ -483,5 +535,5 @@ return ver;
 public void setVer(String ver) {
 this.ver = ver;
 }
-    
+
 }

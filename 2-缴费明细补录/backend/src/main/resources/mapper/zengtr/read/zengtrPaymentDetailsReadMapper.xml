@@ -25,4 +25,19 @@
         from insu_emp_info_b
         where (EMP_NO like CONCAT(concat('%',#{empNo},'%')))
     </select>
+
+    <!--根据单位编号查询人员参保信息-->
+    <select id="queryPsnInsuInfoByEmpNo" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
+        select
+            pid.EMP_NO as empNo,pid.PSN_NO as psnNo,pid.INSUTYPE as insutype,pid.FST_INSU_YM as fstInsuYm,pid.MAX_ACCTPRD as maxAcctprd,ieib.INSU_OPTINS as insuOptins
+        from insu_emp_info_b as ieib ,psn_insu_d as pid
+        where pid.EMP_NO = #{empNo} and pid.EMP_NO = ieib.EMP_NO
+    </select>
+
+    <select id="queryClctRuleTypeCodg" resultType="com.yinhai.zengtr.vo.EmpInsuDQueryVo">
+        select CLCT_RULE_TYPE_CODG as clctRuleTypeCodg
+        from emp_insu_d
+        where EMP_NO = #{empNo}
+    </select>
+
 </mapper>

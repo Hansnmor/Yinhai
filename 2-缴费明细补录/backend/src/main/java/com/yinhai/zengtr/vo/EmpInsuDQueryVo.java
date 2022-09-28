@@ -4,52 +4,38 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
-* (PsnInsuD)实体类
+* (EmpInsuD)实体类
 *
 * @author default
-* @since 2022-09-27 17:06:01
+* @since 2022-09-28 14:47:18
 */
-public class PsnInsuDQueryVo implements Serializable {
+public class EmpInsuDQueryVo implements Serializable {
 
-    private static final long serialVersionUID = -98401136423910201L;
-            //人员参保关系ID
-    private String psnInsuRltsId;
+    private static final long serialVersionUID = -16077681309074094L;
+            //单位参保关系ID
+    private String empInsuRltsId;
             //单位编号
     private String empNo;
-            //人员编号
-    private String psnNo;
             //险种类型
     private String insutype;
-            //本次参保日期
-    private Date crtInsuDate;
-            //暂停参保日期
-    private Date pausInsuDate;
-            //人员参保状态
-    private String psnInsuStas;
-            //险种离退休标志
-    private String insutypeRetrFlag;
-            //人员类别
-    private String psnType;
-            //征收方式
-    private String clctWay;
-            //用工形式
-    private String empFom;
-            //编制类型
-    private String qutsType;
+            //单位参保状态
+    private String empInsuStas;
+            //单位参保日期
+    private Date empInsuDate;
             //最大做账期号
     private String maxAcctprd;
-            //账户建立年月
-    private String acctCrtnYm;
-            //首次参保年月
-    private String fstInsuYm;
-            //本系统首次参保日期
-    private Date psnInsuDate;
-            //征缴规则类型编码
-    private String clctRuleTypeCodg;
-            //基数核定规则编码
-    private String clctstdCrtfRuleCodg;
+            //征收方式
+    private String clctWay;
+            //税务起征年月
+    private String taxBegnClctYm;
             //医疗保险类别
     private String hiType;
+            //征缴规则类型编码
+    private String clctRuleTypeCodg;
+            //基数核定规则类型编码
+    private String clctstdCrtfRuleCodg;
+            //备注
+    private String memo;
             //医保区划
     private String insuOrg;
             //统筹区
@@ -76,34 +62,24 @@ public class PsnInsuDQueryVo implements Serializable {
     private Date updtTime;
             //唯一记录号
     private String rid;
-            //参保人员管理事件ID
-    private String psnInsuMgtEid;
-
-    //参保所属机构
-    private String insuOptins;
+            //参保单位管理事件ID
+    private String insuEmpMgtEid;
 
     @Override
     public String toString() {
-        return "PsnInsuDQueryVo{" +
-                "psnInsuRltsId='" + psnInsuRltsId + '\'' +
+        return "EmpInsuDQueryVo{" +
+                "empInsuRltsId='" + empInsuRltsId + '\'' +
                 ", empNo='" + empNo + '\'' +
-                ", psnNo='" + psnNo + '\'' +
                 ", insutype='" + insutype + '\'' +
-                ", crtInsuDate=" + crtInsuDate +
-                ", pausInsuDate=" + pausInsuDate +
-                ", psnInsuStas='" + psnInsuStas + '\'' +
-                ", insutypeRetrFlag='" + insutypeRetrFlag + '\'' +
-                ", psnType='" + psnType + '\'' +
-                ", clctWay='" + clctWay + '\'' +
-                ", empFom='" + empFom + '\'' +
-                ", qutsType='" + qutsType + '\'' +
+                ", empInsuStas='" + empInsuStas + '\'' +
+                ", empInsuDate=" + empInsuDate +
                 ", maxAcctprd='" + maxAcctprd + '\'' +
-                ", acctCrtnYm='" + acctCrtnYm + '\'' +
-                ", fstInsuYm='" + fstInsuYm + '\'' +
-                ", psnInsuDate=" + psnInsuDate +
+                ", clctWay='" + clctWay + '\'' +
+                ", taxBegnClctYm='" + taxBegnClctYm + '\'' +
+                ", hiType='" + hiType + '\'' +
                 ", clctRuleTypeCodg='" + clctRuleTypeCodg + '\'' +
                 ", clctstdCrtfRuleCodg='" + clctstdCrtfRuleCodg + '\'' +
-                ", hiType='" + hiType + '\'' +
+                ", memo='" + memo + '\'' +
                 ", insuOrg='" + insuOrg + '\'' +
                 ", poolarea='" + poolarea + '\'' +
                 ", optChnl='" + optChnl + '\'' +
@@ -117,25 +93,16 @@ public class PsnInsuDQueryVo implements Serializable {
                 ", crteTime=" + crteTime +
                 ", updtTime=" + updtTime +
                 ", rid='" + rid + '\'' +
-                ", psnInsuMgtEid='" + psnInsuMgtEid + '\'' +
-                ", insuOptins='" + insuOptins + '\'' +
+                ", insuEmpMgtEid='" + insuEmpMgtEid + '\'' +
                 '}';
     }
 
-    public String getInsuOptins() {
-        return insuOptins;
-    }
-
-    public void setInsuOptins(String insuOptins) {
-        this.insuOptins = insuOptins;
-    }
-
-    public String getPsnInsuRltsId() {
-return psnInsuRltsId;
+    public String getEmpInsuRltsId() {
+return empInsuRltsId;
 }
 
-public void setPsnInsuRltsId(String psnInsuRltsId) {
-this.psnInsuRltsId = psnInsuRltsId;
+public void setEmpInsuRltsId(String empInsuRltsId) {
+this.empInsuRltsId = empInsuRltsId;
 }
 
 public String getEmpNo() {
@@ -146,14 +113,6 @@ public void setEmpNo(String empNo) {
 this.empNo = empNo;
 }
 
-public String getPsnNo() {
-return psnNo;
-}
-
-public void setPsnNo(String psnNo) {
-this.psnNo = psnNo;
-}
-
 public String getInsutype() {
 return insutype;
 }
@@ -162,68 +121,20 @@ public void setInsutype(String insutype) {
 this.insutype = insutype;
 }
 
-public Date getCrtInsuDate() {
-return crtInsuDate;
+public String getEmpInsuStas() {
+return empInsuStas;
 }
 
-public void setCrtInsuDate(Date crtInsuDate) {
-this.crtInsuDate = crtInsuDate;
+public void setEmpInsuStas(String empInsuStas) {
+this.empInsuStas = empInsuStas;
 }
 
-public Date getPausInsuDate() {
-return pausInsuDate;
+public Date getEmpInsuDate() {
+return empInsuDate;
 }
 
-public void setPausInsuDate(Date pausInsuDate) {
-this.pausInsuDate = pausInsuDate;
-}
-
-public String getPsnInsuStas() {
-return psnInsuStas;
-}
-
-public void setPsnInsuStas(String psnInsuStas) {
-this.psnInsuStas = psnInsuStas;
-}
-
-public String getInsutypeRetrFlag() {
-return insutypeRetrFlag;
-}
-
-public void setInsutypeRetrFlag(String insutypeRetrFlag) {
-this.insutypeRetrFlag = insutypeRetrFlag;
-}
-
-public String getPsnType() {
-return psnType;
-}
-
-public void setPsnType(String psnType) {
-this.psnType = psnType;
-}
-
-public String getClctWay() {
-return clctWay;
-}
-
-public void setClctWay(String clctWay) {
-this.clctWay = clctWay;
-}
-
-public String getEmpFom() {
-return empFom;
-}
-
-public void setEmpFom(String empFom) {
-this.empFom = empFom;
-}
-
-public String getQutsType() {
-return qutsType;
-}
-
-public void setQutsType(String qutsType) {
-this.qutsType = qutsType;
+public void setEmpInsuDate(Date empInsuDate) {
+this.empInsuDate = empInsuDate;
 }
 
 public String getMaxAcctprd() {
@@ -234,28 +145,28 @@ public void setMaxAcctprd(String maxAcctprd) {
 this.maxAcctprd = maxAcctprd;
 }
 
-public String getAcctCrtnYm() {
-return acctCrtnYm;
+public String getClctWay() {
+return clctWay;
 }
 
-public void setAcctCrtnYm(String acctCrtnYm) {
-this.acctCrtnYm = acctCrtnYm;
+public void setClctWay(String clctWay) {
+this.clctWay = clctWay;
 }
 
-public String getFstInsuYm() {
-return fstInsuYm;
+public String getTaxBegnClctYm() {
+return taxBegnClctYm;
 }
 
-public void setFstInsuYm(String fstInsuYm) {
-this.fstInsuYm = fstInsuYm;
+public void setTaxBegnClctYm(String taxBegnClctYm) {
+this.taxBegnClctYm = taxBegnClctYm;
 }
 
-public Date getPsnInsuDate() {
-return psnInsuDate;
+public String getHiType() {
+return hiType;
 }
 
-public void setPsnInsuDate(Date psnInsuDate) {
-this.psnInsuDate = psnInsuDate;
+public void setHiType(String hiType) {
+this.hiType = hiType;
 }
 
 public String getClctRuleTypeCodg() {
@@ -274,12 +185,12 @@ public void setClctstdCrtfRuleCodg(String clctstdCrtfRuleCodg) {
 this.clctstdCrtfRuleCodg = clctstdCrtfRuleCodg;
 }
 
-public String getHiType() {
-return hiType;
+public String getMemo() {
+return memo;
 }
 
-public void setHiType(String hiType) {
-this.hiType = hiType;
+public void setMemo(String memo) {
+this.memo = memo;
 }
 
 public String getInsuOrg() {
@@ -386,12 +297,12 @@ public void setRid(String rid) {
 this.rid = rid;
 }
 
-public String getPsnInsuMgtEid() {
-return psnInsuMgtEid;
+public String getInsuEmpMgtEid() {
+return insuEmpMgtEid;
 }
 
-public void setPsnInsuMgtEid(String psnInsuMgtEid) {
-this.psnInsuMgtEid = psnInsuMgtEid;
+public void setInsuEmpMgtEid(String insuEmpMgtEid) {
+this.insuEmpMgtEid = insuEmpMgtEid;
 }
 
 }
