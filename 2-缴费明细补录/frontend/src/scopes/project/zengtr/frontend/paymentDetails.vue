@@ -23,6 +23,7 @@
 					>
 						<ta-form-item label="个人编号" :span="6"
 									  fieldDecoratorId="psnNo"
+									  :disabled="ifNo"
 									  :require="{message:'请输入个人编号'}">
 							<ta-suggest
 								:data-source="psnInfoList"
@@ -63,7 +64,7 @@
 						<ta-form-item label="单位编号"
 									  field-decorator-id="empNo"
 									  :span="6"
-									  :disabled="false"
+									  :disabled="ifNo"
 									  :require="{message:'请输入单位编号'}">
 							<ta-suggest
 								:data-source="empInfoList"
@@ -127,7 +128,7 @@
 
 
 				<div style="text-align: center;">
-					<ta-button @click="fnAdd">添加</ta-button>
+					<ta-button @click="fnAdd" :disabled="ifAdd">添加</ta-button>
 				</div>
 
 				<!--引入子组件表格-->
@@ -135,6 +136,7 @@
 					<child ref="freshPage"
 						   :validatedList="validatedList"
 						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"
+						   :recordingDetails="recordingDetails"
 					></child>
 				</div>
 
@@ -179,11 +181,131 @@ export default {
 			checkedInfoInsuList:[],//勾选的人员参保信息数据
 			validatedList:[],//校验成功的列表
 			empInsuDList:[],//单位信息
+			clctInfoList:[],//缴费记录信息表
+			recordingDetails:[],//缴费明细补录表
+			ifNo:false,//决定个人编号和单位编号的输入框
+			ifAdd:false,//添加按钮是否开启
 		}
 	},
 	methods:{
 		fnSave(){
 			//保存
+			console.log('现在开始进行保存操作')
+			//校验单位信息、人员信息的完整性
+			let flag=0
+			this.psnBaseForm.validateFields(errors => {
+				console.log('个人错误信息：', errors)
+				if (errors !== null) {
+					flag=1
+				}
+			})
+			this.empBaseForm.validateFields(errors => {
+				console.log('单位错误信息:',errors)
+				if (errors !== null) {
+					flag=1
+				}
+			})
+			if(flag!==0){
+				this.$message.error('信息录入不完整，请补全！')
+				return false
+			}else{
+				//信基本息完整,校验 校验成功列表是否有数据
+				console.log('验证成功列表:',this.validatedList)
+				if(this.validatedList.length===0){
+					this.$message.error('没有需要保存的数据，请检查！')
+					return false
+				}else{
+					//进行数据校验
+					if(0){
+						//已经在添加部分进行了验证
+						this.$message.error('【XXX险种数据有误，请重新录入！')
+						return false
+					}else{
+						//验证成功
+						//校验存不存在缴费记录
+						this.Base.submit(null,{
+							url:'paymentDetails/queryClctInfoList',
+							data:{
+								empNo:this.empNo
+							},
+						}).then((data)=>{
+							// console.log('data:',data.data.clctInfoList)
+							this.clctInfoList=data.data.clctInfoList
+							console.log('开始验证是否存在缴费记录')
+							let tempinsutype
+							for(let i=0;i<this.validatedList.length;i++){
+								let temp1=this.validatedList[i]
+								for(let j=0;j<this.clctInfoList.length;j++){
+									let temp2=this.clctInfoList[j]
+									if(temp2.accrym!==null){
+										if(temp2.clctFlag===1||(parseInt(temp2.accrym)<parseInt(temp1.endYM)&&parseInt(temp2.accrym)>parseInt(temp1.startYM))){
+											//存在记录
+											flag=1
+											this.Base.asyncGetCodeData('INSUTYPE').then((codeList) => {
+												for (const element of codeList) {
+													if (element.value === temp2.insutype) {
+														tempinsutype = element.label
+														return
+													}
+												}
+											})
+											setTimeout(()=>{
+												this.$message.error(tempinsutype+'险种'+temp2.accrym+'年月已存在缴费记录，不能补录！')
+											},100)
+										}
+									}else{
+										console.log('未存在缴费记录')
+									}
+								}
+							}
+							if(flag!==0){
+								return false
+							}else{
+								//得到缴费基数
+								let clctBase//每月缴费基数
+								for(let i=0;i<this.validatedList.length;i++){
+									let temp=this.validatedList[i]
+									let year=(parseInt((temp.endYM).substring(0,4))-parseInt((temp.startYM).substring(0,4)))*12
+									let month=parseInt((temp.endYM).substring(4))-parseInt((temp.startYM).substring(4))
+									clctBase=temp.baseSum/(year+month+1)
+									console.log('第',(i+1),'个数据的每月缴费基数：',clctBase)
+									temp['clctBase']=clctBase
+									temp['psnNo']=this.psnNo
+								}
+
+								//由于没有表，所以没法查到筹资项目finc和缴费比例pay_scal，所以这一步暂时省略
+								//将每月缴费基数也写入表
+
+								console.log('此时将要写入数据的表：',this.validatedList)
+								//写入
+								this.Base.submit(null,{
+									url:'paymentDetails/insertRecordingData',
+									data:{
+										jsonStr: JSON.stringify(this.validatedList)
+									},
+								}).then((data)=>{
+									this.$message.success('人员'+this.psnNo+'缴费明细补录成功！')
+									console.log('得到的明细数据：',data.data)
+									//成功之后查询数据到补录明细表中
+									this.recordingDetails=data.data.recordingDetails
+									//并置灰输入框和按钮，除了重置
+									this.ifNo=true
+									this.isPayment=true
+									this.ifSave=true
+									this.ifAdd=true
+								}).catch(()=>{
+									this.$message.error('保存失败!');
+								})
+
+							}
+
+
+						})
+
+					}
+				}
+			}
+
 		},
 
 		fnReset(){

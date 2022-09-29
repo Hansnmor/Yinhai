@@ -1,9 +1,6 @@
 package com.yinhai.zengtr.service.read;
 
-import com.yinhai.zengtr.vo.EmpInsuDQueryVo;
-import com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInsuDQueryVo;
+import com.yinhai.zengtr.vo.*;
 
 import java.util.List;
 
@@ -17,4 +14,6 @@ public interface zengtrPaymentDetailsReadService {
 	List<PsnInsuDQueryVo> queryPsnInsuInfoByEmpNo(String empNo);
 
 	List<EmpInsuDQueryVo> queryClctRuleTypeCodg(String empNo);
+
+	List<UebmiClctDetlDQueryVo> queryClctInfoList(String empNo);
 }

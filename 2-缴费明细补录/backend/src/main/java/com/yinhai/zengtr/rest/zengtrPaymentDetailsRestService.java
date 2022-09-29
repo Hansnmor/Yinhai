@@ -1,15 +1,13 @@
 package com.yinhai.zengtr.rest;
 
+import com.alibaba.fastjson.JSON;
 import com.yinhai.ta404.core.restservice.BaseRestService;
 import com.yinhai.ta404.core.restservice.annotation.RestService;
 import com.yinhai.ta404.core.utils.ValidateUtil;
 import com.yinhai.ta404.core.validate.annotation.V;
 import com.yinhai.zengtr.service.read.zengtrPaymentDetailsReadService;
 import com.yinhai.zengtr.service.write.zengtrPaymentDetailsWriteService;
-import com.yinhai.zengtr.vo.EmpInsuDQueryVo;
-import com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInsuDQueryVo;
+import com.yinhai.zengtr.vo.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -62,6 +60,33 @@ public class zengtrPaymentDetailsRestService extends BaseRestService {
 		if(!ValidateUtil.isEmpty(empNo)){
 			List<EmpInsuDQueryVo> empInsuDQueryVoList=zengtrPaymentDetailsReadService.queryClctRuleTypeCodg(empNo);
 			setData("empInsuDList",empInsuDQueryVoList);
+		}
+	}
+
+	@PostMapping("queryClctInfoList")
+	public void queryClctInfoList(String empNo){
+		if (!ValidateUtil.isEmpty(empNo)) {
+			List<UebmiClctDetlDQueryVo> uebmiClctDetlDQueryVoList=zengtrPaymentDetailsReadService.queryClctInfoList(empNo);
+			setData("clctInfoList",uebmiClctDetlDQueryVoList);
+		}
+
+	}
+
+	//进行数据的补录
+	@PostMapping("insertRecordingData")
+	public void insertRecordingData(String jsonStr){
+		if(!ValidateUtil.isEmpty(jsonStr)){
+			List<ValidatedListVo> validatedListVoList=JSON.parseArray(jsonStr, ValidatedListVo.class);
+			List<UebmiCrtfRcdCAddVo> uebmiCrtfRcdCAddVoList=JSON.parseArray(jsonStr, UebmiCrtfRcdCAddVo.class);
+			List<UebmiClctDetlDAddVo> uebmiClctDetlDAddVoList=JSON.parseArray(jsonStr, UebmiClctDetlDAddVo.class);
+			List<UebmiClctDetlExtDAddVo> uebmiClctDetlExtDAddVoList=JSON.parseArray(jsonStr,UebmiClctDetlExtDAddVo.class);
+			System.out.println("收到的数据："+validatedListVoList);
+			//开始进行写入
+			List<RecordingDetailsVo> recordingDetailsVoList =zengtrPaymentDetailsWriteService.insertRecordingData(uebmiCrtfRcdCAddVoList,uebmiClctDetlDAddVoList,uebmiClctDetlExtDAddVoList);
+			System.out.println("将要返回的数据："+recordingDetailsVoList);
+			//返回数据
+			setData("recordingDetails",recordingDetailsVoList);
+
 		}
 
 	}

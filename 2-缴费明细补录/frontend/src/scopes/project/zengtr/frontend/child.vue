@@ -44,7 +44,23 @@
 			</ta-tab-pane>
 
 			<ta-tab-pane tab="本次补录明细" key="3">
-				<ta-big-table>
+				<ta-big-table :data="recordingDetails"
+							  ref="xTable3"
+							  border="default"
+							  auto-resize
+							  keep-source
+							  max-height="500px">
+					<ta-big-table-column type="seq"  width="60"></ta-big-table-column>
+					<ta-big-table-column field="psnNo"  width="150" title="人员编号"></ta-big-table-column>
+					<ta-big-table-column field="accrym"  width="100" title="贷款所属期"></ta-big-table-column>
+					<ta-big-table-column field="insutype"  width="100" title="险种类型"></ta-big-table-column>
+					<ta-big-table-column field="finc"  width="200" title="筹资项目"></ta-big-table-column>
+					<ta-big-table-column field="psnClctParaval"  width="150" title="基准缴费比例"></ta-big-table-column>
+					<ta-big-table-column field="sumamt"  width="150" title="应处理金额"></ta-big-table-column>
+					<ta-big-table-column field="realSumamt"  width="150" title="实处理金额" collection-type="INSUTYPE"></ta-big-table-column>
+					<ta-big-table-column field="clctFlag" width="100" title="到账标志"></ta-big-table-column>
+					<ta-big-table-column field="accFlag"  width="150" title="账户处理标志"></ta-big-table-column>
+					<ta-big-table-column field="time"  width="200" title="收入日期"></ta-big-table-column>
 				</ta-big-table>
 			</ta-tab-pane>
 		</ta-tabs>
@@ -57,6 +73,7 @@ export default {
 	props:{
 		psnInsuInfoListByEmpNo:[],//人员参保信息表
 		validatedList:[],//校验成功的列表
+		recordingDetails:[],//补录明细列表
 	},
 	data(){
 		return{

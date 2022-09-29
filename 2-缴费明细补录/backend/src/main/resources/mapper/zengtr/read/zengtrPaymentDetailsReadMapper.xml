@@ -34,9 +34,18 @@
         where pid.EMP_NO = #{empNo} and pid.EMP_NO = ieib.EMP_NO
     </select>
 
+    <!--根据单位编号查询规则编码-->
     <select id="queryClctRuleTypeCodg" resultType="com.yinhai.zengtr.vo.EmpInsuDQueryVo">
         select CLCT_RULE_TYPE_CODG as clctRuleTypeCodg
         from emp_insu_d
+        where EMP_NO = #{empNo}
+    </select>
+
+    <!--查询验证存不存在缴费记录-->
+    <select id="queryClctInfoList" resultType="com.yinhai.zengtr.vo.UebmiClctDetlDQueryVo">
+        select
+            PSN_CLCT_DETL_ID as psnClctDetlId, Emp_CLCT_Det_ID as empClctDetId, EMP_ARR_INTO_ACCT_AMT as empArrIntoAcctAmt, PSN_CLCT_INTO_ACCT_AMT as psnClctIntoAcctAmt, OTH_CLCT_TRAF_AMT as othClctTrafAmt, OTH_CLCT_AMT as othClctAmt, CRTE_OPTINS as crteOptins, FINSUBS_TRAF_AMT as finsubsTrafAmt, FINSUBS_AMT as finsubsAmt, INSUTYPE as insutype, INSU_IDET as insuIdet, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime, EMP_NO as empNo, EMP_CLCT_PARAVAL as empClctParaval, EMP_INTO_PARAVAL as empIntoParaval, EMP_CLCT_BASSTD as empClctBasstd, EMP_ARR_AMT as empArrAmt, ARVLER as arvler, ELEC_TAXRPT_NO as elecTaxrptNo, QUOT_CLCT_FLAG as quotClctFlag, ACCRYM as accrym, PSN_CLCT_PARAVAL as psnClctParaval, PSN_INTO_PARAVAL as psnIntoParaval, PSN_ARR_AMT as psnArrAmt, REVS_FLAG as revsFlag, TRAFER as trafer, TRAF_TIME as trafTime, TRAF_SUMAMT as trafSumamt, ACCTER as accter, CLCT_FLAG as clctFlag, CLCT_TYPE as clctType, CLCT_TIME as clctTime, CLCT_SUMAMT as clctSumamt, CASHYM_END as cashymEnd, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, INTE as inte, PEAWKR_FLAG as peawkrFlag, CASHYM_BEGN as cashymBegn, PSN_NO as psnNo, PSN_WAG as psnWag, PSN_CLCT_BASSTD as psnClctBasstd, PSN_TYPE as psnType, PSN_IDET as psnIdet, INTSURY_TIME as intsuryTime, SBMT_TIME as sbmtTime, DCLA_PRD as dclaPrd, POOLAREA as poolarea, RID as rid, RETR_FLAG as retrFlag, CLCT_BILL_ID as clctBillId, LATEFEE as latefee, TAXDEPT_CODE as taxdeptCode, OPTINS_NO as optinsNo, PSN_CLCT_DETL_ID_CGE as psnClctDetlIdCge, CLCT_RULE_TYPE_CODG as clctRuleTypeCodg, CLCTSTD_CRTF_RULE_CODG as clctstdCrtfRuleCodg, PSN_INSU_RLTS_ID as psnInsuRltsId, UPDT_TIME as updtTime, PLAN_BCHNO as planBchno, INIT_PSN_NO as initPsnNo, INSU_CLCT_MONS as insuClctMons
+        from uebmi_clct_detl_d
         where EMP_NO = #{empNo}
     </select>
 

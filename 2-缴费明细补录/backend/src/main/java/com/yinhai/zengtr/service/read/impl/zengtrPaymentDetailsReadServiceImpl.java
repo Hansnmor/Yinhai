@@ -4,10 +4,7 @@ import com.yinhai.ta404.core.restservice.BaseRestService;
 import com.yinhai.ta404.core.transaction.annotation.NoTransactional;
 import com.yinhai.zengtr.mapper.read.zengtrPaymentDetailsReadMapper;
 import com.yinhai.zengtr.service.read.zengtrPaymentDetailsReadService;
-import com.yinhai.zengtr.vo.EmpInsuDQueryVo;
-import com.yinhai.zengtr.vo.InsuEmpInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInfoBQueryVo;
-import com.yinhai.zengtr.vo.PsnInsuDQueryVo;
+import com.yinhai.zengtr.vo.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,5 +39,10 @@ public class zengtrPaymentDetailsReadServiceImpl extends BaseRestService impleme
 	@Override
 	public List<EmpInsuDQueryVo> queryClctRuleTypeCodg(String empNo) {
 		return zengtrPaymentDetailsReadMapper.queryClctRuleTypeCodg(empNo);
+	}
+
+	@Override
+	public List<UebmiClctDetlDQueryVo> queryClctInfoList(String empNo) {
+		return zengtrPaymentDetailsReadMapper.queryClctInfoList(empNo);
 	}
 }
