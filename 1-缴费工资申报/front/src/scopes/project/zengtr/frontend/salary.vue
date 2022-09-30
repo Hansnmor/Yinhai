@@ -27,14 +27,35 @@
 											  :span="6"
 											  :disabled="false"
 											  :require="{message:'请输入单位编号'}">
-									<ta-suggest
-										:data-source="empInfoList"
-										dropdownTrigger="enterKeyup"
-										:table-title-map="titleMap"
-										:option-config="optionConfig"
-										@select="onSelect"
-										@search="handleSearch"
-									/>
+<!--									<ta-suggest-->
+<!--										:data-source="empInfoList"-->
+<!--										dropdownTrigger="enterKeyup"-->
+<!--										:table-title-map="titleMap"-->
+<!--										:option-config="optionConfig"-->
+<!--										@select="onSelect"-->
+<!--										@search="handleSearch"-->
+<!--									/>-->
+									<ta-auto-complete @select="onSelect" @search="handleSearch" optionLabelProp="text"
+													  :dropdownMatchSelectWidth="false" placeholder="请输入单位编号或名称">
+										<template slot="dataSource">
+											<ta-select-opt-group v-if="this.empInfoList.length > 0">
+												<div slot="label" style="float: left;  width: 130px;margin-left: 10px">
+													单位编号
+												</div>
+												<div slot="label" style="float: left;  width: 170px">
+													单位名称
+												</div>
+												<ta-select-option v-for="item in empInfoList" :key="item.empNo" :text="item.empNo">
+													<div style="float: left;  width: 130px">
+														{{item.empNo}}
+													</div>
+													<div style="float: left;  width: 170px">
+														{{item.empName}}
+													</div>
+												</ta-select-option>
+											</ta-select-opt-group>
+										</template>
+									</ta-auto-complete>
 								</ta-form-item>
 
 								<ta-form-item label="单位名称" :span="12"
@@ -57,14 +78,41 @@
 											  field-decorator-id="psnNo"
 											  :disabled="psnStatus"
 											  :require="{message:'请输入人员编号'}">
-									<ta-suggest
-										:data-source="psnInfoList"
-										dropdownTrigger="enterKeyup"
-										:table-title-map="titleMap_Psn"
-										:option-config="optionConf_Psn"
-										@select="onSelect_Psn"
-										@search="handleSearch_Psn"
-									/>
+<!--									<ta-suggest-->
+<!--										:data-source="psnInfoList"-->
+<!--										dropdownTrigger="enterKeyup"-->
+<!--										:table-title-map="titleMap_Psn"-->
+<!--										:option-config="optionConf_Psn"-->
+<!--										@select="onSelect_Psn"-->
+<!--										@search="handleSearch_Psn"-->
+<!--									/>-->
+									<ta-auto-complete @select="onSelect_Psn" @search="handleSearch_Psn" optionLabelProp="text"
+													  :dropdownMatchSelectWidth="false" placeholder="请输入个人编号或名称">
+										<template slot="dataSource">
+											<ta-select-opt-group v-if="this.psnInfoList.length > 0">
+												<div slot="label" style="float: left;  width: 130px;margin-left: 10px">
+													个人编号
+												</div>
+												<div slot="label" style="float: left;  width: 100px">
+													姓名
+												</div>
+												<div slot="label" style="float: left;  width: 170px">
+													身份证号
+												</div>
+												<ta-select-option v-for="item in psnInfoList" :key="item.psnNo" :text="item.psnNo">
+													<div style="float: left;  width: 130px">
+														{{item.psnNo}}
+													</div>
+													<div style="float: left;  width: 100px">
+														{{item.psnName}}
+													</div>
+													<div style="float: left;  width: 170px">
+														{{item.certno}}
+													</div>
+												</ta-select-option>
+											</ta-select-opt-group>
+										</template>
+									</ta-auto-complete>
 								</ta-form-item>
 
 
@@ -167,6 +215,27 @@
 										@select="onSelect"
 										@search="handleSearch"
 									/>
+<!--									<ta-auto-complete @select="onSelect" @search="handleSearch" optionLabelProp="text"-->
+<!--													  :dropdownMatchSelectWidth="false" placeholder="请输入单位编号或名称">-->
+<!--										<template slot="dataSource">-->
+<!--											<ta-select-opt-group v-if="this.empInfoList.length > 0">-->
+<!--												<div slot="label" style="float: left;  width: 130px;margin-left: 10px">-->
+<!--													单位编号-->
+<!--												</div>-->
+<!--												<div slot="label" style="float: left;  width: 170px">-->
+<!--													单位名称-->
+<!--												</div>-->
+<!--												<ta-select-option v-for="item in empInfoList" :key="item.empNo" :text="item.empNo">-->
+<!--													<div style="float: left;  width: 130px">-->
+<!--														{{item.empNo}}-->
+<!--													</div>-->
+<!--													<div style="float: left;  width: 170px">-->
+<!--														{{item.empName}}-->
+<!--													</div>-->
+<!--												</ta-select-option>-->
+<!--											</ta-select-opt-group>-->
+<!--										</template>-->
+<!--									</ta-auto-complete>-->
 								</ta-form-item>
 
 								<ta-form-item label="单位名称" :span="12"
@@ -272,16 +341,16 @@ export default {
 			},
 			empInfoList:[],//单位基本信息
 			psnInfoList:[],//人员基本信息
-			titleMap: null, //单位编号下拉框列表头
-			titleMap_Psn:null,//人员编号下拉框列表头
-			optionConfig: { //suggest显示框配置
-				value:'empNo',  // option的value配置
-				label: 'empNo'  //回显给框里的信息
-			},
-			optionConf_Psn:{
-				value:'psnNo',
-				label:'psnNo'
-			},
+			// titleMap: null, //单位编号下拉框列表头
+			// titleMap_Psn:null,//人员编号下拉框列表头
+			// optionConfig: { //suggest显示框配置
+			// 	value:'empNo',  // option的value配置
+			// 	label: 'empNo'  //回显给框里的信息
+			// },
+			// optionConf_Psn:{
+			// 	value:'psnNo',
+			// 	label:'psnNo'
+			// },
 			empNo:'',//单位编号
 			empInsuInfoList:[],//公司参保信息
 			salaryStatus:true,//工资申报部分的按钮可用状态
@@ -888,13 +957,13 @@ export default {
 	// },
 
 	created() {
-		this.titleMap = new Map()
-		this.titleMap.set('empNo', '单位编号')
-		this.titleMap.set('empName', '单位名称')
-		this.titleMap_Psn=new Map()
-		this.titleMap_Psn.set('psnNo','人员编号')
-		this.titleMap_Psn.set('psnName','姓名')
-		this.titleMap_Psn.set('certno','证件号码')
+		// this.titleMap = new Map()
+		// this.titleMap.set('empNo', '单位编号')
+		// this.titleMap.set('empName', '单位名称')
+		// this.titleMap_Psn=new Map()
+		// this.titleMap_Psn.set('psnNo','人员编号')
+		// this.titleMap_Psn.set('psnName','姓名')
+		// this.titleMap_Psn.set('certno','证件号码')
 	},
 
 }

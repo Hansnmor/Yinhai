@@ -25,14 +25,41 @@
 									  fieldDecoratorId="psnNo"
 									  :disabled="ifNo"
 									  :require="{message:'请输入个人编号'}">
-							<ta-suggest
-								:data-source="psnInfoList"
-								dropdownTrigger="enterKeyup"
-								:table-title-map="titleMap_Psn"
-								:option-config="optionConfig_Psn"
-								@select="onSelect_Psn"
-								@search="handleSearch_Psn"
-							/>
+<!--							<ta-suggest-->
+<!--								:data-source="psnInfoList"-->
+<!--								dropdownTrigger="enterKeyup"-->
+<!--								:table-title-map="titleMap_Psn"-->
+<!--								:option-config="optionConfig_Psn"-->
+<!--								@select="onSelect_Psn"-->
+<!--								@search="handleSearch_Psn"-->
+<!--							/>-->
+							<ta-auto-complete @select="onSelect_Psn" @search="handleSearch_Psn" optionLabelProp="text"
+											  :dropdownMatchSelectWidth="false" placeholder="请输入个人编号或名称">
+								<template slot="dataSource">
+									<ta-select-opt-group v-if="this.psnInfoList.length > 0">
+										<div slot="label" style="float: left;  width: 130px;margin-left: 10px">
+											个人编号
+										</div>
+										<div slot="label" style="float: left;  width: 100px">
+											姓名
+										</div>
+										<div slot="label" style="float: left;  width: 170px">
+											身份证号
+										</div>
+										<ta-select-option v-for="item in psnInfoList" :key="item.psnNo" :text="item.psnNo">
+											<div style="float: left;  width: 130px">
+												{{item.psnNo}}
+											</div>
+											<div style="float: left;  width: 100px">
+												{{item.psnName}}
+											</div>
+											<div style="float: left;  width: 170px">
+												{{item.certno}}
+											</div>
+										</ta-select-option>
+									</ta-select-opt-group>
+								</template>
+							</ta-auto-complete>
 						</ta-form-item>
 
 						<ta-form-item label="姓名" :span="6"
@@ -66,14 +93,35 @@
 									  :span="6"
 									  :disabled="ifNo"
 									  :require="{message:'请输入单位编号'}">
-							<ta-suggest
-								:data-source="empInfoList"
-								dropdownTrigger="enterKeyup"
-								:table-title-map="titleMap_Emp"
-								:option-config="optionConfig_Emp"
-								@select="onSelect_Emp"
-								@search="handleSearch_Emp"
-							/>
+<!--							<ta-suggest-->
+<!--								:data-source="empInfoList"-->
+<!--								dropdownTrigger="enterKeyup"-->
+<!--								:table-title-map="titleMap_Emp"-->
+<!--								:option-config="optionConfig_Emp"-->
+<!--								@select="onSelect_Emp"-->
+<!--								@search="handleSearch_Emp"-->
+<!--							/>-->
+							<ta-auto-complete @select="onSelect_Emp" @search="handleSearch_Emp" optionLabelProp="text"
+											  :dropdownMatchSelectWidth="false" placeholder="请输入单位编号或名称">
+								<template slot="dataSource">
+									<ta-select-opt-group v-if="this.empInfoList.length > 0">
+										<div slot="label" style="float: left;  width: 130px;margin-left: 10px">
+											单位编号
+										</div>
+										<div slot="label" style="float: left;  width: 170px">
+											单位名称
+										</div>
+										<ta-select-option v-for="item in empInfoList" :key="item.empNo" :text="item.empNo">
+											<div style="float: left;  width: 130px">
+												{{item.empNo}}
+											</div>
+											<div style="float: left;  width: 170px">
+												{{item.empName}}
+											</div>
+										</ta-select-option>
+									</ta-select-opt-group>
+								</template>
+							</ta-auto-complete>
 						</ta-form-item>
 
 						<ta-form-item label="单位名称" :span="6"
@@ -162,16 +210,16 @@ export default {
 				xxl: 12,
 			},
 			empInfoList:[],//单位基本信息
-			titleMap_Psn: null, //单位编号下拉框列表头
-			titleMap_Emp:null,
-			optionConfig_Psn: { //suggest显示框配置
-				value:'psnNo',  // option的value配置
-				label: 'psnNo'  //回显给框里的信息
-			},
-			optionConfig_Emp:{
-				value:'empNo',
-				label:'empNo'
-			},
+			// titleMap_Psn: null, //单位编号下拉框列表头
+			// titleMap_Emp:null,
+			// optionConfig_Psn: { //suggest显示框配置
+			// 	value:'psnNo',  // option的value配置
+			// 	label: 'psnNo'  //回显给框里的信息
+			// },
+			// optionConfig_Emp:{
+			// 	value:'empNo',
+			// 	label:'empNo'
+			// },
 			psnNo:'',//个人编号
 			psnInfoList:[],//个人信息
 			psnInsuInfoList:[],//个人参保信息
@@ -602,14 +650,14 @@ export default {
 
 	},
 	created () {
-		this.titleMap_Emp = new Map()
-		this.titleMap_Emp.set('empNo', '单位编号')
-		this.titleMap_Emp.set('empName', '单位名称')
-
-		this.titleMap_Psn=new Map()
-		this.titleMap_Psn.set('psnNo','个人编号')
-		this.titleMap_Psn.set('psnName','姓名')
-		this.titleMap_Psn.set('certno','身份证号')
+		// this.titleMap_Emp = new Map()
+		// this.titleMap_Emp.set('empNo', '单位编号')
+		// this.titleMap_Emp.set('empName', '单位名称')
+		//
+		// this.titleMap_Psn=new Map()
+		// this.titleMap_Psn.set('psnNo','个人编号')
+		// this.titleMap_Psn.set('psnName','姓名')
+		// this.titleMap_Psn.set('certno','身份证号')
 	},
 }
 </script>
