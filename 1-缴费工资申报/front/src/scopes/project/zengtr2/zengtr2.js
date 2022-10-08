@@ -4,9 +4,10 @@ Vue.component('child',child)
 
 // 自己引入各种插件
 import TaUtils from '@yh/ta-utils'
-import { BigTable } from '@yh/ta404-ui'
-import child from '@/scopes/project/zengtr/frontend/child'
+import { BigTable,AutoComplete } from '@yh/ta404-ui'
+import child from '@/scopes/project/zengtr2/frontend/child'
 Vue.use(BigTable)
+Vue.use(AutoComplete)
 Vue.prototype.TaUtils = {
   ...TaUtils,
 }

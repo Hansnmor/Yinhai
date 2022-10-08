@@ -355,7 +355,6 @@ export default {
 			}
 
 		},
-
 		fnReset(){
 			//重置页面
 			this.$router.go(0)
@@ -419,7 +418,6 @@ export default {
 				}
 			}
 		},
-
 		handleSearch_Emp(val) {
 			//输入单位编号会自动进行搜索
 			console.log('开始进行handleSearch')
@@ -518,7 +516,6 @@ export default {
 				callback()
 			}
 		},
-
 		fatherMethod(){
 			//父组件中调用子组件方法
 			console.log('我是父组件，调用子组件childmethod方法')
