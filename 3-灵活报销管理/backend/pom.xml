@@ -89,6 +89,10 @@
         <groupId>com.yinhai.ta404</groupId>
         <artifactId>ta404-module-websecurity</artifactId>
     </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
     <!-- 默认固定依赖 -->
     <dependency>
         <groupId>org.springframework.boot</groupId>

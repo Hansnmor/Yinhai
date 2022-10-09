@@ -3,7 +3,7 @@
 		<ta-border-layout layout-type="fixTop">
 			<div slot="header">
 				<div style="text-align: center;">
-					<ta-button  @click="fnSave" :disabled="ifSubmit">
+					<ta-button  @click="beforeSave" :disabled="ifSubmit">
 						保存
 					</ta-button>
 
@@ -157,25 +157,25 @@
 						</ta-form-item>
 
 						<ta-form-item label="就诊开始日期" :span="6"
-									  field-decorator-id="startYM"
+									  field-decorator-id="begntime"
 									  :label-col="{span: 7}"
 									  :wrapper-col="{span: 17}"
 									  :disabled="ifSubmit"
 									  :fieldDecoratorOptions="{rules: [{required:true,message:'请选择就诊开始日期'},
-									  {validator: checkStartYM}]}">
+									  {validator: checkbegntime}]}">
 							<ta-date-picker style="width: 90%"></ta-date-picker>
 						</ta-form-item>
 
 						<ta-form-item label="就诊结束日期" :span="6"
-									  field-decorator-id="endYM"
+									  field-decorator-id="endtime"
 									  :disabled="ifSubmit"
 									  :fieldDecoratorOptions="{rules: [{required:true,message:'请选择就诊结束日期'},
-									  {validator: checkEndYM}]}">
+									  {validator: checkendtime}]}">
 							<ta-date-picker style="width: 90%"></ta-date-picker>
 						</ta-form-item>
 
 						<ta-form-item label="医疗费总金额" :span="6"
-									  field-decorator-id="sumMoney"
+									  field-decorator-id="sumfee"
 									  :disabled="ifSubmit"
 									  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入医疗费总金额'},
 									  { pattern: /^[0-9]+([.][0-9]{1,2})?$/ , message: '金额格式不正确' }]}">
@@ -183,7 +183,7 @@
 						</ta-form-item>
 
 						<ta-form-item label="符合范围金额" :span="6"
-									  field-decorator-id="rangeMoney"
+									  field-decorator-id="inscpScpAmt"
 									  :disabled="ifSubmit"
 									  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入符合范围金额'},
 									  { pattern: /^[0-9]+([.][0-9]{1,2})?$/ , message: '金额格式不正确' }]}">
@@ -191,7 +191,7 @@
 						</ta-form-item>
 
 						<ta-form-item label="本次基金支付总额" :span="6"
-									  field-decorator-id="baseMoney"
+									  field-decorator-id="fundPaySumamt"
 									  :disabled="ifSubmit"
 									  :label-col="{span: 7}"
 									  :wrapper-col="{span: 17}"
@@ -203,18 +203,20 @@
 
 						<ta-form-item label="银行行别代码" :span="6"
 									  field-decorator-id="bankTypeCode"
-									  :disabled="ifSubmit">
+									  :disabled="ifSubmit"
+									  :require="{message:'请选择一个银行行别代码'}">
 							<ta-select collection-type="BANK_TYPE_CODE"  style="width: 90%"></ta-select>
 						</ta-form-item>
 
 						<ta-form-item label="银行户名" :span="6"
-									  field-decorator-id="bankName"
-									  :disabled="ifSubmit">
+									  field-decorator-id="acctname"
+									  :disabled="ifSubmit"
+									  :require="{message:'请输入银行户名'}">
 							<ta-input style="width: 90%"></ta-input>
 						</ta-form-item>
 
 						<ta-form-item label="申报原因" :span="12"
-									  field-decorator-id="submitReason"
+									  field-decorator-id="dclaRea"
 									  :disabled="ifSubmit"
 									  :label-col="{span: 3}"
 									  :wrapper-col="{span: 21}">
@@ -222,8 +224,9 @@
 						</ta-form-item>
 
 						<ta-form-item label="银行账号" :span="6"
-									  field-decorator-id="bankAccount"
-									  :disabled="ifSubmit">
+									  field-decorator-id="bankacct"
+									  :disabled="ifSubmit"
+									  :require="{message:'请输入银行账号'}">
 							<ta-input style="width: 90%"></ta-input>
 						</ta-form-item>
 
@@ -236,7 +239,8 @@
 				<!--引入子组件表格-->
 				<div @click="fatherMethod">
 					<child ref="freshPage"
-						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"
+						   @childEvent="realSave"
+						   :psnInsuInfoListChild="psnInsuInfoListChild"
 						   :submitInfoList="submitInfoList">
 
 					</child>
@@ -274,12 +278,23 @@ export default {
 			empInsuInfoList:[],//单位参保信息
 			ifSubmit:true,//报销登记区域按钮可用
 			submitInfoList:[],//报销登记信息表
+			psnInsuInfoListChild:[],//子组件的个人参保信息
 
 		}
 	},
 	methods:{
-		fnSave(){
+		beforeSave(){
 			//保存操作
+			console.log('现在进行保存前的校验操作')
+			console.log('报销登记表数据：',this.submitInfoList)
+			if(this.submitInfoList.length===0){
+				this.$message.warning('请先添加报销登记信息后再进行保存!')
+				return false
+			}
+
+			this.$refs.freshPage.fullValidEvent()
+
+
 		},
 		fnReset(){
 			//重置页面
@@ -455,6 +470,12 @@ export default {
 									//同时将医疗类型设置为默认
 									this.submitBaseForm.setFieldsValue({medType:'11'})
 
+									//赋值子组件的人员参保信息表
+									for(let z=0;z<this.psnInsuInfoListByEmpNo.length;z++){
+										if(this.psnInsuInfoListByEmpNo[z].psnNo===this.psnNo){
+											this.psnInsuInfoListChild.push(this.psnInsuInfoListByEmpNo[z])
+										}
+									}
 								}
 
 							})
@@ -466,17 +487,17 @@ export default {
 				}
 			}
 		},
-		checkStartYM(rule,value,callback) {
+		checkbegntime(rule,value,callback) {
 			//就诊开始日期的自定义校验
 			console.log('开始进行开始年月的校验')
 			console.log('value：', value)
-			const endYM=this.submitBaseForm.getFieldMomentValue("endYM")
-			const startYM=this.submitBaseForm.getFieldMomentValue("startYM")
-			console.log('end:',endYM)
-			if(endYM!==undefined){
-				if(Date.parse(startYM)>Date.parse(endYM)){
+			const endtime=this.submitBaseForm.getFieldMomentValue("endtime")
+			const begntime=this.submitBaseForm.getFieldMomentValue("begntime")
+			console.log('end:',endtime)
+			if(endtime!==undefined){
+				if(Date.parse(begntime)>Date.parse(endtime)){
 					this.$message.error('不能晚于就诊结束年月!')
-					this.submitBaseForm.resetFields(['startYM'])
+					this.submitBaseForm.resetFields(['begntime'])
 					callback()
 				}else{
 					callback()
@@ -486,17 +507,17 @@ export default {
 			}
 		},
 
-		checkEndYM(rule,value,callback) {
+		checkendtime(rule,value,callback) {
 			//就诊结束日期的自定义校验
 			console.log('开始进行开始年月的校验')
 			console.log('value：', value)
-			const startYM=this.submitBaseForm.getFieldMomentValue("startYM")
-			const endYM=this.submitBaseForm.getFieldMomentValue("endYM")
-			console.log('start:',startYM)
-			if(startYM!==undefined){
-				if(Date.parse(startYM)>Date.parse(endYM)){
+			const begntime=this.submitBaseForm.getFieldMomentValue("begntime")
+			const endtime=this.submitBaseForm.getFieldMomentValue("endtime")
+			console.log('start:',begntime)
+			if(begntime!==undefined){
+				if(Date.parse(begntime)>Date.parse(endtime)){
 					this.$message.error('不能早于就诊开始年月!')
-					this.submitBaseForm.resetFields(['endYM'])
+					this.submitBaseForm.resetFields(['endtime'])
 					callback()
 				}else{
 					callback()
@@ -509,28 +530,72 @@ export default {
 		fnAdd(){
 			//将数据添加到报销登记信息表
 			console.log('开始添加数据到报销登记信息表')
+			//先做校验
+			let flag=0
+			this.submitBaseForm.validateFields(errors => {
+				console.log('个人错误信息：', errors)
+				if (errors !== null) {
+					flag=1
+				}
+			})
+			if(flag!==0){
+				this.$message.warning('请录入完整的报销登记信息!')
+				return false
+			}
+			//校验时间交叉
+			if(this.submitInfoList.length>0){
+				//进行交叉时间验证
+				console.log('开始进行交叉时间验证')
+				for(const element of this.submitInfoList) {
+					let tempS1 = parseInt(this.submitBaseForm.getFieldMomentValue('begntime').substring(0, 4) + this.submitBaseForm.getFieldMomentValue('begntime').substring(5, 7)+this.submitBaseForm.getFieldMomentValue('begntime').substring(8,10))
+					let tempS2 = parseInt(element.begntime.substring(0, 4)+element.begntime.substring(5, 7)+element.begntime.substring(8))
+					let tempE1 = parseInt(this.submitBaseForm.getFieldMomentValue('endtime').substring(0, 4) + this.submitBaseForm.getFieldMomentValue('endtime').substring(5, 7)+this.submitBaseForm.getFieldMomentValue('endtime').substring(8, 10))
+					let tempE2 = parseInt(element.endtime.substring(0, 4)+element.endtime.substring(5, 7)+element.endtime.substring(8))
+					console.log('s1:',tempS1)
+					console.log('s2:',tempS2)
+					console.log('e1:',tempE1)
+					console.log('e2:',tempE2)
+					if((tempS2<=tempE1&&tempS2>=tempS1)||(tempE2>=tempS1&&tempE2<=tempE1)){
+						//时间有交叉
+						this.$message.warning('补录时间段存在交叉，请重新录入！')
+						flag=1
+					}
+				}
+			}
+			if(flag!==0){
+				return false
+			}
 			let tempList=[{}]
 			let psnType=this.submitBaseForm.getFieldValue("psnType")
-			let insuType=this.submitBaseForm.getFieldValue("insuType")
+			let insutype=this.submitBaseForm.getFieldValue("insutype")
 			let medType=this.submitBaseForm.getFieldValue("medType")
-			let startYM=this.submitBaseForm.getFieldMomentValue("startYM")
-			let endYM=this.submitBaseForm.getFieldMomentValue("endYM")
-			let sumMoney=this.submitBaseForm.getFieldValue("sumMoney")
-			let rangeMoney=this.submitBaseForm.getFieldValue("rangeMoney")
-			let baseMoney=this.submitBaseForm.getFieldValue("baseMoney")
+			let begntime=this.submitBaseForm.getFieldMomentValue("begntime")
+			let endtime=this.submitBaseForm.getFieldMomentValue("endtime")
+			let sumfee=this.submitBaseForm.getFieldValue("sumfee")
+			let inscpScpAmt=this.submitBaseForm.getFieldValue("inscpScpAmt")
+			let fundPaySumamt=this.submitBaseForm.getFieldValue("fundPaySumamt")
 			let bankTypeCode=this.submitBaseForm.getFieldValue("bankTypeCode")
-			let bankName=this.submitBaseForm.getFieldValue("bankName")
-			let submitReason=this.submitBaseForm.getFieldValue("submitReason")
-			let bankAccount=this.submitBaseForm.getFieldValue("bankAccount")
-			// tempList.forEach(item =>{
-			// 	Object.assign( item , {empNo:tempList.empNo})
-			// 	Object.assign( item , {insutype:tempList.insutype})
-			// 	Object.assign( item , {clctRuleTypeCodg:this.empInsuDList[0].clctRuleTypeCodg})
-			// 	Object.assign( item , {startYM:this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)})
-			// 	Object.assign( item , {endYM:this.paymentBaseForm.getFieldMomentValue("endYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("endYM").substring(5,7)})
-			// 	Object.assign( item , {clctType:'36'})
-			// 	Object.assign( item , {baseSum:this.paymentBaseForm.getFieldValue("baseSum")})
-			// })
+			let acctname=this.submitBaseForm.getFieldValue("acctname")
+			let dclaRea=this.submitBaseForm.getFieldValue("dclaRea")
+			let bankacct=this.submitBaseForm.getFieldValue("bankacct")
+			tempList.forEach(item =>{
+				Object.assign( item , {psnType:psnType})
+				Object.assign( item , {insutype:insutype})
+				Object.assign( item , {medType:medType})
+				Object.assign( item , {begntime:begntime.substring(0,10)})
+				Object.assign( item , {endtime:endtime.substring(0,10)})
+				Object.assign( item , {sumfee:sumfee})
+				Object.assign( item , {inscpScpAmt:inscpScpAmt})
+				Object.assign( item , {fundPaySumamt:fundPaySumamt})
+				Object.assign( item , {bankTypeCode:bankTypeCode})
+				Object.assign( item , {acctname:acctname})
+				Object.assign( item , {dclaRea:dclaRea})
+				Object.assign( item , {bankacct:bankacct})
+			})
+			this.submitInfoList.push(tempList[0])
+			console.log('submitInfoList:',this.submitInfoList)
+			this.$message.success('添加成功！')
+
 		},
 		fatherMethod(){
 			//点击人员参保信息列表，回显数据
@@ -541,11 +606,40 @@ export default {
 				this.submitBaseForm.setFieldsValue({
 					'insutype':clickedData.insutype,
 					'psnType':clickedData.psnType,
-					'bankName':clickedData.psnName,
+					'acctname':clickedData.psnName,
 				})
 			},50)
 
 		},
+		realSave(val){
+			console.log('现在进行真的保存操作')
+			console.log('errMap:',val)
+			if(val!==undefined){
+				this.$message.warning('提交的报销登记信息中有字段为空的数据，请检查！')
+				return false
+			}else{
+				console.log('校验完毕，开始保存')
+				for(let i=0;i<this.submitInfoList.length;i++){
+					this.submitInfoList[i]['empName']=this.empBaseForm.getFieldValue('empName')
+					this.submitInfoList[i]['psnNo']=this.psnBaseForm.getFieldValue('psnNo')
+					this.submitInfoList[i]['empNo']=this.empBaseForm.getFieldValue('empNo')
+					this.submitInfoList[i]['psnName']=this.psnBaseForm.getFieldValue('psnName')
+					this.submitInfoList[i]['psnCertType']=this.psnBaseForm.getFieldValue('psnCertType')
+					this.submitInfoList[i]['certno']=this.psnBaseForm.getFieldValue('certno')
+				}
+				console.log('最终数据：',this.submitInfoList)
+				this.Base.submit(null,{
+					url:'flexibleReimbursement/insertSubmitList',
+					data:{
+						jsonStr: JSON.stringify(this.submitInfoList)
+					},
+				}).then((data)=>{
+					this.$message.success('保存成功！')
+				}).catch(()=>{
+					this.$message.error('保存失败!')
+				})
+			}
+		}
 
 	}
 }
