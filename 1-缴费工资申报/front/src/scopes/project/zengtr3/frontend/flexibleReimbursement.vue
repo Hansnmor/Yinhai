@@ -198,7 +198,7 @@
 									  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入本次基金支付总额'},
 									  { pattern: /^[0-9]+([.][0-9]{1,2})?$/ , message: '金额格式不正确' }]}"
 						>
-							<ta-input style="width: 90%;"></ta-input>
+							<ta-input-number style="width: 90%;" :min="0" :step="0.01"></ta-input-number>
 						</ta-form-item>
 
 						<ta-form-item label="银行行别代码" :span="6"
@@ -230,14 +230,14 @@
 						<ta-button @click="fnAdd" :disabled="ifSubmit">添加</ta-button>
 
 
-
 					</ta-form>
 				</ta-card>
 
 				<!--引入子组件表格-->
 				<div @click="fatherMethod">
 					<child ref="freshPage"
-						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo">
+						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"
+						   :submitInfoList="submitInfoList">
 
 					</child>
 				</div>
@@ -273,6 +273,7 @@ export default {
 			psnInsuInfoListByEmpNo:[],//根据单位编号查询到的人员参保信息
 			empInsuInfoList:[],//单位参保信息
 			ifSubmit:true,//报销登记区域按钮可用
+			submitInfoList:[],//报销登记信息表
 
 		}
 	},
@@ -506,7 +507,30 @@ export default {
 		},
 
 		fnAdd(){
-
+			//将数据添加到报销登记信息表
+			console.log('开始添加数据到报销登记信息表')
+			let tempList=[{}]
+			let psnType=this.submitBaseForm.getFieldValue("psnType")
+			let insuType=this.submitBaseForm.getFieldValue("insuType")
+			let medType=this.submitBaseForm.getFieldValue("medType")
+			let startYM=this.submitBaseForm.getFieldMomentValue("startYM")
+			let endYM=this.submitBaseForm.getFieldMomentValue("endYM")
+			let sumMoney=this.submitBaseForm.getFieldValue("sumMoney")
+			let rangeMoney=this.submitBaseForm.getFieldValue("rangeMoney")
+			let baseMoney=this.submitBaseForm.getFieldValue("baseMoney")
+			let bankTypeCode=this.submitBaseForm.getFieldValue("bankTypeCode")
+			let bankName=this.submitBaseForm.getFieldValue("bankName")
+			let submitReason=this.submitBaseForm.getFieldValue("submitReason")
+			let bankAccount=this.submitBaseForm.getFieldValue("bankAccount")
+			// tempList.forEach(item =>{
+			// 	Object.assign( item , {empNo:tempList.empNo})
+			// 	Object.assign( item , {insutype:tempList.insutype})
+			// 	Object.assign( item , {clctRuleTypeCodg:this.empInsuDList[0].clctRuleTypeCodg})
+			// 	Object.assign( item , {startYM:this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)})
+			// 	Object.assign( item , {endYM:this.paymentBaseForm.getFieldMomentValue("endYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("endYM").substring(5,7)})
+			// 	Object.assign( item , {clctType:'36'})
+			// 	Object.assign( item , {baseSum:this.paymentBaseForm.getFieldValue("baseSum")})
+			// })
 		},
 		fatherMethod(){
 			//点击人员参保信息列表，回显数据
