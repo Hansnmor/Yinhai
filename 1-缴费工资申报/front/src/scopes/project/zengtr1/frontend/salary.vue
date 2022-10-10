@@ -156,7 +156,7 @@
 											  field-decorator-id="startYM"
 											  :disabled="salaryDec"
 											  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入开始年月'},
-											  {validator: checkStartMY}]}"
+											  {validator: checkStartYM}]}"
 								>
 									<ta-month-picker style="width: 100%"></ta-month-picker>
 								</ta-form-item>
@@ -165,7 +165,7 @@
 											  field-decorator-id="endYM"
 											  :disabled="salaryDec"
 											  :fieldDecoratorOptions="{rules: [{required:true,message:'请输入开始年月'},
-											  {validator: checkEndMY}]}"
+											  {validator: checkEndYM}]}"
 								>
 									<ta-month-picker style="width: 100%"></ta-month-picker>
 								</ta-form-item>
@@ -189,6 +189,7 @@
 							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList
 												 ref="freshPage"
 												 :salaryBaseInfoList=this.salaryBaseInfoList
+												 @childEvent="freshData"
 							></psn-insu-info-table>
 						</div>
 
@@ -207,35 +208,35 @@
 											  :span="6"
 											  :disabled="false"
 											  :require="{message:'请输入单位编号'}">
-									<ta-suggest
-										:data-source="empInfoList"
-										dropdownTrigger="enterKeyup"
-										:table-title-map="titleMap"
-										:option-config="optionConfig"
-										@select="onSelect"
-										@search="handleSearch"
-									/>
-<!--									<ta-auto-complete @select="onSelect" @search="handleSearch" optionLabelProp="text"-->
-<!--													  :dropdownMatchSelectWidth="false" placeholder="请输入单位编号或名称">-->
-<!--										<template slot="dataSource">-->
-<!--											<ta-select-opt-group v-if="this.empInfoList.length > 0">-->
-<!--												<div slot="label" style="float: left;  width: 130px;margin-left: 10px">-->
-<!--													单位编号-->
-<!--												</div>-->
-<!--												<div slot="label" style="float: left;  width: 170px">-->
-<!--													单位名称-->
-<!--												</div>-->
-<!--												<ta-select-option v-for="item in empInfoList" :key="item.empNo" :text="item.empNo">-->
-<!--													<div style="float: left;  width: 130px">-->
-<!--														{{item.empNo}}-->
-<!--													</div>-->
-<!--													<div style="float: left;  width: 170px">-->
-<!--														{{item.empName}}-->
-<!--													</div>-->
-<!--												</ta-select-option>-->
-<!--											</ta-select-opt-group>-->
-<!--										</template>-->
-<!--									</ta-auto-complete>-->
+<!--									<ta-suggest-->
+<!--										:data-source="empInfoList"-->
+<!--										dropdownTrigger="enterKeyup"-->
+<!--										:table-title-map="titleMap"-->
+<!--										:option-config="optionConfig"-->
+<!--										@select="onSelect"-->
+<!--										@search="handleSearch"-->
+<!--									/>-->
+									<ta-auto-complete @select="onSelect" @search="handleSearch" optionLabelProp="text"
+													  :dropdownMatchSelectWidth="false" placeholder="请输入单位编号或名称">
+										<template slot="dataSource">
+											<ta-select-opt-group v-if="this.empInfoList.length > 0">
+												<div slot="label" style="float: left;  width: 130px;margin-left: 10px">
+													单位编号
+												</div>
+												<div slot="label" style="float: left;  width: 170px">
+													单位名称
+												</div>
+												<ta-select-option v-for="item in empInfoList" :key="item.empNo" :text="item.empNo">
+													<div style="float: left;  width: 130px">
+														{{item.empNo}}
+													</div>
+													<div style="float: left;  width: 170px">
+														{{item.empName}}
+													</div>
+												</ta-select-option>
+											</ta-select-opt-group>
+										</template>
+									</ta-auto-complete>
 								</ta-form-item>
 
 								<ta-form-item label="单位名称" :span="12"
@@ -423,6 +424,7 @@ export default {
 			//选择单位编号进行的操作
 			console.log('开始onSelect')
 			console.log('val:',val)
+			this.empNo=val
 			let temp=this.empInfoList
 			for(let i=0;i<temp.length;i++){
 				if(temp[i].empNo===val){
@@ -607,7 +609,7 @@ export default {
 
 
 		},
-		checkStartMY(rule,value,callback){
+		checkStartYM(rule,value,callback){
 			//开始年月的校验
 			console.log('value：',value)
 			const startYM=this.salaryBaseForm.getFieldMomentValue("startYM")
@@ -657,7 +659,7 @@ export default {
 
 
 		},
-		checkEndMY(rule, value, callback){
+		checkEndYM(rule, value, callback){
 			//结束年月的校验
 			console.log('value：',value)
 			const startYM=this.salaryBaseForm.getFieldMomentValue("startYM")
@@ -731,6 +733,14 @@ export default {
 					Object.assign( item , {base:baseNum})
 					Object.assign( item , {empNo:this.empNo})
 				})
+				// for(let j=0;j<this.psnInsuInfoList.length;j++){
+				// 	let temp=this.psnInsuInfoList[j]
+				// 	temp['startYM']=startYM
+				// 	temp['endYM']=endYM
+				// 	temp['wag']=salary
+				// 	temp['base']=baseNum
+				// 	temp['empNo']=this.empNo
+				// }
 
 				//向工资基数列表填入数据
 				let month=new Date().getMonth()<10?'0'+String(new Date().getMonth()):String(new Date().getMonth())
@@ -745,6 +755,9 @@ export default {
 			console.log('此时人员参保信息列表:',this.psnInsuInfoList)
 			console.log('此时工资基数列表列表:',this.salaryBaseInfoList)
 			this.ifSave=false
+			this.psnInsuInfoList=[...this.psnInsuInfoList]//让子组件重新刷新数据
+			this.salaryBaseInfoList=[...this.salaryBaseInfoList]
+
 			this.ifFreshChild++//刷新子组件
 		},
 		fatherMethod(){
@@ -760,23 +773,26 @@ export default {
 			this.salaryStatus=false
 		},
 		fnSave(){
-			console.log('现在开始进行保存操作')
-			console.log('已经选择的人员参保信息：',this.checkedInfoInsuList)
-			if(this.checkedInfoInsuList===[]){
-				this.$message.error('没有获取到要保存的数据，请勾选！')
-				return
-			}
+			this.ifFreshChild++
+			setTimeout(()=>{
+				console.log('现在开始进行保存操作')
+				console.log('已经选择的人员参保信息：',this.checkedInfoInsuList)
+				if(this.checkedInfoInsuList.length===0){
+					this.$message.error('没有获取到要保存的数据，请勾选！')
+					return
+				}
+				//已经有数据，进行校验是否存在老数据,并进行保存操作
+				this.Base.submit(null,{
+					url:'salaryDeclaration/ifExistSalary',
+					data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
+				}).then((data)=>{
+					console.log('data:',data)
+					this.$message.success('保存成功!');
+				}).catch((data)=>{
+					this.$message.error('保存失败!');
+				})
+			},300)
 
-			//已经有数据，进行校验是否存在老数据
-			this.Base.submit(null,{
-				url:'salaryDeclaration/ifExistSalary',
-				data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
-			}).then((data)=>{
-				console.log('data:',data)
-				this.$message.success('保存成功!');
-			}).catch((data)=>{
-				this.$message.error('保存失败!');
-			})
 		},
 		downTemplate(){
 			//模板下载
@@ -938,6 +954,10 @@ export default {
 				}],
 			}
 			this.Base.generateExcel(errorData)
+		},
+		freshData(){
+			//刷新子组件列表数据，更新最新状态
+			this.psnInsuInfoList=[...this.psnInsuInfoList]
 		}
 	},
 	watch: {
@@ -946,7 +966,7 @@ export default {
 			console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
 			setTimeout(()=>{
 				this.fatherMethod()
-			},300)
+			},100)
 		}
 	},
 	// updated () {

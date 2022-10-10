@@ -14,13 +14,17 @@ import{
   Descriptions,
   InputNumber,
   BigTable,
-  Modal
+  Modal,
+  Table,
+  TableEdit
 } from '@yh/ta404-ui'
 Vue.use(Radio)
 Vue.use(Descriptions)
 Vue.use(InputNumber)
 Vue.use(BigTable)
 Vue.use(Modal)
+Vue.use(Table)
+Vue.use(TableEdit)
 // 判断登录状态然后确认是否渲染页面
 
 checkLogin(() => {
