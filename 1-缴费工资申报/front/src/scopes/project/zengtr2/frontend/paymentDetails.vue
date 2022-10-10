@@ -23,7 +23,7 @@
 					>
 						<ta-form-item label="个人编号" :span="6"
 									  fieldDecoratorId="psnNo"
-									  :disabled="ifNo"
+									  :disabled="ifPsnNo"
 									  :require="{message:'请输入个人编号'}">
 <!--							<ta-suggest-->
 <!--								:data-source="psnInfoList"-->
@@ -200,6 +200,7 @@ export default {
 	data(){
 		return{
 			ifSave:true,//保存按钮能否用
+			ifPsnNo:false,//个人编号按钮可用性
 			col: {
 				//用于设置表单栅格属性的分割
 				xs: 1,
@@ -231,8 +232,9 @@ export default {
 			empInsuDList:[],//单位信息
 			clctInfoList:[],//缴费记录信息表
 			recordingDetails:[],//缴费明细补录表
-			ifNo:false,//决定个人编号和单位编号的输入框
+			ifNo:true,//决定个人编号和单位编号的输入框
 			ifAdd:false,//添加按钮是否开启
+			ifFreshChild:0,//决定是否刷新子组件
 		}
 	},
 	methods:{
@@ -338,6 +340,7 @@ export default {
 									this.recordingDetails=data.data.recordingDetails
 									//并置灰输入框和按钮，除了重置
 									this.ifNo=true
+									this.ifPsnNo=true
 									this.isPayment=true
 									this.ifSave=true
 									this.ifAdd=true
@@ -409,6 +412,7 @@ export default {
 								'certno':temp[i].certno,
 								'gend':temp[i].gend
 							})
+							this.ifNo=false
 
 						}else{
 							this.$message.error('人员不存在正常参保的险种信息，请重新录入！')
@@ -460,9 +464,17 @@ export default {
 				},
 			}).then((data)=>{
 				console.log('查询到的人员参保信息：',data.data.psnInsuInfoListByEmpNo)
-				this.psnInsuInfoListByEmpNo=data.data.psnInsuInfoListByEmpNo
-				if(this.psnInsuInfoListByEmpNo!=[]){
+				let tempInsuList=data.data.psnInsuInfoListByEmpNo
+				for(let j=0;j<tempInsuList.length;j++){
+					if (tempInsuList[j].psnNo===this.psnNo){
+						this.psnInsuInfoListByEmpNo.push(tempInsuList[j])
+					}
+				}
+				if(this.psnInsuInfoListByEmpNo.length!==0){
 					this.isPayment=false
+				}else{
+					this.$message.error('没有查询到该人员在该单位下的参保信息，请核实！')
+					return
 				}
 
 			})
@@ -525,126 +537,136 @@ export default {
 
 		},
 		fnAdd(){
-			//添加要补录的信息
-			console.log('开始添加操作')
-			console.log('this.checkedInfoInsuList:',this.checkedInfoInsuList)
-			if(this.checkedInfoInsuList.length===0){
-				this.$message.warn('请选择需要补录的险种！')
-				return false
-			}else if(this.checkedInfoInsuList.length>1){
-				this.$message.warning('只能一次补录一条数据！')
-				return false
-			} else{
-				//进行校验
-				let flag=0
-				console.log('开始进行校验')
-				this.paymentBaseForm.validateFields(errors => {
-					// console.log('错误信息：', errors)
-					if (errors !== null) {
-						this.$message.error('补录信息录入不完整，请重新录入！')
-						flag=1
-						return false
-					}
-				})
-
-				if(flag!==0){
-					console.log('校验不通过')
-					return
-				}else{
-					//再校验开始日期和首次参保年月
-					if(this.checkedInfoInsuList[0].fstInsuYm!==null){
-						console.log('校验日期')
-						let startYM=this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)
-						let tempinsutype=''
-						//将此时的参保类型通过字典工具转码成具体的类型
-						this.Base.asyncGetCodeData('INSUTYPE').then((codeList) => {
-							for (const element of codeList) {
-								if (element.value === this.checkedInfoInsuList[0].insutype) {
-									tempinsutype = element.label
-									return
-								}
-							}
-						})
-
-						setTimeout(()=>{
-							//给个延迟，让tempinsutype能顺利从循环中先赋值，否则出现undefined
-							if(startYM<this.checkedInfoInsuList[0].fstInsuYm){
-								this.$message.warning('开始年月早于险种'+tempinsutype+'首次参保年月，请检查！')
-								tempinsutype=''
-								flag=1
-							}
-							console.log('日期校验完成')
-						},100)
-					}
+			this.ifFreshChild++
+			setTimeout(()=>{
+				//添加要补录的信息
+				console.log('开始添加操作')
+				console.log('this.checkedInfoInsuList:',this.checkedInfoInsuList)
+				if(this.checkedInfoInsuList.length===0){
+					this.$message.warn('请选择需要补录的险种！')
+					return false
+				}else if(this.checkedInfoInsuList.length>1){
+					this.$message.warning('只能一次补录一条数据！')
+					return false
+				} else{
+					//进行校验
+					let flag=0
+					console.log('开始进行校验')
+					this.paymentBaseForm.validateFields(errors => {
+						// console.log('错误信息：', errors)
+						if (errors !== null) {
+							this.$message.error('补录信息录入不完整，请重新录入！')
+							flag=1
+							return false
+						}
+					})
 
 					if(flag!==0){
 						console.log('校验不通过')
 						return
 					}else{
-						//再进行校验是否有交叉时间,前提是校验成功列表有至少一条数据
-						if(this.validatedList.length!==0){
-							//进行交叉时间验证
-							console.log('开始进行交叉时间验证')
-							for(const element of this.validatedList) {
-								let tempS1 = parseInt(this.paymentBaseForm.getFieldMomentValue('startYM').substring(0, 4) + this.paymentBaseForm.getFieldMomentValue('startYM').substring(5, 7))
-								let tempS2 = parseInt(element.startYM)
-								let tempE1 = parseInt(this.paymentBaseForm.getFieldMomentValue('endYM').substring(0, 4) + this.paymentBaseForm.getFieldMomentValue('endYM').substring(5, 7))
-								let tempE2 = parseInt(element.endYM)
-								if((tempS2<=tempE1&&tempS2>=tempS1)||(tempE2>=tempS1&&tempE2<=tempE1)){
-									//时间有交叉
-									this.$message.warning('补录时间段存在交叉，请重新录入！')
+						//再校验开始日期和首次参保年月
+						if(this.checkedInfoInsuList[0].fstInsuYm!==null){
+							console.log('校验日期')
+							let startYM=this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)
+							let tempinsutype=''
+							//将此时的参保类型通过字典工具转码成具体的类型
+							this.Base.asyncGetCodeData('INSUTYPE').then((codeList) => {
+								for (const element of codeList) {
+									if (element.value === this.checkedInfoInsuList[0].insutype) {
+										tempinsutype = element.label
+										return
+									}
+								}
+							})
+
+							setTimeout(()=>{
+								//给个延迟，让tempinsutype能顺利从循环中先赋值，否则出现undefined
+								if(startYM<this.checkedInfoInsuList[0].fstInsuYm){
+									this.$message.warning('开始年月早于险种'+tempinsutype+'首次参保年月，请检查！')
+									tempinsutype=''
 									flag=1
 								}
-							}
-							console.log('flag:',flag)
+								console.log('日期校验完成')
+							},100)
 						}
+
 						if(flag!==0){
 							console.log('校验不通过')
 							return
 						}else{
-							//存入新数据
-							let tempList=this.checkedInfoInsuList[0]
-							//查询单位征缴规则
-							this.Base.submit(null,{
-								url:'paymentDetails/queryClctRuleTypeCodg',
-								data:{
-									empNo:this.empNo
-								},
-							}).then((data)=>{
-								this.empInsuDList=data.data.empInsuDList
-								console.log('empInsuDList:',this.empInsuDList)
-							})
-
-							setTimeout(()=>{
-								//赋值给验证成功信息列表
-								console.log('即将执行赋值,当前validatedList:',this.validatedList)
-								let tempList1=[{}]
-								tempList1.forEach(item =>{
-									Object.assign( item , {empNo:tempList.empNo})
-									Object.assign( item , {insutype:tempList.insutype})
-									Object.assign( item , {clctRuleTypeCodg:this.empInsuDList[0].clctRuleTypeCodg})
-									Object.assign( item , {startYM:this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)})
-									Object.assign( item , {endYM:this.paymentBaseForm.getFieldMomentValue("endYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("endYM").substring(5,7)})
-									Object.assign( item , {clctType:'36'})
-									Object.assign( item , {baseSum:this.paymentBaseForm.getFieldValue("baseSum")})
+							//再进行校验是否有交叉时间,前提是校验成功列表有至少一条数据
+							if(this.validatedList.length!==0){
+								//进行交叉时间验证
+								console.log('开始进行交叉时间验证')
+								for(const element of this.validatedList) {
+									let tempS1 = parseInt(this.paymentBaseForm.getFieldMomentValue('startYM').substring(0, 4) + this.paymentBaseForm.getFieldMomentValue('startYM').substring(5, 7))
+									let tempS2 = parseInt(element.startYM)
+									let tempE1 = parseInt(this.paymentBaseForm.getFieldMomentValue('endYM').substring(0, 4) + this.paymentBaseForm.getFieldMomentValue('endYM').substring(5, 7))
+									let tempE2 = parseInt(element.endYM)
+									if((tempS2<=tempE1&&tempS2>=tempS1)||(tempE2>=tempS1&&tempE2<=tempE1)){
+										//时间有交叉
+										this.$message.warning('补录时间段存在交叉，请重新录入！')
+										flag=1
+									}
+								}
+								console.log('flag:',flag)
+							}
+							if(flag!==0){
+								console.log('校验不通过')
+								return
+							}else{
+								//存入新数据
+								let tempList=this.checkedInfoInsuList[0]
+								//查询单位征缴规则
+								this.Base.submit(null,{
+									url:'paymentDetails/queryClctRuleTypeCodg',
+									data:{
+										empNo:this.empNo
+									},
+								}).then((data)=>{
+									this.empInsuDList=data.data.empInsuDList
+									console.log('empInsuDList:',this.empInsuDList)
 								})
-								this.validatedList.push(tempList1[0])
-								this.$message.success('添加成功！')
-								console.log('this.validatedList:',this.validatedList)
-								this.ifSave=false
-							},100)
+
+								setTimeout(()=>{
+									//赋值给验证成功信息列表
+									console.log('即将执行赋值,当前validatedList:',this.validatedList)
+									let tempList1=[{}]
+									tempList1.forEach(item =>{
+										Object.assign( item , {empNo:tempList.empNo})
+										Object.assign( item , {insutype:tempList.insutype})
+										Object.assign( item , {clctRuleTypeCodg:this.empInsuDList[0].clctRuleTypeCodg})
+										Object.assign( item , {startYM:this.paymentBaseForm.getFieldMomentValue("startYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("startYM").substring(5,7)})
+										Object.assign( item , {endYM:this.paymentBaseForm.getFieldMomentValue("endYM").substring(0,4)+this.paymentBaseForm.getFieldMomentValue("endYM").substring(5,7)})
+										Object.assign( item , {clctType:'36'})
+										Object.assign( item , {baseSum:this.paymentBaseForm.getFieldValue("baseSum")})
+									})
+									this.validatedList.push(tempList1[0])
+									this.$message.success('添加成功！')
+									console.log('this.validatedList:',this.validatedList)
+									this.ifSave=false
+								},100)
+							}
 						}
 					}
+
+					//校验通过
+					console.log('校验通过')
+
 				}
-
-				//校验通过
-				console.log('校验通过')
-
-
-
-			}
+			},200)
 		},
 
+	},
+	watch: {
+		//message必须和监测的data名字一样
+		ifFreshChild: function() {
+			console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
+			setTimeout(()=>{
+				this.fatherMethod()
+			},100)
+		}
 	},
 	created () {
 		// this.titleMap_Emp = new Map()
