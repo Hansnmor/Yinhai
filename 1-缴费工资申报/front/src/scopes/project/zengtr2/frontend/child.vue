@@ -25,13 +25,13 @@
 			</ta-tab-pane>
 
 			<ta-tab-pane tab="校验成功信息" key="2">
-				<ta-form :auto-form-create="(form)=>{this.form= form}">
 					<ta-table :columns="tableColumns2" :dataSource="validatedList"
 							  ref="table2" :haveSn="true"
+
 					>
-						<ta-table-edit :editForm="form" slot="action" slot-scope="text, record" :dataSource="validatedList" type="rowEdit"  @rowDelete="fnRowDelete"></ta-table-edit>
+						<ta-table-edit slot="action" slot-scope="text, record" :dataSource="validatedList" type="rowEdit"  @rowDelete="fnRowDelete(record)"></ta-table-edit>
 					</ta-table>
-				</ta-form>
+
 <!--				<ta-big-table :data="validatedList"-->
 <!--							  ref="xTable2"-->
 <!--							  border="default"-->
@@ -134,30 +134,30 @@ export default {
 				onChange: this.onSelectChange,
 			},
 			checkedInfoInsuList:[],//以选择的行数据
-			operateMenu: [
-				// {
-				// 	name: '编辑',
-				// 	icon: 'edit',
-				// 	onClick: (record, index) => {
-				// 		message.info(JSON.stringify(record))
-				// 		message.info(index)
-				// 	},
-				// },
-				{
-					name: '删除',
-					icon: 'delete',
-					type: 'confirm',
-					confirmTitle: '确认删除该信息？',
-					onOk: (record, index) => {
-						console.log('record:',record)
-						console.log('index:',index)
-						this.validatedList.splice(index,1)
-						console.log('validatedList:',this.validatedList)
-						this.$message.success('删除成功')
-					},
-				},
-
-			],
+			// operateMenu: [
+			// 	// {
+			// 	// 	name: '编辑',
+			// 	// 	icon: 'edit',
+			// 	// 	onClick: (record, index) => {
+			// 	// 		message.info(JSON.stringify(record))
+			// 	// 		message.info(index)
+			// 	// 	},
+			// 	// },
+			// 	{
+			// 		name: '删除',
+			// 		icon: 'delete',
+			// 		type: 'confirm',
+			// 		confirmTitle: '确认删除该信息？',
+			// 		onOk: (record, index) => {
+			// 			console.log('record:',record)
+			// 			console.log('index:',index)
+			// 			this.validatedList.splice(index,1)
+			// 			console.log('validatedList:',this.validatedList)
+			// 			this.$message.success('删除成功')
+			// 		},
+			// 	},
+			//
+			// ],
 		}
 	},
 	methods:{
@@ -178,10 +178,15 @@ export default {
 			console.log('正在向父组件传值')
 			return this.checkedInfoInsuList
 		},
-		fnRowDelete (deleteId) {
-			console.log('deleteId:',deleteId)
-			// this.validatedList.splice(deleteId,1)
+		fnRowDelete (record) {
+			console.log('record:',record)
+			this.validatedList.forEach((value,index,array)=>{
+				if(value.startYM === record.startYM&&value.endYM===record.endYM){
+					array.splice(index,1)
+				}
+			})
 		},
+
 	}
 }
 </script>

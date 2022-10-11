@@ -323,7 +323,8 @@ const webpackCommonConfig = {
     'demoTest',
     'zengtr1',
     'zengtr2',
-    'zengtr3'
+    'zengtr3',
+    'tangcao4'
   ],
   locale: {
     // moment默认提取en及下列国际化文本,在修改值时,需要到node_modules/moment/locale下确认文件名称

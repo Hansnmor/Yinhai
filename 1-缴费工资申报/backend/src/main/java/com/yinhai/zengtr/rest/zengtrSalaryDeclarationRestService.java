@@ -45,6 +45,7 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 	@PostMapping("queryEmpInsuInfo")
 	public void queryEmpInsuInfo(String empNo){
 		if(!ValidateUtil.isEmpty(empNo)){
+			System.out.println("开始查询emp参保信息,empNo:"+empNo);
 			List<EmpInsuDQueryVo> empInsuDQueryVoList=zengtrSalaryDeclarationReadService.queryEmpInsuInfo(empNo);
 			setData("empInsuInfoList",empInsuDQueryVoList);
 		}
@@ -55,7 +56,7 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 	public void queryPsnInsuInfo(String empNo){
 		if(!ValidateUtil.isEmpty(empNo)){
 			List<PsnNormalInfoQueryVo> psnNormalInfoQueryVoList=zengtrSalaryDeclarationReadService.queryPsnInsuInfo(empNo);
-//			System.out.println("最终返回的结果："+psnNormalInfoQueryVoList);
+			System.out.println("最终返回的结果："+psnNormalInfoQueryVoList);
 			setData("psnInsuInfolist",psnNormalInfoQueryVoList);
 		}
 	}

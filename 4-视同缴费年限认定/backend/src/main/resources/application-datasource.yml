@@ -1,0 +1,32 @@
+ta404:
+  datasource:
+    datasource-list: ta404ds
+    type: druid
+    druid:
+      ta404ds:
+        datasource:
+          url: jdbc:mysql://172.20.22.235:3306/ztsjghtest?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: root@1234
+          #          driver-class-name: org.postgresql.Driver #可不写
+          # 初始化连接数
+          initial-size: 3
+          # 连接池最大连接数量
+          max-active: 10
+          # 获取链接超时时间 （毫秒）
+          max-wait: 60000
+        mybatis:
+          mapper-locations:
+            - classpath*:mapper/read/*.xml
+            - classpath*:mapper/write/*.xml
+            - classpath*:mapper/**.xml
+            - classpath*:mapper/tangcao/read/*.xml
+            - classpath*:mapper/tangcao/write/*.xml
+          base-packages:
+            - com.yinhai.ta404.module.mybatis.mapper
+            - com.yinhai.ta404.module.**.mapper.read
+            - com.yinhai.ta404.module.**.mapper.write
+            - com.yinhai.ta404.component.**.mapper.read
+            - com.yinhai.ta404.component.**.mapper.write
+            - com.yinhai.**.mapper.read
+            - com.yinhai.**.mapper.write

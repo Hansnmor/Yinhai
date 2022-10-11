@@ -218,6 +218,7 @@
 						<ta-form-item label="申报原因" :span="12"
 									  field-decorator-id="dclaRea"
 									  :disabled="ifSubmit"
+									  :require="{message:'请输入申报原因'}"
 									  :label-col="{span: 3}"
 									  :wrapper-col="{span: 21}">
 							<ta-input style="width: 96%"></ta-input>
