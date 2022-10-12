@@ -2,6 +2,7 @@ package com.yinhai.zengtr.mapper.read;
 
 import com.yinhai.ta404.module.mybatis.mapper.Ta404SupportMapper;
 import com.yinhai.zengtr.vo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface zengtrSalaryDeclarationReadMapper extends Ta404SupportMapper {
 
 	List<PsnWagDclaDQueryVo> queryPsnWagInfoByPsnNo(String psnNo);
 
-	List<PsnInsuDQueryVo> queryPsnInsuIfNormal(String psnNo,String insutype);
+	List<PsnInsuDQueryVo> queryPsnInsuIfNormal(@Param("psnNo") String psnNo,@Param("insutype") String insutype);
 }

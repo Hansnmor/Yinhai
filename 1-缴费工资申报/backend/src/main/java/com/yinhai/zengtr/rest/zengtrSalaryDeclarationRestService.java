@@ -94,10 +94,12 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 	//下载模板文件
 	@PostMapping("downloadTemplate")
 	public void downloadTemplate(String fileName, HttpServletResponse response) throws IOException {
-		String fileUrl = "D:/upload/template1.xlsx";
-		File file = new File(fileUrl);
-		InputStream is = new FileInputStream(file);
-		ResponseExportUtil.exportFileWithStream(response, is, fileName);
+//		String fileUrl = "D:/upload/template1.xlsx";
+//		File file = new File(fileUrl);
+//		InputStream is = new FileInputStream(file);
+//		ResponseExportUtil.exportFileWithStream(response, is, fileName);
+		List<TemplateVo> templateVos=new ArrayList<>();
+		ExcelUtils.export(response,fileName,templateVos,TemplateVo.class);
 	}
 
 	// 导入文件
@@ -139,7 +141,10 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 					//校验生存状态是否正常，是否正常缴费
 					String psnNo=success.getPsnNo();
 					String insutype=success.getInsutype();
+					System.out.println("psnNo:"+psnNo);
+					System.out.println("insutype:"+insutype);
 					List<PsnInsuDQueryVo> psnInsuDQueryVoList=zengtrSalaryDeclarationReadService.queryPsnInsuIfNormal(psnNo,insutype);
+					System.out.println("psnInsuDQueryVoList:"+psnInsuDQueryVoList);
 					if(ValidateUtil.isEmpty(psnInsuDQueryVoList)){
 						flag=1;
 					}else{
@@ -161,8 +166,11 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 				}else{
 					realsuccessFile.add(success);
 				}
+				flag=0;
 			}
 
+			System.out.println("最终success:"+realsuccessFile);
+			System.out.println("最终error:"+errorFile);
 			System.out.println("fileImportInfoListVo:"+ fileImportInfoListVos);
 
 			setData("wagInfoFiles", fileImportInfoListVos);

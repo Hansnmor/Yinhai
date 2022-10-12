@@ -72,19 +72,32 @@ public class tangcaoYearlyPaymentRestService extends BaseRestService {
         tangcaoYearlyPaymentWriteService.deletePsnTratYearDInfo(psnTratClctId);
     }
 
-    @PostMapping("updatePsnTratYearDInfo")
-    public void updatePsnTratYearDInfo(String jsonStr) {
-        if(!ValidateUtil.isEmpty(jsonStr)) {
-            List<PsnTratYearDInfoVo> validatedListVoList = JSON.parseArray(jsonStr, PsnTratYearDInfoVo.class);
-            tangcaoYearlyPaymentWriteService.updatePsnTratYearDInfo(validatedListVoList);
-        }
-    }
+//    @PostMapping("updatePsnTratYearDInfo")
+//    public void updatePsnTratYearDInfo(String jsonStr) {
+//        if(!ValidateUtil.isEmpty(jsonStr)) {
+//            List<PsnTratYearDInfoVo> validatedListVoList = JSON.parseArray(jsonStr, PsnTratYearDInfoVo.class);
+//            tangcaoYearlyPaymentWriteService.updatePsnTratYearDInfo(validatedListVoList);
+//        }
+//    }
+//
+//    @PostMapping("insertPsnTratYearDInfo")
+//    public void insertPsnTratYearDInfo(String jsonStr) {
+//        if(!ValidateUtil.isEmpty(jsonStr)) {
+//            List<PsnTratYearDInfoVo> validatedListVoList = JSON.parseArray(jsonStr, PsnTratYearDInfoVo.class);
+//            tangcaoYearlyPaymentWriteService.insertPsnTratYearDInfo(validatedListVoList);
+//        }
+//    }
 
-    @PostMapping("insertPsnTratYearDInfo")
-    public void insertPsnTratYearDInfo(String jsonStr) {
-        if(!ValidateUtil.isEmpty(jsonStr)) {
-            List<PsnTratYearDInfoVo> validatedListVoList = JSON.parseArray(jsonStr, PsnTratYearDInfoVo.class);
-            tangcaoYearlyPaymentWriteService.insertPsnTratYearDInfo(validatedListVoList);
+    @PostMapping("insertUpdatedData")
+    public void insertUpdatedData(String jsonStr1,String jsonStr2){
+        if(!ValidateUtil.isEmpty(jsonStr1)&&!ValidateUtil.isEmpty(jsonStr2)){
+           List<PsnTratYearDInfoVo> psnTratYearDInfoVoList1=JSON.parseArray(jsonStr1, PsnTratYearDInfoVo.class);
+           List<PsnTratYearDInfoVo> psnTratYearDInfoVoList2=JSON.parseArray(jsonStr2, PsnTratYearDInfoVo.class);
+            System.out.println("收到的值1："+psnTratYearDInfoVoList1);
+            System.out.println("收到的值2："+psnTratYearDInfoVoList2);
+            tangcaoYearlyPaymentWriteService.insertUpdatedData(psnTratYearDInfoVoList1,psnTratYearDInfoVoList2);
+
         }
+
     }
 }

@@ -73,14 +73,14 @@
 
 
     <select id="queryPsnInsuIfNormal" resultType="com.yinhai.zengtr.vo.PsnInsuDQueryVo">
-        select pid.PSN_INSU_STAS
+        select pid.PSN_INSU_STAS as psnInsuStas,pid.PSN_NO as psnNo,pid.EMP_NO as empNo
         from psn_info_b pib,psn_insu_d pid
         where
-             pid.PSN_NO = #{param1,jdbcType=VARCHAR} and pib.SURV_STAS='1' and pid.INSUTYPE=#{param2,jdbcType=VARCHAR} and pib.PSN_NO=pid.PSN_NO
+             pid.PSN_NO = #{psnNo} and pib.SURV_STAS='1' and pid.INSUTYPE=#{insutype} and pib.PSN_NO=pid.PSN_NO
                 and pid.EMP_NO = (
-                    select EMP_NO
+                    select distinct  EMP_NO
                     from psn_insu_d
-                    where PSN_NO =#{param1,jdbcType=VARCHAR})
+                    where PSN_NO =#{psnNo})
     </select>
 
 </mapper>

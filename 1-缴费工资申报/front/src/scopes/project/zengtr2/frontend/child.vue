@@ -29,7 +29,10 @@
 							  ref="table2" :haveSn="true"
 
 					>
-						<ta-table-edit slot="action" slot-scope="text, record" :dataSource="validatedList" type="rowEdit"  @rowDelete="fnRowDelete(record)"></ta-table-edit>
+<!--						<ta-table-edit slot="action" slot-scope="text, record" :dataSource="validatedList" type="rowEdit"  @rowDelete="fnRowDelete(record)"></ta-table-edit>-->
+						<span slot="operate" slot-scope="text, record">
+							<ta-table-operate :operate-menu="operateMenu" />
+						</span>
 					</ta-table>
 
 <!--				<ta-big-table :data="validatedList"-->
@@ -92,7 +95,7 @@ const tableColumns1=[
 	{ title: '参保所属机构', dataIndex: 'insuOptins', collectionType: 'OPTINS' },
 ]
 const tableColumns2=[
-	{ title: '操作', dataIndex: 'action', width: 150, scopedSlots: { customRender: 'action' } },
+	{ title: '操作',width: 100, dataIndex: 'operate', scopedSlots: { customRender: 'operate' } },
 	{ title: '单位编号', dataIndex: 'empNo',  },
 	{ title: '参保险种', dataIndex: 'insutype', collectionType: 'INSUTYPE' },
 	{ title: '单位征缴规则', dataIndex: 'clctRuleTypeCodg', collectionType: 'CLCT_RULE_TYPE_CODG' },
@@ -134,30 +137,22 @@ export default {
 				onChange: this.onSelectChange,
 			},
 			checkedInfoInsuList:[],//以选择的行数据
-			// operateMenu: [
-			// 	// {
-			// 	// 	name: '编辑',
-			// 	// 	icon: 'edit',
-			// 	// 	onClick: (record, index) => {
-			// 	// 		message.info(JSON.stringify(record))
-			// 	// 		message.info(index)
-			// 	// 	},
-			// 	// },
-			// 	{
-			// 		name: '删除',
-			// 		icon: 'delete',
-			// 		type: 'confirm',
-			// 		confirmTitle: '确认删除该信息？',
-			// 		onOk: (record, index) => {
-			// 			console.log('record:',record)
-			// 			console.log('index:',index)
-			// 			this.validatedList.splice(index,1)
-			// 			console.log('validatedList:',this.validatedList)
-			// 			this.$message.success('删除成功')
-			// 		},
-			// 	},
-			//
-			// ],
+			operateMenu: [
+				{
+					name: '删除',
+					icon: 'delete',
+					type: 'confirm',
+					confirmTitle: '确认删除该信息？',
+					onOk: (record, index) => {
+						console.log('record:',record)
+						console.log('index:',index)
+						this.validatedList.splice(index,1)
+						console.log('validatedList:',this.validatedList)
+						this.$message.success('删除成功')
+					},
+				},
+
+			],
 		}
 	},
 	methods:{
@@ -168,11 +163,11 @@ export default {
 			console.log('selectedRows:',selectedRows)
 			this.checkedInfoInsuList=selectedRows
 		},
-		childMethods(){
-			// console.log('我是子组件，执行childmethod')
-			// this.$refs.xTable1.loadData(this.psnInsuInfoListByEmpNo, true)
-			// this.$refs.xTable2.loadData(this.validatedList, true)
-		},
+		// childMethods(){
+		// 	// console.log('我是子组件，执行childmethod')
+		// 	// this.$refs.xTable1.loadData(this.psnInsuInfoListByEmpNo, true)
+		// 	// this.$refs.xTable2.loadData(this.validatedList, true)
+		// },
 		sendDataToFather(){
 			//向父组件传值的函数
 			console.log('正在向父组件传值')

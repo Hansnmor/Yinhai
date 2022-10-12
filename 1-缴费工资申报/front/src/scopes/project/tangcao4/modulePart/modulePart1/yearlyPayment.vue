@@ -23,6 +23,7 @@
              >
                <ta-form-item label="个人编号" :span="6"
                              fieldDecoratorId="psnNo"
+							 :disabled="ifPsnNo"
                              :require="{message:'请输入个人编号'}">
                  <ta-auto-complete @select="onSelect_Psn" @search="handleSearch_Psn" optionLabelProp="text"
                                    :dropdownMatchSelectWidth="false" placeholder="请输入个人编号、姓名、身份证号"
@@ -212,7 +213,8 @@ export default {
   data () {
     return {
       ifSave:true,//保存按钮能否用
-      ifEmpNo:false,//决定个人编号和单位编号的输入框
+      ifEmpNo:false,//决定单位编号的输入框
+		ifPsnNo:false,//个人编号可用性
       isPayment:true,//工作经历信息区域的组件可用性
       ifAdd:true,//添加按钮是否开启
       col: {
@@ -237,34 +239,73 @@ export default {
   methods: {
     fnSave(){
       //保存操作
-      console.log('父组件收到的值：',this.updateInfoInsuList)
-      console.log('原本的值：',this.psnTratYearDInfoList)
-      console.log('新增的值：',this.currTratYearDInfoList)
-      if((this.updateInfoInsuList == null || this.updateInfoInsuList.length <= 0) && (this.currTratYearDInfoList.length <= 0)){
+		console.log('进行保存操作，首先验证新增数据')
+      console.log('已更新的历史认定信息：',this.updateInfoInsuList)
+		console.log('本次认定信息表：',this.currTratYearDInfoList)
+      if((this.currTratYearDInfoList.length===0 && this.updateInfoInsuList.length === 0) ){
         this.$message.warning('请先添加视同缴费信息或者修改历史认定信息后再进行保存！')
-      }
+		  return false
+      }else{
+		  //有新增数据，进行保存操作
+		  console.log('有新增数据，进行保存操作')
 
-/*      if(this.updateInfoInsuList ！== null && this.updateInfoInsuList.length >= 0){
-        this.Base.submit(null,{
-          url:'yearlyPayment/updatePsnTratYearDInfo',
-          data:{
-            jsonStr:JSON.stringify(this.updateInfoInsuList)
-          },
-        }).then((data)=>{
-          this.$message.success('保存成功！')
-        })
-      }*/
+		  //空字段验证暂时略过
+		  console.log('空字段验证完成')
+		  //进行时间交叉验证
+		  let flag=0
+		  if(this.currTratYearDInfoList.length===0){
+			  //没有新增，就不存在交叉
+			  console.log('交叉验证完成，不存在交叉')
+		  }else{
+			  for(let i=0;i<this.psnTratYearDInfoList.length;i++){
+				  let temp1=this.psnTratYearDInfoList[i]
+				  let begnYm1=parseInt(temp1.begnYm)
+				  let endYm1=parseInt(temp1.endYm)
+				  for(let j=0;j<this.currTratYearDInfoList.length;j++){
+					  let temp2=this.currTratYearDInfoList[j]
+					  let begnYm2=parseInt(temp2.begnYm)
+					  let endYm2=parseInt(temp2.endYm)
+					  if(temp1.insutype===temp2.insutype){
+						  console.log('匹配到同一险种：',temp1.insutype)
+						  if((begnYm1<=begnYm2&&endYm1>=begnYm2)||(begnYm1<=endYm2&&endYm1>=endYm2)){
+							  console.log('时间存在交叉，不允许保存！')
+							  flag=1
+							  break
+						  }
+					  }
+				  }
+				  if(flag!==0){
+					  break
+				  }
+			  }
+		  }
+		  if(flag!==0){
+			  this.$message.warning('【提交的数据中存在时间交叉的数据，请检查!')
+			  return  false
+		  }
+		  console.log('所有验证完成，正式进行保存')
+		  //保存之前，对缺少的值进行赋值
+		  for(let i=0;i<this.currTratYearDInfoList.length;i++){
+			  let temp=this.currTratYearDInfoList[i]
+			  temp['psnNo']=this.psnNo
+		  }
+		  this.Base.submit(null,{
+			  url:'yearlyPayment/insertUpdatedData',
+			  data: {jsonStr1: JSON.stringify(this.currTratYearDInfoList),
+			  		jsonStr2:JSON.stringify(this.updateInfoInsuList)}
+		  }).then(()=>{
+			  this.$message.success('保存成功！')
+			  //同时将按钮置灰
+			  this.ifSave=true
+			  this.ifPsnNo=true
+			  this.ifEmpNo=true
+			  this.ifAdd=true
+			  this.isPayment=true
+		  }).catch(()=>{
+			  this.$message.error('保存错误！')
+		  })
+	  }
 
-      if(this.currTratYearDInfoList.length >= 0){
-/*        let successData = this.successFile.map(function (item) {
-          let { _XID,rowData,rowNum,rowTips, ...objNew } = item;
-          return { ...objNew }
-        })*/
-        for(let i=0;i<this.currTratYearDInfoList.length;i++){
-          this.currTratYearDInfoList[i]['psnNo']=this.psnNo
-        }
-        console.log('新增的值：',this.currTratYearDInfoList)
-      }
     },
     fnReset(){
       //重置页面
@@ -381,6 +422,7 @@ export default {
                 },
               }).then((data)=> {
                 this.psnTratYearDInfoList = data.data.psnTratYearDInfoList;
+				  console.log('历史认定信息：',this.psnTratYearDInfoList)
               })
               //将按钮置为可用
               this.ifSave = false;
@@ -522,6 +564,7 @@ export default {
 	  getChildData(val){
 		  console.log('收到子组件的值：',val)
 		  console.log('当前历史认定信息：',this.psnTratYearDInfoList)
+		  console.log('当前更新表信息：',this.updateInfoInsuList)
 		  if(this.updateInfoInsuList.length===0){
 			  this.updateInfoInsuList.push(val)
 		  }else{
@@ -529,9 +572,23 @@ export default {
 			  for(let i=0;i<this.psnTratYearDInfoList.length;i++){
 				  let temp=this.psnTratYearDInfoList[i]
 				  let id=temp.psnTratClctId
+				  // console.log('i=',i,',此时id为：',id)
+				  // console.log('val的id为：',val.psnTratClctId)
+				  let flag=0
 				  if(id===val.psnTratClctId){
-					  console.log('匹配到了第',(i+1),'条数据')
-					  this.psnTratYearDInfoList[i]=val
+					  // console.log('匹配到第',(i+1),'条数据')
+					  //判断update表有多少条数据，决定val是新增的数据还是修改的数据
+					  for(let j=0;j<this.updateInfoInsuList.length;j++){
+						  if(this.updateInfoInsuList[j].psnTratClctId===id){
+							  flag=1
+							  //说明是修改数据
+							  this.updateInfoInsuList[j]===val
+						  }
+					  }
+					  if(flag===0){
+						  //并没有匹配到，说明是新增数据，执行push
+						  this.updateInfoInsuList.push(val)
+					  }
 				  }
 			  }
 		  }

@@ -10,4 +10,6 @@ public interface tangcaoYearlyPaymentWriteService {
     void updatePsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
 
     void insertPsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
+
+	void insertUpdatedData(List<PsnTratYearDInfoVo> psnTratYearDInfoVoList1, List<PsnTratYearDInfoVo> psnTratYearDInfoVoList2);
 }

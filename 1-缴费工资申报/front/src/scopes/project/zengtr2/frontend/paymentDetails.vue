@@ -181,11 +181,31 @@
 
 				<!--引入子组件表格-->
 				<div @click="fatherMethod">
-					<child ref="freshPage"
-						   :validatedList="validatedList"
-						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"
-						   :recordingDetails="recordingDetails"
-					></child>
+<!--					<child ref="freshPage"-->
+<!--						   :validatedList="validatedList"-->
+<!--						   :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"-->
+<!--						   :recordingDetails="recordingDetails"-->
+<!--					></child>-->
+					<ta-tabs defaultActiveKey="1">
+						<ta-tab-pane tab="人员参保信息" key="1">
+							<child1 :psnInsuInfoListByEmpNo="psnInsuInfoListByEmpNo"
+									ref="freshPage">
+
+							</child1>
+						</ta-tab-pane>
+
+						<ta-tab-pane tab="校验成功信息" key="2">
+							<child2 :validatedList="validatedList">
+
+							</child2>
+						</ta-tab-pane>
+
+						<ta-tab-pane tab="本次补录明细" key="3">
+							<child3 :recordingDetails="recordingDetails">
+
+							</child3>
+						</ta-tab-pane>
+					</ta-tabs>
 				</div>
 
 
@@ -533,7 +553,7 @@ export default {
 			console.log('我是父组件，调用子组件childmethod方法')
 			this.checkedInfoInsuList=this.$refs.freshPage.sendDataToFather()
 			console.log('父组件收到的值：',this.checkedInfoInsuList)
-			this.$refs.freshPage.childMethods();
+			// this.$refs.freshPage.childMethods();
 
 		},
 		fnAdd(){

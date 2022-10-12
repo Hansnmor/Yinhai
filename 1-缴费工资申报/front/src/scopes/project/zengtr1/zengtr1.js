@@ -1,7 +1,11 @@
 import { Vue, store, taMixins, checkLogin} from 'common/js/public-ant.js'// 引入公共文件
 import router from './router/index' // 引入 改模块的路由模块
 import psnInsuInfoTable from '@/scopes/project/zengtr1/frontend/psnInsuInfoTable'
+import child1 from '@/scopes/project/zengtr1/frontend/child1'
+import child2 from '@/scopes/project/zengtr1/frontend/child2'
 Vue.component('psnInsuInfoTable',psnInsuInfoTable)
+Vue.component('child1',child1)
+Vue.component('child2',child2)
 // 自己引入各种插件
 import excelUtil from '@yh/ta404-ui/es/utils/js/excel.util'
 // 注册工具到上Base

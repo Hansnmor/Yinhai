@@ -185,12 +185,27 @@
 						</ta-card>
 
 						<!--人员参保信息表和工资基数信息表-->
+<!--						<div @click="fatherMethod">-->
+<!--							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList-->
+<!--												 ref="freshPage"-->
+<!--												 :salaryBaseInfoList=this.salaryBaseInfoList-->
+<!--												 @childEvent="freshData"-->
+<!--							></psn-insu-info-table>-->
+<!--						</div>-->
 						<div @click="fatherMethod">
-							<psn-insu-info-table :psnInsuInfoList=this.psnInsuInfoList
-												 ref="freshPage"
-												 :salaryBaseInfoList=this.salaryBaseInfoList
-												 @childEvent="freshData"
-							></psn-insu-info-table>
+							<ta-tabs defaultActiveKey="1">
+								<ta-tab-pane tab="人员参保信息" key="1">
+									<child1 :psnInsuInfoList=this.psnInsuInfoList
+											ref="freshPage"
+											@childEvent="freshData">
+									</child1>
+								</ta-tab-pane>
+
+								<ta-tab-pane tab="工资基数信息" key="2">
+									<child2 :salaryBaseInfoList=this.salaryBaseInfoList>
+									</child2>
+								</ta-tab-pane>
+							</ta-tabs>
 						</div>
 
 
@@ -282,39 +297,47 @@
 						<div slot="title" style="font-size: 20px;font-weight: bold">导盘信息</div>
 						<ta-tabs defaultActiveKey="1">
 							<ta-tab-pane tab="导入成功信息" key="1">
-								<ta-big-table
-									border
-									auto-resize
-									:data="tableDataSuccess">
-									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>
-									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>
-									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
-									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
-									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
-									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>
-									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>
-									<ta-big-table-column field="startYM" title="开始年月"></ta-big-table-column>
-									<ta-big-table-column field="endYM" title="结束年月"></ta-big-table-column>
-									<ta-big-table-column field="psnClctstd" title="基数"></ta-big-table-column>
-									<ta-big-table-column field="wag" title="工资"></ta-big-table-column>
-								</ta-big-table>
+								<ta-table :columns="tableColumns1" :dataSource="tableDataSuccess"
+										  ref="table1" :haveSn="true"
+								>
+								</ta-table>
+<!--								<ta-big-table-->
+<!--									border-->
+<!--									auto-resize-->
+<!--									:data="tableDataSuccess">-->
+<!--									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="startYM" title="开始年月"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="endYM" title="结束年月"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnClctstd" title="基数"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="wag" title="工资"></ta-big-table-column>-->
+<!--								</ta-big-table>-->
 							</ta-tab-pane>
 
 							<ta-tab-pane tab="导入失败信息" key="2" forceRender>
-								<ta-big-table
-									border
-									auto-resize
-									:data="tableDataError">
-									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>
-									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>
-									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>
-									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>
-									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>
-									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>
-									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>
-									<ta-big-table-column field="rowTips" title="失败原因"></ta-big-table-column>
+								<ta-table :columns="tableColumns2" :dataSource="tableDataError"
+										  ref="table2" :haveSn="true"
+								>
+								</ta-table>
+<!--								<ta-big-table-->
+<!--									border-->
+<!--									auto-resize-->
+<!--									:data="tableDataError">-->
+<!--									<ta-big-table-column type="seq"  width="60"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnNo" title="人员编号"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnName" title="姓名"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="certno" title="证件号码"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="gend" title="性别" collection-type="GEND"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="insutype" title="参保险种" collection-type="INSUTYPE"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="psnInsuStas" title="参保状态" collection-type="PSN_INSU_STAS"></ta-big-table-column>-->
+<!--									<ta-big-table-column field="rowTips" title="失败原因"></ta-big-table-column>-->
 
-								</ta-big-table>
+<!--								</ta-big-table>-->
 							</ta-tab-pane>
 						</ta-tabs>
 					</ta-tab-pane>
@@ -326,6 +349,27 @@
 </template>
 
 <script>
+const tableColumns1=[
+	{ title: '人员编号', dataIndex: 'psnNo' },
+	{ title: '姓名', dataIndex: 'psnName', },
+	{ title: '证件号码', dataIndex: 'certno', },
+	{ title: '性别', dataIndex: 'gend', collectionType: 'GEND' },
+	{ title: '参保险种', dataIndex: 'insutype', collectionType: 'INSUTYPE' },
+	{ title: '参保状态', dataIndex: 'psnInsuStas', collectionType: 'PSN_INSU_STAS' },
+	{ title: '开始年月', dataIndex: 'startYM', },
+	{ title: '结束年月', dataIndex: 'endYM', },
+	{ title: '基数', dataIndex: 'psnClctstd', },
+	{ title: '工资', dataIndex: 'wag',  },
+]
+const tableColumns2=[
+	{ title: '人员编号', dataIndex: 'psnNo' },
+	{ title: '姓名', dataIndex: 'psnName', },
+	{ title: '证件号码', dataIndex: 'certno', },
+	{ title: '性别', dataIndex: 'gend', collectionType: 'GEND' },
+	{ title: '参保险种', dataIndex: 'insutype', collectionType: 'INSUTYPE' },
+	{ title: '参保状态', dataIndex: 'psnInsuStas', collectionType: 'PSN_INSU_STAS' },
+	{ title: '失败原因', dataIndex: 'rowTips',  },
+]
 export default {
 	name: 'salary',
 	data(){
@@ -370,6 +414,8 @@ export default {
 			chooseExport:false,//是否打开导出模态框
 			confirmLoading: false,
 			isExport:true,//决定导出按钮的可用
+			tableColumns1,
+			tableColumns2
 		}
 	},
 	methods:{
@@ -765,7 +811,6 @@ export default {
 			console.log('我是父组件，调用子组件childmethod方法')
 			this.checkedInfoInsuList=this.$refs.freshPage.sendDataToFather()
 			console.log('父组件收到的值：',this.checkedInfoInsuList)
-			this.$refs.freshPage.childMethods();
 
 		},
 		changeStatus(){

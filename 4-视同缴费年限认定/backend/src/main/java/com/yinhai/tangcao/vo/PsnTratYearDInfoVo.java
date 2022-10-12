@@ -58,15 +58,44 @@ public class PsnTratYearDInfoVo implements Serializable {
     private String psnInsuRltsId;
             //参保人员管理事件ID
     private String psnInsuMgtEid;
-                    
-public String getPsnTratClctId() {
+
+    @Override
+    public String toString() {
+        return "PsnTratYearDInfoVo{" +
+                "psnTratClctId='" + psnTratClctId + '\'' +
+                ", psnNo='" + psnNo + '\'' +
+                ", insutype='" + insutype + '\'' +
+                ", tratClctType='" + tratClctType + '\'' +
+                ", begnYm='" + begnYm + '\'' +
+                ", endYm='" + endYm + '\'' +
+                ", tratClctMons=" + tratClctMons +
+                ", valiFlag='" + valiFlag + '\'' +
+                ", memo='" + memo + '\'' +
+                ", insuOrg='" + insuOrg + '\'' +
+                ", optChnl='" + optChnl + '\'' +
+                ", optins='" + optins + '\'' +
+                ", opter='" + opter + '\'' +
+                ", opterName='" + opterName + '\'' +
+                ", optTime=" + optTime +
+                ", crteOptins='" + crteOptins + '\'' +
+                ", crter='" + crter + '\'' +
+                ", crterName='" + crterName + '\'' +
+                ", crteTime=" + crteTime +
+                ", updtTime=" + updtTime +
+                ", rid='" + rid + '\'' +
+                ", psnInsuRltsId='" + psnInsuRltsId + '\'' +
+                ", psnInsuMgtEid='" + psnInsuMgtEid + '\'' +
+                '}';
+    }
+
+    public String getPsnTratClctId() {
 return psnTratClctId;
 }
 
 public void setPsnTratClctId(String psnTratClctId) {
 this.psnTratClctId = psnTratClctId;
 }
-                
+
 public String getPsnNo() {
 return psnNo;
 }
@@ -74,7 +103,7 @@ return psnNo;
 public void setPsnNo(String psnNo) {
 this.psnNo = psnNo;
 }
-                
+
 public String getInsutype() {
 return insutype;
 }
@@ -82,7 +111,7 @@ return insutype;
 public void setInsutype(String insutype) {
 this.insutype = insutype;
 }
-                
+
 public String getTratClctType() {
 return tratClctType;
 }
@@ -90,7 +119,7 @@ return tratClctType;
 public void setTratClctType(String tratClctType) {
 this.tratClctType = tratClctType;
 }
-                
+
 public String getBegnYm() {
 return begnYm;
 }
@@ -98,7 +127,7 @@ return begnYm;
 public void setBegnYm(String begnYm) {
 this.begnYm = begnYm;
 }
-                
+
 public String getEndYm() {
 return endYm;
 }
@@ -106,7 +135,7 @@ return endYm;
 public void setEndYm(String endYm) {
 this.endYm = endYm;
 }
-                
+
 public Double getTratClctMons() {
 return tratClctMons;
 }
@@ -114,7 +143,7 @@ return tratClctMons;
 public void setTratClctMons(Double tratClctMons) {
 this.tratClctMons = tratClctMons;
 }
-                
+
 public String getValiFlag() {
 return valiFlag;
 }
@@ -122,7 +151,7 @@ return valiFlag;
 public void setValiFlag(String valiFlag) {
 this.valiFlag = valiFlag;
 }
-                
+
 public String getMemo() {
 return memo;
 }
@@ -130,7 +159,7 @@ return memo;
 public void setMemo(String memo) {
 this.memo = memo;
 }
-                
+
 public String getInsuOrg() {
 return insuOrg;
 }
@@ -138,7 +167,7 @@ return insuOrg;
 public void setInsuOrg(String insuOrg) {
 this.insuOrg = insuOrg;
 }
-                
+
 public String getOptChnl() {
 return optChnl;
 }
@@ -146,7 +175,7 @@ return optChnl;
 public void setOptChnl(String optChnl) {
 this.optChnl = optChnl;
 }
-                
+
 public String getOptins() {
 return optins;
 }
@@ -154,7 +183,7 @@ return optins;
 public void setOptins(String optins) {
 this.optins = optins;
 }
-                
+
 public String getOpter() {
 return opter;
 }
@@ -162,7 +191,7 @@ return opter;
 public void setOpter(String opter) {
 this.opter = opter;
 }
-                
+
 public String getOpterName() {
 return opterName;
 }
@@ -170,7 +199,7 @@ return opterName;
 public void setOpterName(String opterName) {
 this.opterName = opterName;
 }
-                
+
 public Date getOptTime() {
 return optTime;
 }
@@ -178,7 +207,7 @@ return optTime;
 public void setOptTime(Date optTime) {
 this.optTime = optTime;
 }
-                
+
 public String getCrteOptins() {
 return crteOptins;
 }
@@ -186,7 +215,7 @@ return crteOptins;
 public void setCrteOptins(String crteOptins) {
 this.crteOptins = crteOptins;
 }
-                
+
 public String getCrter() {
 return crter;
 }
@@ -194,7 +223,7 @@ return crter;
 public void setCrter(String crter) {
 this.crter = crter;
 }
-                
+
 public String getCrterName() {
 return crterName;
 }
@@ -202,7 +231,7 @@ return crterName;
 public void setCrterName(String crterName) {
 this.crterName = crterName;
 }
-                
+
 public Date getCrteTime() {
 return crteTime;
 }
@@ -210,7 +239,7 @@ return crteTime;
 public void setCrteTime(Date crteTime) {
 this.crteTime = crteTime;
 }
-                
+
 public Date getUpdtTime() {
 return updtTime;
 }
@@ -218,7 +247,7 @@ return updtTime;
 public void setUpdtTime(Date updtTime) {
 this.updtTime = updtTime;
 }
-                
+
 public String getRid() {
 return rid;
 }
@@ -226,7 +255,7 @@ return rid;
 public void setRid(String rid) {
 this.rid = rid;
 }
-                
+
 public String getPsnInsuRltsId() {
 return psnInsuRltsId;
 }
@@ -234,7 +263,7 @@ return psnInsuRltsId;
 public void setPsnInsuRltsId(String psnInsuRltsId) {
 this.psnInsuRltsId = psnInsuRltsId;
 }
-                
+
 public String getPsnInsuMgtEid() {
 return psnInsuMgtEid;
 }
@@ -242,5 +271,5 @@ return psnInsuMgtEid;
 public void setPsnInsuMgtEid(String psnInsuMgtEid) {
 this.psnInsuMgtEid = psnInsuMgtEid;
 }
-    
+
 }
