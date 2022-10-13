@@ -21,7 +21,7 @@ const tableColumns3=[
 export default {
 	name: 'child3',
 	props:{
-		recordingDetails:[],//补录明细列表
+		recordingDetails:[], //补录明细列表
 	},
 	data(){
 		return{
