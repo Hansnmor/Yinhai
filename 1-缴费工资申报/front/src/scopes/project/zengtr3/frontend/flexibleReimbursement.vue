@@ -3,7 +3,7 @@
 		<ta-border-layout layout-type="fixTop">
 			<div slot="header">
 				<div style="text-align: center;">
-					<ta-button  @click="beforeSave" :disabled="ifSubmit">
+					<ta-button  @click="beforeSave" :disabled="ifSubmit" type="primary">
 						保存
 					</ta-button>
 
@@ -22,6 +22,7 @@
 					>
 						<ta-form-item label="个人编号" :span="6"
 									  fieldDecoratorId="psnNo"
+									  :disabled="ifPsnNo"
 									  :require="{message:'请输入个人编号'}">
 							<ta-auto-complete @select="onSelect_Psn" @search="handleSearch_Psn" optionLabelProp="text"
 											  :dropdownMatchSelectWidth="false" placeholder="请输入个人编号、姓名、身份证号"
@@ -238,13 +239,32 @@
 				</ta-card>
 
 				<!--引入子组件表格-->
-				<div @click="fatherMethod">
-					<child ref="freshPage"
-						   @childEvent="realSave"
-						   :psnInsuInfoListChild="psnInsuInfoListChild"
-						   :submitInfoList="submitInfoList">
+				<div>
+<!--					<child ref="freshPage"-->
+<!--						   @childEvent1="getClickedRowData"-->
+<!--						   @childEvent2="realSave"-->
+<!--						   :psnInsuInfoListChild="psnInsuInfoListChild"-->
+<!--						   :submitInfoList="submitInfoList">-->
 
-					</child>
+<!--					</child>-->
+					<ta-tabs defaultActiveKey="1">
+						<ta-tab-pane tab="人员参保信息" key="1">
+							<child1 :psnInsuInfoListChild="psnInsuInfoListChild"
+									@childEvent1="getClickedRowData"
+							>
+
+							</child1>
+						</ta-tab-pane>
+						<ta-tab-pane tab="报销登记信息" key="2">
+							<child2 :submitInfoList="submitInfoList"
+									@childEvent2="realSave"
+									ref="freshPage"
+							>
+
+							</child2>
+						</ta-tab-pane>
+					</ta-tabs>
+
 				</div>
 
 
@@ -280,6 +300,8 @@ export default {
 			ifSubmit:true,//报销登记区域按钮可用
 			submitInfoList:[],//报销登记信息表
 			psnInsuInfoListChild:[],//子组件的个人参保信息
+			clickedRowData:[],//自组件中已点击的行数据
+			ifPsnNo:false,//个人编号输入框可用性
 
 		}
 	},
@@ -598,19 +620,15 @@ export default {
 			this.$message.success('添加成功！')
 
 		},
-		fatherMethod(){
-			//点击人员参保信息列表，回显数据
-			setTimeout(()=>{
-				let clickedData=this.$refs.freshPage.sendClickedDataToFather()
-				console.log('点击的数据：',clickedData)
-				//回显数据
-				this.submitBaseForm.setFieldsValue({
-					'insutype':clickedData.insutype,
-					'psnType':clickedData.psnType,
-					'acctname':clickedData.psnName,
-				})
-			},50)
-
+		getClickedRowData(val){
+			this.clickedRowData=val
+			// console.log('点击行数据：',this.clickedRowData)
+			//回显数据
+			this.submitBaseForm.setFieldsValue({
+				'insutype':this.clickedRowData.insutype,
+				'psnType':this.clickedRowData.psnType,
+				'acctname':this.clickedRowData.psnName,
+			})
 		},
 		realSave(val){
 			console.log('现在进行真的保存操作')
@@ -636,6 +654,11 @@ export default {
 					},
 				}).then((data)=>{
 					this.$message.success('保存成功！')
+					//将整个页面置灰
+					this.ifPsnNo=true
+					this.ifEmpNo=true
+					this.ifSubmit=true
+
 				}).catch(()=>{
 					this.$message.error('保存失败!')
 				})

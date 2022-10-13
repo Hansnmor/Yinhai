@@ -159,41 +159,41 @@ export default {
 		submitInfoList:[],//报销登记列表
 	},
 	data(){
-		const checkbegntime = ({ cellValue,row }) => {
-			// console.log('cellValue:',cellValue)
-			if(isNaN(cellValue)&&!isNaN(Date.parse(cellValue))&&cellValue.length===10){
-				console.log("data是日期格式！")
-				//就诊开始日期不能晚于就诊结束日期
-				// console.log('row:',row)
-				let start=parseInt(row.begntime.substring(0,4)+row.begntime.substring(5,7)+row.begntime.substring(8))
-				let end=parseInt(row.endtime.substring(0,4)+row.endtime.substring(5,7)+row.endtime.substring(8))
-				if(start>=end){
-					return new Error('就诊开始日期不能晚于就诊结束日期!')
-				}
-			}else{
-				return new Error('日期格式不对')
-			}
-		}
-		const checkendtime = ({ cellValue,row}) => {
-			// console.log('cellValue:',cellValue)
-			if(isNaN(cellValue)&&!isNaN(Date.parse(cellValue))&&cellValue.length===10){
-				console.log("data是日期格式！")
-				//就诊开始日期不能晚于就诊结束日期
-				// console.log('row:',row)
-				let start=parseInt(row.begntime.substring(0,4)+row.begntime.substring(5,7)+row.begntime.substring(8))
-				let end=parseInt(row.endtime.substring(0,4)+row.endtime.substring(5,7)+row.endtime.substring(8))
-				if(start>=end){
-					return new Error('就诊开始日期不能晚于就诊结束日期!')
-				}
-			}else{
-				return new Error('日期格式不对')
-			}
-
-		}
+		// const checkbegntime = ({ cellValue,row }) => {
+		// 	// console.log('cellValue:',cellValue)
+		// 	if(isNaN(cellValue)&&!isNaN(Date.parse(cellValue))&&cellValue.length===10){
+		// 		console.log("data是日期格式！")
+		// 		//就诊开始日期不能晚于就诊结束日期
+		// 		// console.log('row:',row)
+		// 		let start=parseInt(row.begntime.substring(0,4)+row.begntime.substring(5,7)+row.begntime.substring(8))
+		// 		let end=parseInt(row.endtime.substring(0,4)+row.endtime.substring(5,7)+row.endtime.substring(8))
+		// 		if(start>=end){
+		// 			return new Error('就诊开始日期不能晚于就诊结束日期!')
+		// 		}
+		// 	}else{
+		// 		return new Error('日期格式不对')
+		// 	}
+		// }
+		// const checkendtime = ({ cellValue,row}) => {
+		// 	// console.log('cellValue:',cellValue)
+		// 	if(isNaN(cellValue)&&!isNaN(Date.parse(cellValue))&&cellValue.length===10){
+		// 		console.log("data是日期格式！")
+		// 		//就诊开始日期不能晚于就诊结束日期
+		// 		// console.log('row:',row)
+		// 		let start=parseInt(row.begntime.substring(0,4)+row.begntime.substring(5,7)+row.begntime.substring(8))
+		// 		let end=parseInt(row.endtime.substring(0,4)+row.endtime.substring(5,7)+row.endtime.substring(8))
+		// 		if(start>=end){
+		// 			return new Error('就诊开始日期不能晚于就诊结束日期!')
+		// 		}
+		// 	}else{
+		// 		return new Error('日期格式不对')
+		// 	}
+		//
+		// }
 		return{
 			tableColumns1,
 			tableColumns2,
-			loading: false,
+			// loading: false,
 			editStyle: 'border',//点击单元格直接编辑
 			rowData:{},//行数据
 			operateMenu: [
@@ -219,28 +219,28 @@ export default {
 					},
 				},
 			],
-			validRules: {
-				begntime: [
-					{ required: true, message: '就诊开始日期必填', },
-					{ validator: checkbegntime, }
-				],
-				endtime: [
-					{ required: true, message: '就诊结束日期必填', },
-					{ validator: checkendtime, }
-				],
-				sumfee:[
-					{required:true,message:'医疗费总金额必填'}
-				],
-				inscpScpAmt:[
-					{required:true,message:'符合范围总金额必填'}
-				],
-				fundPaySumamt:[
-					{required:true,message:'本次基金支付金额必填'}
-				],
-				baseAccount:[
-					{required:true,message:'银行账号必填'}
-				]
-			},
+			// validRules: {
+			// 	begntime: [
+			// 		{ required: true, message: '就诊开始日期必填', },
+			// 		{ validator: checkbegntime, }
+			// 	],
+			// 	endtime: [
+			// 		{ required: true, message: '就诊结束日期必填', },
+			// 		{ validator: checkendtime, }
+			// 	],
+			// 	sumfee:[
+			// 		{required:true,message:'医疗费总金额必填'}
+			// 	],
+			// 	inscpScpAmt:[
+			// 		{required:true,message:'符合范围总金额必填'}
+			// 	],
+			// 	fundPaySumamt:[
+			// 		{required:true,message:'本次基金支付金额必填'}
+			// 	],
+			// 	baseAccount:[
+			// 		{required:true,message:'银行账号必填'}
+			// 	]
+			// },
 		}
 	},
 	methods:{
@@ -252,11 +252,7 @@ export default {
 		// 	this.rowData=row
 		// 	console.log('rowData:',this.rowData)
 		// },
-		sendClickedDataToFather(){
-			//向父组件传值的函数
-			console.log('正在向父组件传值')
-			return this.rowData
-		},
+
 		fullValidEvent () {//完整校验
 			// 不指定数据，则默认只校验临时变动的数据，例如新增或修改，当某一列校验失败后不会停止校验
 			// this.$refs.table2.fullValidate().then(() => {
@@ -266,7 +262,7 @@ export default {
 			// 	console.log('errMap:',errMap)
 			// 	this.$emit('childEvent',errMap)
 			// })
-			this.$emit('childEvent',undefined)
+			this.$emit('childEvent2',undefined)
 		},
 		fnCustomRow (record, index) {
 			//回传数据给父组件的必要操作
@@ -277,6 +273,7 @@ export default {
 						// console.log('点击行record:',record)
 						// console.log('点击行index:',index)
 						this.rowData=record
+						this.$emit('childEvent1',this.rowData)
 					}
 				}
 			}

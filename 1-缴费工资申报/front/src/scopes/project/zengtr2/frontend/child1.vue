@@ -31,6 +31,7 @@ export default {
 				onChange: this.onSelectChange,
 			},
 			checkedInfoInsuList:[],//以选择的行数据
+			insutypeCH:''//参保险种的中文描述
 		}
 	},
 	methods:{
@@ -38,14 +39,29 @@ export default {
 		onSelectChange (selectedRowKeys, selectedRows) {
 			//设置选中项为点击选中的项
 			this.rowSelection.selectedRowKeys = selectedRowKeys
-			console.log('selectedRows:',selectedRows)
+			// console.log('selectedRows:',selectedRows)
 			this.checkedInfoInsuList=selectedRows
+			this.getInsutypeCH()
+			setTimeout(()=>{
+				this.$emit('childEvent',this.checkedInfoInsuList,this.insutypeCH)
+			},5)
 		},
-		sendDataToFather(){
-			//向父组件传值的函数
-			console.log('正在向父组件传值')
-			return this.checkedInfoInsuList
-		},
+		getInsutypeCH(){
+			//获得当前所选数据的参保险种中文
+			if(this.checkedInfoInsuList.length===1){
+				// console.log('checked：',this.checkedInfoInsuList)
+				//将此时的参保类型通过字典工具转码成具体的类型
+				this.Base.asyncGetCodeData('INSUTYPE').then((codeList) => {
+					for (const element of codeList) {
+						if (element.value === this.checkedInfoInsuList[0].insutype) {
+							this.insutypeCH = element.label
+							return
+						}
+					}
+				})
+			}
+
+		}
 	}
 }
 </script>

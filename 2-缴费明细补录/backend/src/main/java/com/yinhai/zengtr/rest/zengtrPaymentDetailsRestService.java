@@ -63,6 +63,7 @@ public class zengtrPaymentDetailsRestService extends BaseRestService {
 		}
 	}
 
+	//查询单位缴费信息
 	@PostMapping("queryClctInfoList")
 	public void queryClctInfoList(String empNo){
 		if (!ValidateUtil.isEmpty(empNo)) {
@@ -81,6 +82,9 @@ public class zengtrPaymentDetailsRestService extends BaseRestService {
 			List<UebmiClctDetlDAddVo> uebmiClctDetlDAddVoList=JSON.parseArray(jsonStr, UebmiClctDetlDAddVo.class);
 			List<UebmiClctDetlExtDAddVo> uebmiClctDetlExtDAddVoList=JSON.parseArray(jsonStr,UebmiClctDetlExtDAddVo.class);
 			System.out.println("收到的数据："+validatedListVoList);
+			System.out.println("uebmiCrtfRcdCAddVoList："+uebmiCrtfRcdCAddVoList);
+			System.out.println("uebmiClctDetlDAddVoList："+uebmiClctDetlDAddVoList);
+			System.out.println("uebmiClctDetlExtDAddVoList："+uebmiClctDetlExtDAddVoList);
 			//开始进行写入
 			List<RecordingDetailsVo> recordingDetailsVoList =zengtrPaymentDetailsWriteService.insertRecordingData(uebmiCrtfRcdCAddVoList,uebmiClctDetlDAddVoList,uebmiClctDetlExtDAddVoList);
 			System.out.println("将要返回的数据："+recordingDetailsVoList);
