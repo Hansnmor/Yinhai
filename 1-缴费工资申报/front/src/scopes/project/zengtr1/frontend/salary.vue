@@ -197,7 +197,8 @@
 								<ta-tab-pane tab="人员参保信息" key="1">
 									<child1 :psnInsuInfoList=this.psnInsuInfoList
 											ref="freshPage"
-											@childEvent="freshData">
+											@childEvent="freshData"
+											@childEvent1="getCheckedData">
 									</child1>
 								</ta-tab-pane>
 
@@ -405,7 +406,6 @@ export default {
 			salaryBaseInfoList:[],//工资基数信息列表，放入子组件
 			psnInfoInsuListByPsnNo:[],//根据psnNo查询得到的人员参保信息列表
 			ifSave:true,//保存按钮
-			ifFreshChild:0,//决定是否刷新子组件
 			checkedInfoInsuList:[],//父组件收到的从子组件传过来的值
 			wagInfoFile:[],//批量保存的信息
 			wagImportData:[],//导入的wag信息表
@@ -542,8 +542,6 @@ export default {
 				//同时赋值工资基数信息列表
 				this.salaryBaseInfoList=this.psnInsuInfoList
 				console.log('工资基数信息列表：',this.salaryBaseInfoList)
-				this.ifFreshChild++//刷新子组件
-
 			})
 		},
 		handleSearch_Psn(val){
@@ -634,7 +632,6 @@ export default {
 									// console.log('单人申报：当前psnInsuInfoList:',this.psnInsuInfoList)
 									// console.log('参保状态：',this.psnInfoInsuListByPsnNo)
 									this.salaryBaseInfoList=this.psnInsuInfoList
-									this.ifFreshChild++//刷新子组件
 
 									if(this.value===1){
 										this.salaryDec=false
@@ -746,6 +743,7 @@ export default {
 			if(startYM===undefined||endYM===undefined||salary===undefined){
 				this.$message.error('工资申报信息录入不完整，请先将信息录入完整！')
 				flag=1
+				return
 			}
 			this.salaryBaseForm.validateFields(errors => {
 				console.log('错误信息：',errors)
@@ -804,7 +802,6 @@ export default {
 			this.psnInsuInfoList=[...this.psnInsuInfoList]//让子组件重新刷新数据
 			this.salaryBaseInfoList=[...this.salaryBaseInfoList]
 
-			this.ifFreshChild++//刷新子组件
 		},
 		fatherMethod(){
 			//父组件中调用子组件方法
@@ -818,25 +815,21 @@ export default {
 			this.salaryStatus=false
 		},
 		fnSave(){
-			this.ifFreshChild++
-			setTimeout(()=>{
-				console.log('现在开始进行保存操作')
-				console.log('已经选择的人员参保信息：',this.checkedInfoInsuList)
-				if(this.checkedInfoInsuList.length===0){
-					this.$message.error('没有获取到要保存的数据，请勾选！')
-					return
-				}
-				//已经有数据，进行校验是否存在老数据,并进行保存操作
-				this.Base.submit(null,{
-					url:'salaryDeclaration/ifExistSalary',
-					data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
-				}).then((data)=>{
-					console.log('data:',data)
-					this.$message.success('保存成功!');
-				}).catch((data)=>{
-					this.$message.error('保存失败!');
-				})
-			},300)
+			console.log('现在开始进行保存操作')
+			console.log('已经选择的人员参保信息：',this.checkedInfoInsuList)
+			if(this.checkedInfoInsuList.length===0){
+				this.$message.error('没有获取到要保存的数据，请勾选！')
+				return
+			}
+			//已经有数据，进行校验是否存在老数据,并进行保存操作
+			this.Base.submit(null,{
+				url:'salaryDeclaration/ifExistSalary',
+				data: {jsonStr: JSON.stringify(this.checkedInfoInsuList),}
+			}).then(()=>{
+				this.$message.success('保存成功!');
+			}).catch(()=>{
+				this.$message.error('保存失败!');
+			})
 
 		},
 		downTemplate(){
@@ -850,7 +843,7 @@ export default {
 			}).then((data) => {
 				console.log('data：',data)
 				this.$message.success('下载成功!');
-			}).catch((data) => {
+			}).catch(() => {
 				this.$message.error('下载失败!');
 			})
 		},
@@ -1003,17 +996,13 @@ export default {
 		freshData(){
 			//刷新子组件列表数据，更新最新状态
 			this.psnInsuInfoList=[...this.psnInsuInfoList]
+		},
+		getCheckedData(val){
+			//从子组件获得选中行的值
+			this.checkedInfoInsuList=val
 		}
 	},
-	watch: {
-		//message必须和监测的data名字一样
-		ifFreshChild: function() {
-			console.log('watch:', '我是父组件，psnInsuInfoList 变了,所以调用子组件方法')
-			setTimeout(()=>{
-				this.fatherMethod()
-			},100)
-		}
-	},
+
 	// updated () {
 	// 	setTimeout(()=>{
 	// 		this.fatherMethod()

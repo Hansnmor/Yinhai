@@ -27,15 +27,15 @@ public class tangcaoYearlyPaymentWriteServiceImpl extends BaseRestService implem
         tangcaoYearlyPaymentWriteMapper.deletePsnTratYearDInfo(psnTratClctId);
     }
 
-    @Override
-    public void updatePsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList) {
+//    @Override
+//    public void updatePsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList) {
 //        tangcaoYearlyPaymentWriteMapper.updatePsnTratYearDInfo(validatedListVoList);
-    }
-
-    @Override
-    public void insertPsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList) {
+//    }
+//
+//    @Override
+//    public void insertPsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList) {
 //        tangcaoYearlyPaymentWriteMapper.insertPsnTratYearDInfo(validatedListVoList);
-    }
+//    }
 
     @Override
     public void insertUpdatedData(List<PsnTratYearDInfoVo> psnTratYearDInfoVoList1, List<PsnTratYearDInfoVo> psnTratYearDInfoVoList2) {

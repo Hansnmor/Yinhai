@@ -344,7 +344,6 @@ export default {
 				}
 
 				//由于没有表，缴费比例pay_scal，所以这一步暂时省略
-				//将每月缴费基数也写入表
 
 				console.log('此时将要写入数据的表：',this.validatedList)
 				//写入

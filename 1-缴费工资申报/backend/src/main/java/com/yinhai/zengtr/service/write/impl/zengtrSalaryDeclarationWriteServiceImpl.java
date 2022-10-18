@@ -195,16 +195,4 @@ public class zengtrSalaryDeclarationWriteServiceImpl  extends BaseRestService im
 
 	}
 
-//	private List<Map<Object,Object>> Transfer(JSONObject job) {
-//		List<Map<Object,Object>> list=null;
-//		Map<Object,Object> map=new LinkedHashMap<>();
-//		Iterator iter = job.entrySet().iterator();
-//		while (iter.hasNext()) {
-//			Map.Entry entry = (Map.Entry) iter.next();
-//			map.put(entry.getKey(),entry.getValue());
-//		}
-//		list.add(map);
-//		return list;
-//	}
-
 }

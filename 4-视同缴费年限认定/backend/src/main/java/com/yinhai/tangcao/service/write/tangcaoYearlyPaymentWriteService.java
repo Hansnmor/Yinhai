@@ -7,9 +7,9 @@ import java.util.List;
 public interface tangcaoYearlyPaymentWriteService {
     void deletePsnTratYearDInfo(String psnTratClctId);
 
-    void updatePsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
-
-    void insertPsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
+//    void updatePsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
+//
+//    void insertPsnTratYearDInfo(List<PsnTratYearDInfoVo> validatedListVoList);
 
 	void insertUpdatedData(List<PsnTratYearDInfoVo> psnTratYearDInfoVoList1, List<PsnTratYearDInfoVo> psnTratYearDInfoVoList2);
 }

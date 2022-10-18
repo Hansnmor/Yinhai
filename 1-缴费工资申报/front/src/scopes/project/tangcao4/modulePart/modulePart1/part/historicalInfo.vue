@@ -43,7 +43,6 @@
 		{ dataIndex: 'insutype',  slots: { title: 'nameTitle1', }, scopedSlots: { customRender: 'insutype', }, overflowTooltip: true,},
 		{ dataIndex: 'begnYm',   slots: { title: 'nameTitle2', }, scopedSlots: { customRender: 'begnYm', }, overflowTooltip: true,},
 		{ dataIndex: 'endYm',   slots: { title: 'nameTitle3', }, scopedSlots: { customRender: 'endYm', }, overflowTooltip: true,},
-
 		{ title: '视同缴费月数', dataIndex: 'tratClctMons',  },
 		{ title: '操作',width: 100, dataIndex: 'operate', scopedSlots: { customRender: 'operate' } },
 	]
@@ -119,23 +118,23 @@
             }
         },
         methods: {
-            reduMonths(startMonth,endMonth){
-                let startY = startMonth.substring(0,4),
-                    startM = startMonth.substring(4,6),
-                    endY = endMonth.substring(0,4),
-                    endM = endMonth.substring(4,6);
-                if(startMonth > endMonth){
-                    let reduY = startY - endY,
-                        reduM = startM - endM;
-                    return reduY*12+reduM
-                }else if(startMonth < endMonth){
-                    let reduY = endY - startY,
-                        reduM = endM - startM;
-                    return reduY*12+reduM
-                }else{
-                    return 1
-                }
-            },
+            // reduMonths(startMonth,endMonth){
+            //     let startY = startMonth.substring(0,4),
+            //         startM = startMonth.substring(4,6),
+            //         endY = endMonth.substring(0,4),
+            //         endM = endMonth.substring(4,6);
+            //     if(startMonth > endMonth){
+            //         let reduY = startY - endY,
+            //             reduM = startM - endM;
+            //         return reduY*12+reduM
+            //     }else if(startMonth < endMonth){
+            //         let reduY = endY - startY,
+            //             reduM = endM - startM;
+            //         return reduY*12+reduM
+            //     }else{
+            //         return 1
+            //     }
+            // },
 			fnBeforeChangeBegnYm({newData, record, columnKey, }, callback){
 				console.log('校验开始年月')
 				let begnYm=newData

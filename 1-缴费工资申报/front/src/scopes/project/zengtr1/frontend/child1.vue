@@ -58,6 +58,7 @@ export default {
 			this.rowSelection.selectedRowKeys = selectedRowKeys
 			console.log('selectedRows:',selectedRows)
 			this.checkedInfoInsuList=selectedRows
+			this.$emit('childEvent1',this.checkedInfoInsuList)
 		},
 		fnBeforeChangeEndYM ({newData, record, columnKey, }, callback) {
 			//对结束日期的验证
@@ -114,11 +115,6 @@ export default {
 				callback()
 			}
 
-		},
-		sendDataToFather(){
-			//向父组件传值的函数
-			console.log('正在向父组件传值')
-			return this.checkedInfoInsuList
 		},
 	}
 }

@@ -22,14 +22,6 @@
 </template>
 
 <script>
-const tableColumns1=[
-	{ title: '单位编号', dataIndex: 'empNo',  },
-	{ title: '单位名称', dataIndex: 'empName',  },
-	{ title: '个人编号', dataIndex: 'psnNo',  },
-	{ title: '姓名', dataIndex: 'psnName',  },
-	{ title: '险种类型', dataIndex: 'insutype', collectionType: 'INSUTYPE' },
-	{ title: '参保日期', dataIndex: 'crtInsuDate',  },
-]
 export default {
 	name: "psnInsuChild",
 	props:{
@@ -37,7 +29,14 @@ export default {
 	},
 	data(){
 		return{
-			tableColumns1,
+			tableColumns1:[
+				{ title: '单位编号', dataIndex: 'empNo',  },
+				{ title: '单位名称', dataIndex: 'empName',  },
+				{ title: '个人编号', dataIndex: 'psnNo',  },
+				{ title: '姓名', dataIndex: 'psnName',  },
+				{ title: '险种类型', dataIndex: 'insutype', collectionType: 'INSUTYPE' },
+				{ title: '参保日期', dataIndex: 'crtInsuDate',  },
+			]
 		}
 	},
 	methods:{

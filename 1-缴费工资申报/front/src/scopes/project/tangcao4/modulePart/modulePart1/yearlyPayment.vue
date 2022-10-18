@@ -438,9 +438,9 @@ export default {
 
     checkbegnYm(rule,value,callback){
       //开始年月的自定义校验
+		// console.log('开始value：',value)
       const begnYm=this.workInfoForm.getFieldMomentValue("begnYm")
       const endYm=this.workInfoForm.getFieldMomentValue("endYm")
-
       if(endYm!==undefined){
         if(Date.parse(begnYm)>=Date.parse(endYm)){
           this.$message.error('开始期号不能晚于结束期号，请重新录入！')
@@ -459,6 +459,7 @@ export default {
 
     checkendYm(rule,value,callback){
       //结束年月的自定义校验
+		// console.log('结束value：',value)
       const begnYm=this.workInfoForm.getFieldMomentValue("begnYm")
       const endYm=this.workInfoForm.getFieldMomentValue("endYm")
       if(begnYm!==undefined){
@@ -478,21 +479,25 @@ export default {
     },
 
     reduMonths(startMonth,endMonth){
-          let startY = startMonth.substring(0,4),
-              startM = startMonth.substring(4,6),
-              endY = endMonth.substring(0,4),
-              endM = endMonth.substring(4,6);
-          if(startMonth > endMonth){
-            let reduY = startY - endY,
-                reduM = startM - endM;
-            return reduY*12+reduM
-          }else if(startMonth < endMonth){
-            let reduY = endY - startY,
-                reduM = endM - startM;
-            return reduY*12+reduM
-          }else{
-            return 1
-          }
+		if(startMonth!==null&&endMonth!==null){
+			let startY = startMonth.substring(0,4),
+				startM = startMonth.substring(4,6),
+				endY = endMonth.substring(0,4),
+				endM = endMonth.substring(4,6);
+			return (endY-startY)*12+(endM-startM)
+
+			// if(startMonth > endMonth){
+			//   let reduY = startY - endY,
+			//       reduM = startM - endM;
+			//   return reduY*12+reduM
+			// }else if(startMonth < endMonth){
+			//   let reduY = endY - startY,
+			//       reduM = endM - startM;
+			//   return reduY*12+reduM
+			// }else{
+			//   return 1
+			// }
+		}
     },
 
     fatherMethod(){
