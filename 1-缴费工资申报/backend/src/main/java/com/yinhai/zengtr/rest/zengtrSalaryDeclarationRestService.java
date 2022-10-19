@@ -85,7 +85,6 @@ public class zengtrSalaryDeclarationRestService extends BaseRestService {
 	public void ifExistSalary(String jsonStr){
 		if (!ValidateUtil.isEmpty(jsonStr)) {
 			List<SaveWagInfoListVo> saveWagInfoListVoList = JSON.parseArray(jsonStr, SaveWagInfoListVo.class);
-//			JSONArray array = JSONArray.fromObject(jsonStr);
 			System.out.println("收到的数据为："+saveWagInfoListVoList);
 			zengtrSalaryDeclarationWriteService.ifExistSalary(saveWagInfoListVoList);
 		}

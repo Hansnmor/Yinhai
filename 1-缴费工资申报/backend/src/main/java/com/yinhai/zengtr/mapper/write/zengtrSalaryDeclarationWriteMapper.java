@@ -11,5 +11,5 @@ public interface zengtrSalaryDeclarationWriteMapper extends Ta404SupportMapper {
 
 	void insertNewWagInfo(SaveWagInfoListVo vo);
 
-//	void insertNewWagInfo(Object o);
+
 }

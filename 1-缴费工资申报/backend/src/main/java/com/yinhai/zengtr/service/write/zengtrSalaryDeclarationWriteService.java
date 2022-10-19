@@ -8,7 +8,5 @@ import java.util.List;
 public interface zengtrSalaryDeclarationWriteService {
 
 
-	void ifExistSalary(JSONArray array);
-
 	void ifExistSalary(List<SaveWagInfoListVo> saveWagInfoListVoList);
 }

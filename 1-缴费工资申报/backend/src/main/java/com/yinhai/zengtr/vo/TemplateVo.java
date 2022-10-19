@@ -1,10 +1,8 @@
 package com.yinhai.zengtr.vo;
 
 import com.yinhai.zengtr.utils.excel.ExcelExport;
-import com.yinhai.zengtr.utils.excel.ExcelExport;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class TemplateVo implements Serializable {
 	@ExcelExport(value = "人员编号")
