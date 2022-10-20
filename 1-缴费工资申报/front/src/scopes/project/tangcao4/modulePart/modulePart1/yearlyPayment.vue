@@ -507,6 +507,7 @@ export default {
 					endY = endMonth.substring(0, 4),
 					endM = endMonth.substring(4, 6)
 				return (endY - startY) * 12 + (endM - startM)
+
 			}
 		},
 		fnAdd () {
@@ -580,7 +581,6 @@ export default {
 				for (let i = 0; i < this.psnTratYearDInfoList.length; i++) {
 					let temp = this.psnTratYearDInfoList[i]
 					let id = temp.psnTratClctId
-					// console.log('i=',i,',此时id为：',id)
 					// console.log('val的id为：',val.psnTratClctId)
 					let flag = 0
 					if (id === val.psnTratClctId) {
@@ -589,8 +589,8 @@ export default {
 						for (let j = 0; j < this.updateInfoInsuList.length; j++) {
 							if (this.updateInfoInsuList[j].psnTratClctId === id) {
 								flag = 1
-								//说明是修改数据
-								this.updateInfoInsuList[j] === val
+								//说明是修改的数据，直接进行覆盖
+								this.updateInfoInsuList[j] = val
 							}
 						}
 						if (flag === 0) {
