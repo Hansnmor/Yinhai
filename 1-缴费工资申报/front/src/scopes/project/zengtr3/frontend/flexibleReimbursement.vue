@@ -352,7 +352,7 @@ export default {
 			}).then((data) => {
 				console.log('查询后的data:', data)
 				if (data.data.psnInfoList === null) {
-					this.$message.warning('人员基本信息不完整，不能办理此业务!');
+					this.$message.warning('人员基本信息不完整，不能办理此业务!')
 					this.psnBaseForm.resetFields()
 					return false
 				}
@@ -433,7 +433,7 @@ export default {
 			}).then((data) => {
 				console.log('data:', data.data)
 				if (data.data.empInfoList == null) {
-					this.$message.error('未获取到单位基本信息!');
+					this.$message.error('未获取到单位基本信息!')
 				}
 				this.empInfoList = data.data.empInfoList
 			})
@@ -529,8 +529,8 @@ export default {
 			//就诊开始日期的自定义校验
 			console.log('开始进行开始年月的校验')
 			console.log('value：', value)
-			const endtime = this.submitBaseForm.getFieldMomentValue("endtime")
-			const begntime = this.submitBaseForm.getFieldMomentValue("begntime")
+			const endtime = this.submitBaseForm.getFieldMomentValue('endtime')
+			const begntime = this.submitBaseForm.getFieldMomentValue('begntime')
 			console.log('end:', endtime)
 			if (endtime !== undefined) {
 				if (Date.parse(begntime) > Date.parse(endtime)) {
@@ -549,8 +549,8 @@ export default {
 			//就诊结束日期的自定义校验
 			console.log('开始进行开始年月的校验')
 			console.log('value：', value)
-			const begntime = this.submitBaseForm.getFieldMomentValue("begntime")
-			const endtime = this.submitBaseForm.getFieldMomentValue("endtime")
+			const begntime = this.submitBaseForm.getFieldMomentValue('begntime')
+			const endtime = this.submitBaseForm.getFieldMomentValue('endtime')
 			console.log('start:', begntime)
 			if (begntime !== undefined) {
 				if (Date.parse(begntime) > Date.parse(endtime)) {
@@ -595,10 +595,10 @@ export default {
 						+ this.submitBaseForm.getFieldMomentValue('endtime').substring(8, 10))
 					let tempE2 = parseInt(element.endtime.substring(0, 4) + element.endtime.substring(5, 7)
 						+ element.endtime.substring(8))
-					console.log('s1:', tempS1)
-					console.log('s2:', tempS2)
-					console.log('e1:', tempE1)
-					console.log('e2:', tempE2)
+					// console.log('s1:', tempS1)
+					// console.log('s2:', tempS2)
+					// console.log('e1:', tempE1)
+					// console.log('e2:', tempE2)
 					if ((tempS2 <= tempE1 && tempS2 >= tempS1) || (tempE2 >= tempS1 && tempE2 <= tempE1)) {
 						//时间有交叉
 						this.$message.warning('补录时间段存在交叉，请重新录入！')
@@ -610,18 +610,18 @@ export default {
 				return false
 			}
 			let tempList = [{}]
-			let psnType = this.submitBaseForm.getFieldValue("psnType")
-			let insutype = this.submitBaseForm.getFieldValue("insutype")
-			let medType = this.submitBaseForm.getFieldValue("medType")
-			let begntime = this.submitBaseForm.getFieldMomentValue("begntime")
-			let endtime = this.submitBaseForm.getFieldMomentValue("endtime")
-			let sumfee = this.submitBaseForm.getFieldValue("sumfee")
-			let inscpScpAmt = this.submitBaseForm.getFieldValue("inscpScpAmt")
-			let fundPaySumamt = this.submitBaseForm.getFieldValue("fundPaySumamt")
-			let bankTypeCode = this.submitBaseForm.getFieldValue("bankTypeCode")
-			let acctname = this.submitBaseForm.getFieldValue("acctname")
-			let dclaRea = this.submitBaseForm.getFieldValue("dclaRea")
-			let bankacct = this.submitBaseForm.getFieldValue("bankacct")
+			let psnType = this.submitBaseForm.getFieldValue('psnType')
+			let insutype = this.submitBaseForm.getFieldValue('insutype')
+			let medType = this.submitBaseForm.getFieldValue('medType')
+			let begntime = this.submitBaseForm.getFieldMomentValue('begntime')
+			let endtime = this.submitBaseForm.getFieldMomentValue('endtime')
+			let sumfee = this.submitBaseForm.getFieldValue('sumfee')
+			let inscpScpAmt = this.submitBaseForm.getFieldValue('inscpScpAmt')
+			let fundPaySumamt = this.submitBaseForm.getFieldValue('fundPaySumamt')
+			let bankTypeCode = this.submitBaseForm.getFieldValue('bankTypeCode')
+			let acctname = this.submitBaseForm.getFieldValue('acctname')
+			let dclaRea = this.submitBaseForm.getFieldValue('dclaRea')
+			let bankacct = this.submitBaseForm.getFieldValue('bankacct')
 			tempList.forEach(item => {
 				Object.assign(item, { psnType: psnType })
 				Object.assign(item, { insutype: insutype })

@@ -17,7 +17,17 @@
     </select>
     <select id="queryEmpInfo" resultType="com.yinhai.tangcao.vo.InsuEmpInfoBQueryVo">
         select
-            EMP_NO as empNo, EMP_ENTT_CODG as empEnttCodg, EMP_MGT_TYPE as empMgtType, PRNT_EMP_NO as prntEmpNo, ASOC_LEGENT_FLAG as asocLegentFlag, EMP_TYPE as empType, EMP_NAME as empName, REG_NAME as regName, LOC_ADMDVS as locAdmdvs, CONER_NAME as conerName, CONER_EMAIL as conerEmail, TEL as tel, FAX_NO as faxNo, TAX_NO as taxNo, ORGCODE as orgcode, REGNO as regno, REGNO_CERT_TYPE as regnoCertType, EMP_ADDR as empAddr, POSCODE as poscode, APRV_ESTA_DEPT as aprvEstaDept, APRV_ESTA_DATE as aprvEstaDate, APRV_ESTA_DOCNO as aprvEstaDocno, PRNT_ADMDVS as prntAdmdvs, INSU_OPTINS as insuOptins, ORG_VALI_STAS as orgValiStas, LEGREP_TEL as legrepTel, LEGREP_NAME as legrepName, LEGREP_CERT_TYPE as legrepCertType, LEGREP_CERTNO as legrepCertno, ORGCODE_ISSU_EMP as orgcodeIssuEmp, VALI_FLAG as valiFlag, RID as rid, CRTE_TIME as crteTime, UPDT_TIME as updtTime, CRTER as crter, CRTER_NAME as crterName, CRTE_OPTINS as crteOptins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, OPTINS as optins, POOLAREA as poolarea, VER as ver
+            EMP_NO as empNo, EMP_ENTT_CODG as empEnttCodg, EMP_MGT_TYPE as empMgtType, PRNT_EMP_NO as prntEmpNo,
+            ASOC_LEGENT_FLAG as asocLegentFlag, EMP_TYPE as empType, EMP_NAME as empName, REG_NAME as regName,
+            LOC_ADMDVS as locAdmdvs, CONER_NAME as conerName, CONER_EMAIL as conerEmail, TEL as tel,
+            FAX_NO as faxNo, TAX_NO as taxNo, ORGCODE as orgcode, REGNO as regno, REGNO_CERT_TYPE as regnoCertType,
+            EMP_ADDR as empAddr, POSCODE as poscode, APRV_ESTA_DEPT as aprvEstaDept, APRV_ESTA_DATE as aprvEstaDate,
+            APRV_ESTA_DOCNO as aprvEstaDocno, PRNT_ADMDVS as prntAdmdvs, INSU_OPTINS as insuOptins,
+            ORG_VALI_STAS as orgValiStas, LEGREP_TEL as legrepTel, LEGREP_NAME as legrepName,
+            LEGREP_CERT_TYPE as legrepCertType, LEGREP_CERTNO as legrepCertno, ORGCODE_ISSU_EMP as orgcodeIssuEmp,
+            VALI_FLAG as valiFlag, RID as rid, CRTE_TIME as crteTime, UPDT_TIME as updtTime, CRTER as crter,
+            CRTER_NAME as crterName, CRTE_OPTINS as crteOptins, OPTER as opter, OPTER_NAME as opterName,
+            OPT_TIME as optTime, OPTINS as optins, POOLAREA as poolarea, VER as ver
         from insu_emp_info_b
         where (EMP_NO like CONCAT(concat('%',#{queryCondition},'%')) or EMP_NAME like CONCAT(concat('%',#{queryCondition},'%')) )
     </select>
@@ -25,7 +35,9 @@
     <!--查询个人参保信息-->
     <select id="queryPsnInsuInfoByEmpNoAndPsnNo" resultType="com.yinhai.tangcao.vo.PsnInsuDQueryVo">
         select
-            pid.EMP_NO as empNo,ieib.EMP_NAME as empName,pid.PSN_NO as psnNo,pib.PSN_NAME as psnName,pid.INSUTYPE as insutype,pid.PSN_TYPE as psnType,pid.PSN_INSU_STAS as psnInsuStas,pid.CRT_INSU_DATE as crtInsuDate
+            pid.EMP_NO as empNo,ieib.EMP_NAME as empName,pid.PSN_NO as psnNo,pib.PSN_NAME as psnName,
+            pid.INSUTYPE as insutype,pid.PSN_TYPE as psnType,pid.PSN_INSU_STAS as psnInsuStas,
+            pid.CRT_INSU_DATE as crtInsuDate
         from psn_insu_d as pid,insu_emp_info_b as ieib,psn_info_b as pib
         where pid.EMP_NO = #{empNo} and pid.PSN_NO = #{psnNo} and pid.EMP_NO =ieib.EMP_NO and pid.PSN_NO = pib.PSN_NO
     </select>
@@ -34,7 +46,12 @@
     <!--查询历史认定信息-->
     <select id="queryPsnTratYearDInfoByPsnNo" resultType="com.yinhai.tangcao.vo.PsnTratYearDInfoVo">
         select
-            PSN_TRAT_CLCT_ID as psnTratClctId, PSN_NO as psnNo, INSUTYPE as insutype, TRAT_CLCT_TYPE as tratClctType, BEGN_YM as begnYm, END_YM as endYm, TRAT_CLCT_MONS as tratClctMons, VALI_FLAG as valiFlag, MEMO as memo, INSU_ORG as insuOrg, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime, UPDT_TIME as updtTime, RID as rid, PSN_INSU_RLTS_ID as psnInsuRltsId, PSN_INSU_MGT_EID as psnInsuMgtEid
+            PSN_TRAT_CLCT_ID as psnTratClctId, PSN_NO as psnNo, INSUTYPE as insutype, TRAT_CLCT_TYPE as tratClctType,
+            BEGN_YM as begnYm, END_YM as endYm, TRAT_CLCT_MONS as tratClctMons, VALI_FLAG as valiFlag, MEMO as memo,
+            INSU_ORG as insuOrg, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName,
+            OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName,
+            CRTE_TIME as crteTime, UPDT_TIME as updtTime, RID as rid, PSN_INSU_RLTS_ID as psnInsuRltsId,
+            PSN_INSU_MGT_EID as psnInsuMgtEid
         from psn_trat_year_d
         where PSN_NO = #{psnNo} and VALI_FLAG = '1'
     </select>
@@ -42,7 +59,11 @@
     <!--查询指定行数据-->
     <select id="queryList" resultType="com.yinhai.tangcao.vo.PsnTratYearDInfoVo">
         select
-        PSN_TRAT_CLCT_ID as psnTratClctId, PSN_NO as psnNo, INSUTYPE as insutype, TRAT_CLCT_TYPE as tratClctType, BEGN_YM as begnYm, END_YM as endYm, TRAT_CLCT_MONS as tratClctMons, VALI_FLAG as valiFlag, MEMO as memo, INSU_ORG as insuOrg, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName, OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime, UPDT_TIME as updtTime, RID as rid, PSN_INSU_RLTS_ID as psnInsuRltsId, PSN_INSU_MGT_EID as psnInsuMgtEid
+        PSN_TRAT_CLCT_ID as psnTratClctId, PSN_NO as psnNo, INSUTYPE as insutype, TRAT_CLCT_TYPE as tratClctType,
+        BEGN_YM as begnYm, END_YM as endYm, TRAT_CLCT_MONS as tratClctMons, VALI_FLAG as valiFlag, MEMO as memo,
+        INSU_ORG as insuOrg, OPT_CHNL as optChnl, OPTINS as optins, OPTER as opter, OPTER_NAME as opterName,
+        OPT_TIME as optTime, CRTE_OPTINS as crteOptins, CRTER as crter, CRTER_NAME as crterName, CRTE_TIME as crteTime,
+        UPDT_TIME as updtTime, RID as rid, PSN_INSU_RLTS_ID as psnInsuRltsId, PSN_INSU_MGT_EID as psnInsuMgtEid
         from psn_trat_year_d
         <where>
 

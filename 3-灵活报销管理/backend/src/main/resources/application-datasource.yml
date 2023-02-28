@@ -5,9 +5,9 @@ ta404:
     druid:
       ta404ds:
         datasource:
-          url: jdbc:mysql://172.20.22.235:3306/ztsjghtest?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://localhost:3306/yhdemo?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
           username: root
-          password: root@1234
+          password: yyjcmx1314
           #          driver-class-name: org.postgresql.Driver #可不写
           # 初始化连接数
           initial-size: 3

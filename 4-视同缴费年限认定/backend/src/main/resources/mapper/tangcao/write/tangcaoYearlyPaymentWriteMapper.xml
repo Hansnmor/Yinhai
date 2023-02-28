@@ -4,10 +4,55 @@
 
     <!--新增所有列-->
     <insert id="insertPsnTratYearDInfo" parameterType="com.yinhai.tangcao.vo.PsnTratYearDInfoVo">
-        insert into psn_trat_year_d(PSN_TRAT_CLCT_ID, PSN_NO, INSUTYPE, TRAT_CLCT_TYPE, BEGN_YM, END_YM, TRAT_CLCT_MONS, VALI_FLAG, MEMO, INSU_ORG, OPT_CHNL, OPTINS, OPTER, OPTER_NAME, OPT_TIME, CRTE_OPTINS, CRTER, CRTER_NAME, CRTE_TIME, UPDT_TIME, RID, PSN_INSU_RLTS_ID, PSN_INSU_MGT_EID)
+        insert into psn_trat_year_d(
+                                    PSN_TRAT_CLCT_ID,
+                                    PSN_NO,
+                                    INSUTYPE,
+                                    TRAT_CLCT_TYPE,
+                                    BEGN_YM,
+                                    END_YM,
+                                    TRAT_CLCT_MONS,
+                                    VALI_FLAG,
+                                    MEMO,
+                                    INSU_ORG,
+                                    OPT_CHNL,
+                                    OPTINS,
+                                    OPTER,
+                                    OPTER_NAME,
+                                    OPT_TIME,
+                                    CRTE_OPTINS,
+                                    CRTER,
+                                    CRTER_NAME,
+                                    CRTE_TIME,
+                                    UPDT_TIME,
+                                    RID,
+                                    PSN_INSU_RLTS_ID,
+                                    PSN_INSU_MGT_EID)
         values
         <foreach collection ="list" item="item" separator =",">
-            (#{item.psnTratClctId,jdbcType=VARCHAR}, #{item.psnNo,jdbcType=VARCHAR}, #{item.insutype,jdbcType=VARCHAR}, #{item.tratClctType,jdbcType=VARCHAR}, #{item.begnYm,jdbcType=VARCHAR}, #{item.endYm,jdbcType=VARCHAR}, #{item.tratClctMons,jdbcType=NUMERIC}, #{item.valiFlag,jdbcType=VARCHAR}, #{item.memo,jdbcType=VARCHAR}, #{item.insuOrg,jdbcType=VARCHAR}, #{item.optChnl,jdbcType=VARCHAR}, #{item.optins,jdbcType=VARCHAR}, #{item.opter,jdbcType=VARCHAR}, #{item.opterName,jdbcType=VARCHAR}, #{item.optTime,jdbcType=TIMESTAMP}, #{item.crteOptins,jdbcType=VARCHAR}, #{item.crter,jdbcType=VARCHAR}, #{item.crterName,jdbcType=VARCHAR}, #{item.crteTime,jdbcType=TIMESTAMP}, #{item.updtTime,jdbcType=TIMESTAMP}, #{item.rid,jdbcType=VARCHAR}, #{item.psnInsuRltsId,jdbcType=VARCHAR}, #{item.psnInsuMgtEid,jdbcType=VARCHAR})
+            (#{item.psnTratClctId,jdbcType=VARCHAR},
+             #{item.psnNo,jdbcType=VARCHAR},
+             #{item.insutype,jdbcType=VARCHAR},
+             #{item.tratClctType,jdbcType=VARCHAR},
+             #{item.begnYm,jdbcType=VARCHAR},
+             #{item.endYm,jdbcType=VARCHAR},
+             #{item.tratClctMons,jdbcType=NUMERIC},
+             #{item.valiFlag,jdbcType=VARCHAR},
+             #{item.memo,jdbcType=VARCHAR},
+             #{item.insuOrg,jdbcType=VARCHAR},
+             #{item.optChnl,jdbcType=VARCHAR},
+             #{item.optins,jdbcType=VARCHAR},
+             #{item.opter,jdbcType=VARCHAR},
+             #{item.opterName,jdbcType=VARCHAR},
+             #{item.optTime,jdbcType=TIMESTAMP},
+             #{item.crteOptins,jdbcType=VARCHAR},
+             #{item.crter,jdbcType=VARCHAR},
+             #{item.crterName,jdbcType=VARCHAR},
+             #{item.crteTime,jdbcType=TIMESTAMP},
+             #{item.updtTime,jdbcType=TIMESTAMP},
+             #{item.rid,jdbcType=VARCHAR},
+             #{item.psnInsuRltsId,jdbcType=VARCHAR},
+             #{item.psnInsuMgtEid,jdbcType=VARCHAR})
         </foreach>
     </insert>
 

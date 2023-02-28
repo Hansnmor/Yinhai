@@ -81,7 +81,7 @@ export default {
       openSocialLogin: 'openSocialLogin',
       openSmsLogin: 'openSmsLogin',
     }),
-  },
+  },z
   watch: {
     showModifyPasswordPane (value, old) {
       if (value === false) {
